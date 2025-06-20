@@ -1,0 +1,126 @@
+read_coast = function(scale = "medium", form = "sf",
+                      bb = sf::st_bbox(c(xmin = -77, 
+                                         ymin = 34, 
+                                         xmax = -63, 
+                                         ymax = 45.5), crs = 4326)){
+  
+  #' Read the coastline
+  #' 
+  #' @param scale chr the scale of map as "small", "medium" (default) or "large"
+  #' @param form chr one of 'sp' or 'sf' (default)
+  #' @return geometry of the coast
+  
+  rnaturalearth::ne_coastline(scale = scale[1], returnclass = form[1]) |>
+    sf::st_geometry() |>
+    sf::st_crop(bb)
+}
+
+save_model_plots = function(results, 
+                            test_data, 
+                            output_dir, 
+                            poly_path = "data/polygons/coastline_nwa_medium.gpkg"){
+  #' Save ROC and prediction histogram plots
+  #'
+  #' @param results list returned from model_maxent or model_rf
+  #' @param test_data dataframe used to evaluate the model
+  #' @param polygon_path string, path to coastline polygon for masking
+  #' @param output_dir directory to save plots to
+  
+  dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
+  
+  # ROC 
+  roc_obj = pROC::roc(test_data$presence, test_data$.pred)
+  png(file.path(output_dir, "roc.png"), width = 800, height = 600)
+  plot(roc_obj, main = sprintf("ROC Curve (AUC = %.2f)", pROC::auc(roc_obj)))
+  dev.off()
+  
+  # Histogram of predicted probabilities
+  png(file.path(output_dir, "hist.png"), width = 800, height = 600)
+  hist(test_data$.pred,
+       breaks = 20,
+       col = "skyblue",
+       main = "Histogram of Predicted Probabilities",
+       xlab = "Predicted Probability",
+       ylab = "Frequency")
+  dev.off()
+}
+
+original_dist = function(obs, bkg, the_date){
+  #' 
+  #' 
+  #' 
+  #' 
+  #' 
+  #' 
+  
+  obs = obs %>% 
+    filter(date == the_date) %>% 
+    mutate(presence = 1)
+  
+  bkg = bkg %>% 
+    filter(date == the_date) %>% 
+    mutate(presence = 0)
+  
+  all = bind_rows(obs, bkg) %>% 
+    mutate(presence = as.factor(presence))
+  
+  coast = read_coast()
+  coast_bbox = st_bbox(coast)
+  
+  plot_data = ggplot() +
+    geom_sf(data = coast, color = "black") +
+    coord_sf(
+      xlim = c(coast_bbox["xmin"], coast_bbox["xmax"]),
+      ylim = c(coast_bbox["ymin"], coast_bbox["ymax"]),
+      expand = FALSE
+    ) +
+    theme_minimal() +
+    labs(title = paste("Observations on", format(the_date, "%Y-%m-%d"))) +
+    theme(axis.title = element_blank())
+  
+  if (nrow(bkg) == 0) {
+    plot_data = plot_data +
+      geom_sf(data = obs, aes(color = factor(1)), size = 1.5)
+  } else if (nrow(obs) == 0) {
+    plot_data = plot_data +
+      geom_sf(data = bkg, aes(color = factor(0)), size = 1.5)
+  } else {
+    plot_data = plot_data +
+      geom_sf(data = all, aes(color = factor(presence)), size = 1.5)
+  }
+}
+
+predicted_dist = function(raster, 
+                          poly_path = "data/polygons/coastline_nwa_medium.gpkg", 
+                          the_date) {
+
+  #' Generates a ggplot of the predicted distribution raster with optional polygon masking.
+  #'
+  #' @param raster stars object, prediction raster
+  #' @param polygon sf object, optional; spatial polygon for cropping and masking
+  #' @param the_date date object
+  #'
+  #' @return ggplot object
+  
+  ggplot2::ggplot() +
+    stars::geom_stars(data = raster) +
+    ggplot2::scale_fill_viridis_c(option = "C", name = "Predicted\nProbability") +
+    ggplot2::labs(title = paste("Predicted Observations on", format(the_date, "%Y-%m-%d"))) +
+    ggplot2::theme_minimal()
+}
+
+
+mask_to_polygon = function(raster, poly, crs_proj = 3857){
+  #'
+  #'
+  #'
+  
+  poly_proj = sf::st_transform(poly, crs_proj)
+  raster_proj = st_transform(raster, crs_proj)
+  cropped = st_crop(raster_proj, sf::st_bbox(poly_proj))
+  masked = cropped[poly_proj]
+  return(st_transform(masked, 4326))
+}
+
+
+
