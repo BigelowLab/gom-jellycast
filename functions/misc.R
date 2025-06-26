@@ -17,6 +17,30 @@ make_obs_bkg = function(sp = "lionsmane"){
   return(list(obs = obs, bkg = bkg))
 }
 
+csv_make_obs_bkg = function(sp = "lionsmane"){
+  df = read.csv("/mnt/s1/projects/ecocast/projects/gom-jellycast-dev/jellyfish.csv") %>% 
+    dplyr::select(Source, Year, Month, Day, Type, Lat, Lon) %>% 
+    drop_na() %>%
+    mutate(Date = as.Date(sprintf("%04d-%02d-%02d", Year, Month, Day))) %>% 
+    st_as_sf(coords = c("Lon", "Lat"), crs = 4326) %>%
+    dplyr::select(-Year, -Month, -Day) %>%
+    rename(
+      date = Date,
+      source = Source,
+      type = Type
+    ) %>% 
+    filter(source == "record")
+  
+  obs = df %>% 
+    dplyr::filter(type == sp) 
+  
+  bkg = df %>% 
+    dplyr::filter(type != sp)
+  
+  return(list(obs = obs, bkg = bkg))
+  
+}
+
 write_covs = function(region = "nwa", 
                       product = "GLOBAL_MULTIYEAR_PHY_001_030",
                       day = as.Date("2015-05-29"),
@@ -30,10 +54,16 @@ write_covs = function(region = "nwa",
   
   nwapath = copernicus::copernicus_path(region, product)
   DB = andreas::read_database(nwapath)
+  # print(str(DB))
   
   db = DB %>% 
     dplyr::filter(date == day,
-                  variable %in% vars)
+                  as.character(variable) %in% vars)
+  
+  if (nrow(db) == 0) {
+    message("No covariate data for ", as.character(day))
+    return(NULL)
+  }
   
   x = andreas::read_andreas(db, nwapath)
   

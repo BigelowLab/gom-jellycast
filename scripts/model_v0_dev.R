@@ -1,11 +1,11 @@
 # author: Logan Ngai
 # date: 2025-06-12
 
-# use this script to build and write models from the terminal
+# use this script to DEBUG 
 # usage: 
 # $ Rscript /path/to/script.R /path/to/config.yaml YYYY-MM-DD
 # example:
-# Rscript scripts/model_v0.R data/versions/v0/v0.013/v0.013.yaml 2024-06-01
+# Rscript scripts/model_v0_dev.R data/versions/v0/v0.014/v0.014.yaml 2025-06-01
 # 
 # params: 
 #   @param script to be run
@@ -58,7 +58,7 @@ main = function(cfg, target_date){
   
   # observation and background points 
   charlier::info("filtering observation/background points")
-  pts = make_obs_bkg(sp = species)
+  pts = csv_make_obs_bkg(sp = species)
   obs = pts$obs
   bkg = pts$bkg
   
@@ -110,8 +110,7 @@ main = function(cfg, target_date){
     deptho_rast = read_stars(deptho_path)
     names(deptho_rast) = "deptho"
   }
-  
-  charlier::info("pulling covariates")
+  charlier::info("pulling other covariates")
   x = write_covs(region = region, product = product, day = target_date, vars = variables)
   
   if (has_deptho) {

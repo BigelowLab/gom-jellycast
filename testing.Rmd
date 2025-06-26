@@ -1,0 +1,33 @@
+---
+title: "testing"
+output: html_document
+---
+
+```{r}
+library(dplyr)
+library(tidyr)
+```
+
+
+```{r}
+df = read.csv("jellyfish.csv") %>% 
+  dplyr::select(Source, Year, Month, Day, Type, Lat, Lon) %>% 
+  drop_na() %>%
+  mutate(Date = as.Date(sprintf("%04d-%02d-%02d", Year, Month, Day))) %>% 
+  dplyr::select(-Year, -Month, -Day) %>%
+  st_as_sf(coords = c("Lon", "Lat"), crs = 4326) %>%
+  rename(
+    date = Date,
+    source = Source,
+    type = Type
+  )
+
+species = "lionsmane"
+pts = csv_make_obs_bkg(sp = species)
+obs = pts$obs
+bkg = pts$bkg
+```
+
+```{r}
+
+```

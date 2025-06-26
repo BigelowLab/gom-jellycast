@@ -164,8 +164,82 @@ bake(rec_prep, new_data = NULL) |> names()
 # removed: wo, mlots, pbo, sob, tob
 ```
 
+# Comparing full model to reduced
+```{r}
+df11 = read.csv("data/versions/v0/v0.011/results_summary.csv", header = TRUE, sep = ",")
+df12 = read.csv("data/versions/v0/v0.012/results_summary.csv", header = TRUE, sep = ",")
+
+summary = read.csv("data/versions/v0/summary_statistics.csv", header = TRUE, sep = ",")
+```
 
 
+```{r}
+df = df %>% 
+  mutate(actual_presence = case_when(type == "lionsmane" ~ 1,
+                   type != "lionsmane" ~ 0))
+
+# July 2023
+model = readRDS("data/versions/v0/v0.013/results/2023-07-01/maxent/maxent.rds")
+raster_pred = model$prediction_raster
+df$prediction = stars::st_extract(raster_pred, df)[[1]] 
+df50 = df %>%
+  mutate(pred_presence = ifelse(prediction > 0.5, 1, 0))
+
+# accuracy
+mean(df50$pred_presence == df50$actual_presence, na.rm = TRUE)
+
+# confusion matrix
+table(Predicted = df50$pred_presence, Actual = df50$actual_presence)
+
+```
+
+# Threshold = 0.75
+```{r}
+df75 = df %>%
+  mutate(pred_presence = ifelse(prediction > 0.75, 1, 0))
+
+# accuracy
+mean(df75$pred_presence == df75$actual_presence, na.rm = TRUE)
+
+# confusion matrix
+table(Predicted = df75$pred_presence, Actual = df75$actual_presence)
+```
+
+# Threshold = 0.25
+```{r}
+df25 = df %>%
+  mutate(pred_presence = ifelse(prediction > 0.25, 1, 0))
+
+# accuracy
+mean(df25$pred_presence == df25$actual_presence, na.rm = TRUE)
+
+# confusion matrix
+table(Predicted = df25$pred_presence, Actual = df25$actual_presence)
+```
+
+# Threshold = 0.4
+```{r}
+df40 = df %>%
+  mutate(pred_presence = ifelse(prediction > 0.40, 1, 0))
+
+# accuracy
+mean(df40$pred_presence == df40$actual_presence, na.rm = TRUE)
+
+# confusion matrix
+table(Predicted = df40$pred_presence, Actual = df40$actual_presence)
+```
+
+# Threshold = 0.6
+```{r}
+df60 = df %>%
+  mutate(pred_presence = ifelse(prediction > 0.60, 1, 0))
+
+# accuracy
+mean(df60$pred_presence == df60$actual_presence, na.rm = TRUE)
+
+# confusion matrix
+table(Predicted = df60$pred_presence, Actual = df60$actual_presence)
+```
 
 
 

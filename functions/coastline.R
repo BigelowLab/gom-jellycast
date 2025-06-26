@@ -34,7 +34,7 @@ read_coastline = function(region = "gom", scale = "medium", path = "data/polygon
 #' @param file string/NULL, name of output file to create or NULL to not write a file
 #' @return sf object of a buffered coastline
 
-coastline_buffer = function(x = read_coastline(), buffer = 50000, file = NULL){
+make_coastline_buffer = function(x = read_coastline(), buffer = 50000, region = "nwa", scale = "medium", path = "data/polygons"){
   sf::sf_use_s2(FALSE) #don't use s2
   eckertIV <- "+proj=eck4 +lon_0=0 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs"
   p = sf::st_transform(x, crs = eckertIV) |> #go to eckertIV projection
@@ -43,9 +43,9 @@ coastline_buffer = function(x = read_coastline(), buffer = 50000, file = NULL){
     st_cast("POLYGON") |>
     st_as_sf() |>
     st_transform(crs = 4326) #back to lat-lon 
-  if(!is.null(file)){
-    write_sf(p, file)
-  }
+  
+  filename = file.path(path, sprintf("coastline_%s_%s_%d.gpkg", region, scale, buffer))
+  sf::write_sf(p, filename)
   return(p)
 }
 
@@ -57,8 +57,8 @@ coastline_buffer = function(x = read_coastline(), buffer = 50000, file = NULL){
 #' @param path string, path to the directory
 #' @return sf object 
 
-read_coastline_buffer = function(region = "nwa", scale = "medium", path = "data/polygons"){
-  filename = file.path(path, sprintf("coastline_%s_%s.gpkg", region, scale))
+read_coastline_buffer = function(region = "nwa", scale = "medium", buffer = 50000, path = "data/polygons"){
+  filename = file.path(path, sprintf("coastline_%s_%s_%d.gpkg", region, scale, buffer))
   buffer = read_sf(filename)
   return(buffer)
 }

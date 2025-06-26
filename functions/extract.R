@@ -66,3 +66,38 @@ extract_summary = function(version = "v0"){
   message(sprintf("Summary statistics written to: %s", output_path))
   return(summary_df)
 }
+
+
+
+library(png)
+library(grid)
+
+extract_im = function(version = "v0", 
+                      v = "v0.001",
+                      date = as.Date("2024-06-01"),
+                      model = "maxent") {
+  date_str = format(date, "%Y-%m-%d")
+  path = file.path(
+    "data", "versions", version, v, "results", model, date_str, model,
+    "predicted_distribution.png"
+  )
+  
+  img = png::readPNG(path)
+  grid::grid.raster(img)
+  
+  return(invisible(img)) 
+}
+
+extract_accuracies = function(model = "maxent", 
+                              date = as.Date("2023-07-01"),
+                              version = "v0",
+                              v = "v0.013"){
+  model_path = file.path("data", "versions", version, v, "results", 
+                         format(day, "%Y-%m-%d"), model, paste0(model_type, ".rds"))
+  model = readRDS(model_path)
+  
+  
+}
+
+
+
