@@ -1,33 +1,26 @@
 ---
-title: "Lion's Mane Jellyfish"
+title: "White Cross Jellyfish"
 format:
   html:
     code-fold: true
 ---
 
 <p align="center">
-  <img src="images/lionsmane.JPG" width="400">
+  <img src="images/whitecross.jpg" width="400">
 </p>
 
 <section>
   <p>
-    The lion’s mane jellyfish (*Cyanea capillata*) is one of the largest known species of jellyfish, named for its long, trailing tentacles that resemble a lion’s mane. It can have a bell diameter of over 2 meters (6.5 feet) and tentacles extending more than 30 meters (100 feet), though most are much smaller.
+    The Whitecross jelly (*Staurostoma mertensii*) is a less commonly observed species, named for the distinct white cross-shaped markings on its bell. It inhabits cold, northern waters and has been documented in regions such as coastal Norway.
   </p>
   <p>
-    These jellyfish are typically found in the cold, northern waters of the Atlantic and Pacific Oceans, 
-    especially in the Gulf of Maine, Arctic, and North Sea. They drift with ocean currents and feed on small fish, plankton, and other jellyfish, capturing prey with stinging cells in their tentacles.
-  </p>
-  <p>
-    While their sting is painful, it is usually not dangerous to humans. Encounters are most common during the summer months, when they come closer to shore.
+    This species remains relatively mysterious compared to other jellyfish, and sightings are often of scientific interest. Its delicate body and unique markings make it visually striking when encountered by divers or captured in photographs.
   </p>
   <p>
     <strong>Learn more:</strong><br>
-    <a href="https://en.wikipedia.org/wiki/Lion%27s_mane_jellyfish" target="_blank">Wikipedia – Lion’s Mane Jellyfish</a><br>
-    <a href="https://oceanservice.noaa.gov/facts/lions-mane-jellyfish.html" target="_blank">NOAA Ocean Service</a><br>
-    <a href="https://www.aquariumofpacific.org/onlinelearningcenter/species/lions_mane_jelly" target="_blank">Aquarium of the Pacific</a>
+    <a href="https://commons.wikimedia.org/wiki/File:Whitecross_Jelly_(Staurostoma_mertensii)_-_Sortland,_Norway_2023-07-15.jpg" target="_blank">Wikimedia Commons Photo</a>
   </p>
 </section>
-
 
 ```{r setup, include=FALSE}
 source("setup.R")
@@ -35,7 +28,7 @@ knitr::opts_chunk$set(echo = TRUE)
 coast = st_as_sf(read_coast())
 coast_bbox = st_bbox(coast)
 obs = read_obs() %>% 
-  filter(type == "lionsmane", source == "record") %>% 
+  filter(type == "whitecross", source == "record") %>% 
   st_as_sf(coords = c("lon", "lat"), crs = 4326) %>% 
   mutate(year = factor(year(date)),
          month = factor(month(date, label = TRUE, abbr = TRUE), 
@@ -44,12 +37,12 @@ obs = read_obs() %>%
 
 # Today's Forecast
 ```{r forecast, echo=FALSE}
-img = png::readPNG("data/versions/v0/v0.015/results/2025-07-02/rf/predicted_distribution.png")
+img = png::readPNG("data/versions/v0/v0.028/results/2025-07-02/rf/predicted_distribution.png")
 grid.raster(img)
 ```
 
 # Observation Distributions
-```{r dist, echo=FALSE}
+```{r dist}
 ggplot() +
   geom_sf(data = coast, color = "black") +
   geom_sf(data = obs, color = "red", size = 1.5) +
@@ -59,7 +52,7 @@ ggplot() +
     expand = FALSE
   ) +
   theme_minimal() +
-  labs(title = "Lion's Mane Observations") +
+  labs(title = "White Cross Jelly Observations") +
   theme(axis.title = element_blank())
 
 ggplot() +
@@ -72,7 +65,7 @@ ggplot() +
   ) +
   facet_wrap(~ year) +
   theme_minimal() +
-  labs(title = "Lion's Mane Observations by Year") +
+  labs(title = "White Cross Jelly Observations by Year") +
   theme(axis.title = element_blank())
 
 ggplot() +
@@ -85,17 +78,17 @@ ggplot() +
   ) +
   facet_wrap(~ month) +
   theme_minimal() +
-  labs(title = "Lion's Mane Observations by Month") +
+  labs(title = "White Cross Jelly Observations by Month") +
   theme(axis.title = element_blank())
 ```
 
 # Proportion of Observations Histograms
-```{r hist, echo=FALSE}
+```{r hist}
 ggplot(obs, aes(x = year)) +
   geom_bar(aes(y = after_stat(prop), group = 1), fill = "steelblue") +
   theme_minimal() +
   labs(
-    title = "Proportion of Lion's Mane Observations per Year",
+    title = "Proportion of White Cross Jelly Observations per Year",
     x = "Year",
     y = "Proportion"
   )
@@ -105,7 +98,7 @@ ggplot(obs, aes(x = month)) +
   scale_x_discrete(drop = FALSE) +
   theme_minimal() +
   labs(
-    title = "Proportion of Lion's Mane Observations per Month",
+    title = "Proportion of White Cross Jelly Observations per Month",
     x = "Month",
     y = "Proportion"
   )

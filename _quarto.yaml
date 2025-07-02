@@ -1,0 +1,52 @@
+project:
+  type: website
+  output-dir: docs
+  execute-dir: project
+  render:
+    - index.qmd
+    - 01_lionsmane.qmd
+    - 02_moon.qmd
+    - 03_whitecross.qmd
+    - 04_comb.qmd
+    - about.qmd
+execute: 
+  cache: false
+website:
+  title: "Gulf of Maine Jellies"
+  page-navigation: true
+  back-to-top-navigation: true
+  page-footer: "Copyright 2025, Bigelow Laboratory for Ocean Science" 
+  sidebar:
+    style: "docked"
+    search: true
+    contents:
+      - href: index.qmd
+        text: Home
+      - href: 01_lionsmane.qmd
+        text: Lion's Mane Jellyfish
+      - href: 02_moon.qmd
+        text: Moon Jellyfish
+      - href: 03_whitecross.qmd
+        text: White Cross Jellyfish
+      - href: 04_comb.qmd
+        text: Comb Jellyfish
+      - href: about.qmd
+        text: About
+tools:
+   - icon: github
+     menu:
+       - text: Tandy Center
+         url:  https://www.bigelow.org/services/ocean-forecasting/
+       - text: Source Code
+         url:  https://github.com/BigelowLab/gom-jellies
+       - text: Report a bug or ask a question
+         url:  https://github.com/BigelowLab/gom-jellies/issues
+format:
+  html:
+    theme: cosmo
+    css: styles.css
+    toc: true
+    number-sections: true
+    
+editor: source
+

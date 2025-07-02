@@ -1,0 +1,9 @@
+---
+title: "About"
+---
+
+The [jellydata](https://github.com/BigelowLab/jellydata) project was developed at [Bigelow Laboratory's Tandy Center for Ocean Forecasting](https://www.bigelow.org/services/ocean-forecasting/) to aid in the development of modeling studies requiring either observation/abundance point data or to modeled rasterized layers for subsequent use in modeling studies. Use the [github issues tracker](https://github.com/BigelowLab/jellydata/issues) to post questions or report issues.
+
+* credit Colby, Bigelow
+* blurb about Nick, Ben, Logan
+

@@ -29,8 +29,8 @@ extract_summary = function(version = "v0"){
     summary_path = file.path(dir_path, v, "results_summary.csv")
     if (file.exists(summary_path)){
       df = read.table(summary_path, header = TRUE, sep = ",", , stringsAsFactors = FALSE) %>%
-        select(all_of(metrics)) %>% 
-        mutate(across(everything(), as.numeric))
+        dplyr::select(all_of(metrics)) %>% 
+        dplyr::mutate(across(everything(), as.numeric))
       
       for (m in metrics) {
         col_vals = as.numeric(df[[m]])

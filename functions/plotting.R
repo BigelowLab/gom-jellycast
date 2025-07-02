@@ -129,7 +129,7 @@ predicted_dist = function(raster,
       expand = FALSE
     ) +
     labs(
-      title = paste("Lion's Mane Sighting Forecast for", format(the_date, "%Y-%m-%d")),
+      title = paste("Comb Jellyfish Sighting Forecast for", format(the_date, "%Y-%m-%d")),
       x = "Longitude", y = "Latitude"
     ) +
     theme_minimal() +

@@ -1,33 +1,30 @@
 ---
-title: "Lion's Mane Jellyfish"
+title: "Moon Jellyfish"
 format:
   html:
     code-fold: true
 ---
 
 <p align="center">
-  <img src="images/lionsmane.JPG" width="400">
+  <img src="images/moon.JPG" width="400">
 </p>
 
 <section>
   <p>
-    The lion’s mane jellyfish (*Cyanea capillata*) is one of the largest known species of jellyfish, named for its long, trailing tentacles that resemble a lion’s mane. It can have a bell diameter of over 2 meters (6.5 feet) and tentacles extending more than 30 meters (100 feet), though most are much smaller.
+    The moon jelly (*Aurelia aurita*) is a widely distributed and easily recognizable jellyfish, known for its translucent, saucer-shaped bell and four horseshoe-shaped gonads visible through the top. It typically grows to about 25–40 cm (10–16 inches) in diameter.
   </p>
   <p>
-    These jellyfish are typically found in the cold, northern waters of the Atlantic and Pacific Oceans, 
-    especially in the Gulf of Maine, Arctic, and North Sea. They drift with ocean currents and feed on small fish, plankton, and other jellyfish, capturing prey with stinging cells in their tentacles.
+    Moon jellies are found in coastal waters around the world and prefer calm bays and harbors. They feed mainly on small plankton and fish eggs, using their fringe of short tentacles and mucus-covered bell to trap food.
   </p>
   <p>
-    While their sting is painful, it is usually not dangerous to humans. Encounters are most common during the summer months, when they come closer to shore.
+    While their sting is harmless to humans, they are often studied in aquariums and marine biology for their simple body structure and gentle movement.
   </p>
   <p>
     <strong>Learn more:</strong><br>
-    <a href="https://en.wikipedia.org/wiki/Lion%27s_mane_jellyfish" target="_blank">Wikipedia – Lion’s Mane Jellyfish</a><br>
-    <a href="https://oceanservice.noaa.gov/facts/lions-mane-jellyfish.html" target="_blank">NOAA Ocean Service</a><br>
-    <a href="https://www.aquariumofpacific.org/onlinelearningcenter/species/lions_mane_jelly" target="_blank">Aquarium of the Pacific</a>
+    <a href="https://en.wikipedia.org/wiki/Aurelia_aurita" target="_blank">Wikipedia – Moon Jelly</a><br>
+    <a href="https://www.aquariumofpacific.org/onlinelearningcenter/species/moon_jelly" target="_blank">Aquarium of the Pacific</a>
   </p>
 </section>
-
 
 ```{r setup, include=FALSE}
 source("setup.R")
@@ -35,7 +32,7 @@ knitr::opts_chunk$set(echo = TRUE)
 coast = st_as_sf(read_coast())
 coast_bbox = st_bbox(coast)
 obs = read_obs() %>% 
-  filter(type == "lionsmane", source == "record") %>% 
+  filter(type == "moon", source == "record") %>% 
   st_as_sf(coords = c("lon", "lat"), crs = 4326) %>% 
   mutate(year = factor(year(date)),
          month = factor(month(date, label = TRUE, abbr = TRUE), 
@@ -44,12 +41,12 @@ obs = read_obs() %>%
 
 # Today's Forecast
 ```{r forecast, echo=FALSE}
-img = png::readPNG("data/versions/v0/v0.015/results/2025-07-02/rf/predicted_distribution.png")
+img = png::readPNG("data/versions/v0/v0.021/results/2025-07-02/rf/predicted_distribution.png")
 grid.raster(img)
 ```
 
 # Observation Distributions
-```{r dist, echo=FALSE}
+```{r dist}
 ggplot() +
   geom_sf(data = coast, color = "black") +
   geom_sf(data = obs, color = "red", size = 1.5) +
@@ -59,7 +56,7 @@ ggplot() +
     expand = FALSE
   ) +
   theme_minimal() +
-  labs(title = "Lion's Mane Observations") +
+  labs(title = "Moon Jelly Observations") +
   theme(axis.title = element_blank())
 
 ggplot() +
@@ -72,7 +69,7 @@ ggplot() +
   ) +
   facet_wrap(~ year) +
   theme_minimal() +
-  labs(title = "Lion's Mane Observations by Year") +
+  labs(title = "Moon Jelly Observations by Year") +
   theme(axis.title = element_blank())
 
 ggplot() +
@@ -85,17 +82,17 @@ ggplot() +
   ) +
   facet_wrap(~ month) +
   theme_minimal() +
-  labs(title = "Lion's Mane Observations by Month") +
+  labs(title = "Moon Jelly Observations by Month") +
   theme(axis.title = element_blank())
 ```
 
 # Proportion of Observations Histograms
-```{r hist, echo=FALSE}
+```{r hist}
 ggplot(obs, aes(x = year)) +
   geom_bar(aes(y = after_stat(prop), group = 1), fill = "steelblue") +
   theme_minimal() +
   labs(
-    title = "Proportion of Lion's Mane Observations per Year",
+    title = "Proportion of Moon Jelly Observations per Year",
     x = "Year",
     y = "Proportion"
   )
@@ -105,7 +102,7 @@ ggplot(obs, aes(x = month)) +
   scale_x_discrete(drop = FALSE) +
   theme_minimal() +
   labs(
-    title = "Proportion of Lion's Mane Observations per Month",
+    title = "Proportion of Moon Jelly Observations per Month",
     x = "Month",
     y = "Proportion"
   )
