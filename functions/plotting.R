@@ -91,8 +91,10 @@ original_dist = function(obs, bkg, the_date){
 }
 
 predicted_dist = function(raster, 
-                          poly_path = "data/polygons/coastline_nwa_medium.gpkg", 
-                          the_date) {
+                          the_date,
+                          species = "lionsmane",
+                          add_points = "none",
+                          day_obs, day_bkg){
 
   #' Generates a ggplot of the predicted distribution raster with optional polygon masking.
   #'
@@ -100,13 +102,60 @@ predicted_dist = function(raster,
   #' @param polygon sf object, optional; spatial polygon for cropping and masking
   #' @param the_date date object
   #'
+  #'
   #' @return ggplot object
   
-  ggplot2::ggplot() +
-    stars::geom_stars(data = raster) +
-    ggplot2::scale_fill_viridis_c(option = "C", name = "Predicted\nProbability") +
-    ggplot2::labs(title = paste("Predicted Observations on", format(the_date, "%Y-%m-%d"))) +
-    ggplot2::theme_minimal()
+  coast_buffer = read_coastline_buffer()
+  coast_bbox = st_bbox(coast_buffer)
+  
+  labels = data.frame(
+    lon = c(-70.2553, -71.0589, -63.5752), 
+    lat = c(43.6615, 42.3601, 44.6488),
+    city = c("Portland", "Boston", "Halifax")
+  )
+  
+  p = ggplot() +
+    geom_stars(data = raster, na.rm = TRUE) +
+    scale_fill_viridis_c(
+      option = "C",
+      name = "Jellyfish\nIndex",
+      na.value = "transparent",
+      limits = c(0, 1)
+    ) +
+    geom_sf(data = read_coastline(), color = "black", fill = NA, linewidth = 1.0) +
+    coord_sf(
+      xlim = c(coast_bbox["xmin"], coast_bbox["xmax"]),
+      ylim = c(coast_bbox["ymin"], coast_bbox["ymax"]),
+      expand = FALSE
+    ) +
+    labs(
+      title = paste("Lion's Mane Sighting Forecast for", format(the_date, "%Y-%m-%d")),
+      x = "Longitude", y = "Latitude"
+    ) +
+    theme_minimal() +
+    theme(panel.grid.major = element_line(color = "gray80", linewidth = 0.2)) + 
+  
+    geom_point(data = labels, aes(x = lon, y = lat),
+               shape = 8, size = 5, color = "red", alpha = 0.4) +
+    geom_point(data = labels, aes(x = lon, y = lat),
+               shape = 8, size = 3, color = "red") +
+    
+    geom_text(data = labels, aes(x = lon, y = lat, label = city),
+              nudge_x = -0.2, nudge_y = 0.2, hjust = 1, vjust = 0, size = 3.5, color = "black")
+  
+  
+  if ((add_points %in% c("obs", "all")) && nrow(day_obs) > 0) {
+    p = p + geom_sf(data = day_obs %>% filter(type == species), 
+                    color = "red", size = 1, shape = 21, fill = "red", alpha = 0.6)
+  }
+  
+  if ((add_points %in% c("bkg", "all")) && nrow(day_bkg) > 0) {
+    p = p + geom_sf(data = day_bkg %>% filter(type == species), 
+                    color = "blue", size = 1, shape = 21, fill = "blue", alpha = 0.4)
+  }
+  
+  
+  return(p)
 }
 
 

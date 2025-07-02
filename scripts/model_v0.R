@@ -5,7 +5,7 @@
 # usage: 
 # $ Rscript /path/to/script.R /path/to/config.yaml YYYY-MM-DD
 # example:
-# Rscript scripts/model_v0.R data/versions/v0/v0.013/v0.013.yaml 2024-06-01
+# Rscript scripts/model_v0.R data/versions/v0/v0.015/v0.015.yaml 2025-06-01
 # 
 # params: 
 #   @param script to be run
@@ -142,7 +142,8 @@ main = function(cfg, target_date){
     
     stars::write_stars(maxent_res$prediction_raster, file.path(maxent_dir, "predicted_distribution.tif"))
     
-    dist_plot = predicted_dist(maxent_res$prediction_raster, the_date = target_date)
+    dist_plot = predicted_dist(maxent_res$prediction_raster, the_date = target_date, add_points = "all", day_obs = day_obs, day_bkg = day_bkg)
+    
     
     ggplot2::ggsave(
       filename = file.path(maxent_dir, "predicted_distribution.png"),
@@ -181,7 +182,7 @@ main = function(cfg, target_date){
     
     stars::write_stars(rf_res$prediction_raster, file.path(rf_dir, "predicted_distribution.tif"))
     
-    dist_plot = predicted_dist(rf_res$prediction_raster, the_date = target_date)
+    dist_plot = predicted_dist(rf_res$prediction_raster, the_date = target_date, add_points = "all", day_obs = day_obs, day_bkg = day_bkg)
     ggplot2::ggsave(
       filename = file.path(rf_dir, "predicted_distribution.png"),
       plot = dist_plot,

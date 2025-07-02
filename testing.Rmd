@@ -3,31 +3,328 @@ title: "testing"
 output: html_document
 ---
 
+```{r setup, echo = FALSE, include = FALSE}
+source("setup.R")
+df = read_obs() %>% 
+  filter(source == "record", type %in% c("lionsmane", "moon", "comb", "whitecross")) %>% 
+  st_as_sf(coords = c("lon", "lat"), crs = 4326)
+```
+
 ```{r}
+# prod = "GLOBAL_ANALYSISFORECAST_PHY_001_024"
+# path = copernicus_path("nwa", prod) %>% 
+#   make_path()
+
+product_id = "GLOBAL_ANALYSISFORECAST_PHY_001_024"
+dataset_id = "cmems_mod_glo_phy-cur_anfc_0.083deg_P1D-m"    
+vars = c("uo","vo")
+bb = c(xmin = -72, xmax = -63, ymin = 39, ymax = 46)
+path = copernicus_path(product_id, "gom") |>
+  make_path()
+depth = c(0,1) # just the top 1 meter
+time = c(0, 9) + Sys.Date()  # today - and a little ahead window
+ofile = copernicus_path("tmp", 
+                        paste0(product_id, "__", dataset_id, ".nc"))
+ok = download_copernicus_cli_subset(dataset_id = dataset_id, 
+                                   vars = vars, 
+                                   depth = depth,
+                                   bb = bb, 
+                                   time = time, 
+                                   ofile = ofile)
+x = stars::read_stars(ofile)
+plot(x['uo'], axes = TRUE)
+plot(x['vo'], axes = TRUE)
+```
+
+```{r}
+nwapath = copernicus_path("nwa", "GLOBAL_MULTIYEAR_PHY_001_030")
+DB = read_database(nwapath)
+db = DB %>% 
+  filter(between(.data$date, as.Date("2015-06-01"), as.Date("2015-06-02")),
+         variable %in% c("thetao", "so", "vo", "uo")) %>% 
+  glimpse()
+x = read_andreas(db, nwapath)
+buoys = read_buoys() |>
+  glimpse()
+v = extract_points(x, buoys) |>
+  glimpse()
+v = extract_points(x, buoys, form = "wide") |>
+  glimpse()
+```
+```{r}
+obs = df %>% 
+  filter(type == "lionsmane")
+
+bkg = df %>% 
+  filter(type != "lionsmane")
+
+nwapath = copernicus_path("nwa", "GLOBAL_MULTIYEAR_PHY_001_030")
+DB = read_database(nwapath)
+
+db = DB %>% 
+  filter(date == as.Date("2015-05-29"),
+         variable == "vo")
+x = read_andreas(db, nwapath)
+```
+
+# Lionsmane/vo
+```{r}
+v = extract_points(x, obs, form = "wide") %>% 
+  drop_na() %>% 
+  mutate(presence = 1)
+```
+
+# Background/vo
+```{r}
+z = extract_points(x, bkg, form = "wide") %>% 
+  drop_na() %>% 
+  mutate(presence = 0)
+```
+
+# Combine presence and absence
+```{r}
+df = bind_rows(v, z) %>% 
+  select(-point)
+```
+
+# MaxEnt model
+```{r}
+set.seed(123)
+data_split <- initial_split(df, strata = presence)
+train <- training(data_split)
+test <- testing(data_split)
+
+maxent_model <- maxnet(p = train$presence,
+                       data = select(train, -presence),
+                       f = maxnet.formula(train$presence, 
+                                          select(train, -presence)))
+
+test$prediction <- predict(maxent_model,
+                           newdata = test,
+                           type = "logistic")
+
+
+ggplot(test, aes(x = prediction, fill = factor(presence))) +
+  geom_histogram(position = "identity", alpha = 0.6, bins = 30) +
+  labs(title = "Predicted probabilities by class",
+       x = "Predicted probability of presence",
+       fill = "Actual presence") +
+  theme_minimal()
+
+eval_df <- test %>%
+  mutate(presence = factor(presence, levels = c(0, 1)),
+         .pred = as.numeric(prediction)) %>%
+  select(presence, .pred)
+
+roc_auc(eval_df, truth = presence, .pred)
+
+eval_df <- eval_df %>%
+  mutate(class = factor(ifelse(.pred >= 0.5, 1, 0), levels = c(0, 1)))
+
+accuracy(eval_df, truth = presence, estimate = class)
+conf_mat(eval_df, truth = presence, estimate = class)
+```
+
+# Prep data
+```{r}
+data = make_obs_bkg(sp = "lionsmane")
+obs = data$obs
+bkg = data$bkg
+
+x = write_covs(region = "nwa",
+               path = "GLOBAL_MULTIYEAR_PHY_001_030",
+               day = as.Date("2015-05-29"),
+               vars = c("vo"))
+
+df = write_df(x, obs, bkg)
+
+prep = prep_split(seed = 123, data = df)
+train = prep$train
+test = prep$test
+```
+
+# Perform modeling
+```{r}
+model_maxent(train, test, roc = TRUE, acc = TRUE)
+
+model_rf(train, test, roc = TRUE, acc = TRUE)
+```
+
+# Covariate Correlation
+```{r}
+cfg = read_config("data/versions/v0/v0.011/v0.011.yaml")
+target_date = as.Date("2017-06-01")
+# RUN MODEL_V0.R TO PREP TRAIN/TEST DATA
+
+rec <- recipe(presence ~ ., data = train) %>%
+  step_corr(all_numeric_predictors(), threshold = 0.9)  # remove vars with r > 0.9
+
+rec_prep <- prep(rec)
+bake(rec_prep, new_data = NULL) |> names()  
+# remaining: uo, vo, so, thetao, zos
+# removed: wo, mlots, pbo, sob, tob
+```
+
+# Comparing full model to reduced
+```{r}
+df11 = read.csv("data/versions/v0/v0.011/results_summary.csv", header = TRUE, sep = ",")
+df12 = read.csv("data/versions/v0/v0.012/results_summary.csv", header = TRUE, sep = ",")
+
+summary = read.csv("data/versions/v0/summary_statistics.csv", header = TRUE, sep = ",")
+```
+
+
+```{r}
+df = df %>% 
+  mutate(actual_presence = case_when(type == "lionsmane" ~ 1,
+                   type != "lionsmane" ~ 0))
+
+# July 2023
+model = readRDS("data/versions/v0/v0.013/results/2023-07-01/maxent/maxent.rds")
+raster_pred = model$prediction_raster
+df$prediction = stars::st_extract(raster_pred, df)[[1]] 
+df50 = df %>%
+  mutate(pred_presence = ifelse(prediction > 0.5, 1, 0))
+
+# accuracy
+mean(df50$pred_presence == df50$actual_presence, na.rm = TRUE)
+
+# confusion matrix
+table(Predicted = df50$pred_presence, Actual = df50$actual_presence)
+
+```
+
+# Threshold = 0.75
+```{r}
+df75 = df %>%
+  mutate(pred_presence = ifelse(prediction > 0.75, 1, 0))
+
+# accuracy
+mean(df75$pred_presence == df75$actual_presence, na.rm = TRUE)
+
+# confusion matrix
+table(Predicted = df75$pred_presence, Actual = df75$actual_presence)
+```
+
+# Threshold = 0.25
+```{r}
+df25 = df %>%
+  mutate(pred_presence = ifelse(prediction > 0.25, 1, 0))
+
+# accuracy
+mean(df25$pred_presence == df25$actual_presence, na.rm = TRUE)
+
+# confusion matrix
+table(Predicted = df25$pred_presence, Actual = df25$actual_presence)
+```
+
+# Threshold = 0.4
+```{r}
+df40 = df %>%
+  mutate(pred_presence = ifelse(prediction > 0.40, 1, 0))
+
+# accuracy
+mean(df40$pred_presence == df40$actual_presence, na.rm = TRUE)
+
+# confusion matrix
+table(Predicted = df40$pred_presence, Actual = df40$actual_presence)
+```
+
+# Threshold = 0.6
+```{r}
+df60 = df %>%
+  mutate(pred_presence = ifelse(prediction > 0.60, 1, 0))
+
+# accuracy
+mean(df60$pred_presence == df60$actual_presence, na.rm = TRUE)
+
+# confusion matrix
+table(Predicted = df60$pred_presence, Actual = df60$actual_presence)
+```
+
+
+# MOVIE
+
+
+
+```{r}
+library(ggplot2)
+library(gganimate)
+library(png)
+library(grid)
 library(dplyr)
-library(tidyr)
+library(gifski)
+library(animation)
+
 ```
 
 
 ```{r}
-df = read.csv("jellyfish.csv") %>% 
-  dplyr::select(Source, Year, Month, Day, Type, Lat, Lon) %>% 
-  drop_na() %>%
-  mutate(Date = as.Date(sprintf("%04d-%02d-%02d", Year, Month, Day))) %>% 
-  dplyr::select(-Year, -Month, -Day) %>%
-  st_as_sf(coords = c("Lon", "Lat"), crs = 4326) %>%
-  rename(
-    date = Date,
-    source = Source,
-    type = Type
-  )
+# Extract and load PNGs
+png_df <- extract_pngs("v0", "v0.015", as.Date("2025-07-01"), as.Date("2025-07-08"), "maxent")
 
-species = "lionsmane"
-pts = csv_make_obs_bkg(sp = species)
-obs = pts$obs
-bkg = pts$bkg
+png_df$raster <- lapply(png_df$file, function(f) {
+  img <- readPNG(f)
+  rasterGrob(img, width = unit(1, "npc"), height = unit(1, "npc"))
+})
+png_df$frame <- seq_len(nrow(png_df))
+
 ```
 
 ```{r}
+frame_df <- data.frame(frame = png_df$frame)
+
+p <- ggplot(frame_df, aes(frame = frame)) +
+  geom_blank() +
+  transition_manual(frame) +
+  labs(title = "Date: {png_df$date[as.integer(current_frame)]}") +
+  theme_void()
+
+
+
+ggplot(df, aes(x, y)) +
+  geom_point() +
+  transition_states(frame_date, transition_length = 2, state_length = 1) +
+  labs(title = "Date: {closest_state}")
+```
+
+```{r}
+anim <- animate(
+  p,
+  nframes = nrow(png_df),
+  fps = 2,
+  width = 800,
+  height = 600,
+  renderer = file_renderer(dir = "animation_frames", prefix = "frame_", overwrite = TRUE),
+  frame_vars = list(function(i) {
+    annotation_custom(png_df$raster[[i]], xmin=-Inf, xmax=Inf, ymin=-Inf, ymax=Inf)
+  })
+)
 
 ```
+
+```{r}
+system("convert -delay 50 -loop 0 animation_frames/frame_*.png my_animation.gif")
+browseURL("my_animation.gif")
+
+```
+
+
+# THIS WORKS
+```{r}
+png_files <- list.files("animation_frames", pattern = "\\.png$", full.names = TRUE)
+png_files <- sort(png_files)  # sort alphabetically (frame_001.png, frame_002.png, ...)
+
+for (file in png_files) {
+  img <- readPNG(file)
+  grid.newpage()              # clear previous plot
+  grid.raster(img)            # draw new image
+  Sys.sleep(0.7)              # wait before next frame
+}
+
+
+```
+
+
+
+

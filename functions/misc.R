@@ -1,19 +1,22 @@
-make_obs_bkg = function(sp = "lionsmane"){
+make_obs_bkg = function(sp = "lionsmane", bbox = read_coastline_buffer()){
   #' Create list of two sf objects: observation and background points
   #'
   #' @param sp 
   #' @return observation and background points
   
   df = read_obs() %>% 
-    dplyr::filter(source == "record") %>% 
-    sf::st_as_sf(coords = c("lon", "lat"), crs = 4326)
-
-  obs = df %>% 
-    dplyr::filter(type == sp) 
-      
-  bkg = df %>% 
-    dplyr::filter(type != sp)
-    
+    filter(source == "record") %>% 
+    st_as_sf(coords = c("lon", "lat"), crs = 4326)
+  
+  # Filter by species
+  obs = df %>% filter(type == sp)
+  bkg = df %>% filter(type != sp)
+  
+  if (!is.null(bbox)) {
+    obs = st_crop(obs, bbox)
+    bkg = st_crop(bkg, bbox)
+  }
+  
   return(list(obs = obs, bkg = bkg))
 }
 

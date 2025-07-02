@@ -101,3 +101,11 @@ extract_accuracies = function(model = "maxent",
 
 
 
+  
+  
+  
+  
+  
+  
+  
+  
