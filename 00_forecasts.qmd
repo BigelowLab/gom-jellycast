@@ -33,6 +33,7 @@ gif = make_movie(version = "v0", v = "v0.021", start_date = as.Date("2025-07-01"
 ```
 
 # Today's White Cross Jellyfish Forecast
+=======
 ```{r whitecross, echo=FALSE}
 img = update_forecast(version = "v0", v = "v0.028", model = "rf")
 grid.raster(img)
