@@ -13,7 +13,7 @@
 packages = list(
   cran = c("here", "sf", "stars", "dplyr","tidyr","tidymodels","maxnet", 
            "yardstick", "randomForest", "copernicus", "andreas", "charlier", 
-           "lubridate", "rnaturalearth", "raster"),
+           "lubridate", "rnaturalearth", "raster", "magick"),
   github = c(jellydata = "BigelowLab")
 )
 

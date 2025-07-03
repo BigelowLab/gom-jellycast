@@ -45,6 +45,12 @@ img = update_forecast(version = "v0", v = "v0.021", model = "rf")
 grid.raster(img)
 ```
 
+# Forecast Animation
+```{r animation, echo=FALSE}
+gif = make_movie(version = "v0", v = "v0.021", start_date = as.Date("2025-07-01"), end_date = as.Date("2025-07-08"), model = "rf")
+print(gif)
+```
+
 # Observation Distributions
 ```{r dist}
 ggplot() +

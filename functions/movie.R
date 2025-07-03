@@ -22,39 +22,32 @@ extract_pngs = function(version = "v0",
   return(df)
 }
 
-
-
-
-
-
-
 make_movie = function(version = "v0",
-                          v = "v0.015",
-                          start_date = as.Date("2025-07-01"),
-                          end_date = as.Date("2025-07-08"),
-                          model = "maxent",
-                          width = 800,
-                          height = 600,
-                          fps = 2) {
+                      v = "v0.015",
+                      start_date = as.Date("2025-07-01"),
+                      end_date = as.Date("2025-07-08"),
+                      model = "rf",
+                      width = 800,
+                      height = 600,
+                      fps = 2) {
   
-  png_df <- extract_pngs(version, v, start_date, end_date, model)
+  png_df = extract_pngs(version, v, start_date, end_date, model)
+  pngs = image_read(png_df$file)
+  animation = image_animate(pngs, fps = 2)
+  # image_write(animation, "rf_animation.gif")
   
-  if (nrow(png_df) == 0) {
-    stop("No PNG files found for the specified parameters.")
-  }
+  out_dir = file.path("data", "versions", version, v, "results",
+                      format(start_date, "%Y-%m-%d"), model)
   
-  output_gif <- sprintf("animation_%s_to_%s.gif",
-                        format(min(png_df$date), "%Y%m%d"),
-                        format(max(png_df$date), "%Y%m%d"))
+  dir.create(out_dir, recursive = TRUE, showWarnings = FALSE)
   
-  gifski::gifski_png(
-    png_df$file,
-    gif_file = output_gif,
-    width = width,
-    height = height,
-    delay = 1/fps
-  )
+  out_file = sprintf("%s_%s.gif",
+                     format(start_date, "%Y-%m-%d"),
+                     format(end_date, "%Y-%m-%d"))
   
-  message("✅ GIF saved as: ", output_gif)
-  browseURL(output_gif)
+  out_path = file.path(out_dir, out_file)
+  
+  image_write(animation, out_path)
+  
+  return(animation)
 }
