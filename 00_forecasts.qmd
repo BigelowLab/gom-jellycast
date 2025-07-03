@@ -1,0 +1,35 @@
+---
+title: "Jellyfish Sighting Forecasts"
+format:
+  html:
+    code-fold: true
+---
+
+```{r setup, include=FALSE}
+source("setup.R")
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Lion's Mane Jellyfish Sighting Forecast
+```{r lionsmane, echo=FALSE}
+img = png::readPNG("data/versions/v0/v0.015/results/2025-07-02/rf/predicted_distribution.png")
+grid.raster(img)
+```
+
+# Moon Jellyfish Forecast
+```{r moon, echo=FALSE}
+img = png::readPNG("data/versions/v0/v0.021/results/2025-07-02/rf/predicted_distribution.png")
+grid.raster(img)
+```
+
+# White Cross Jellyfish Forecast
+```{r whitecross, echo=FALSE}
+img = png::readPNG("data/versions/v0/v0.028/results/2025-07-02/rf/predicted_distribution.png")
+grid.raster(img)
+```
+
+# Comb Jellyfish Forecast
+```{r comb, echo=FALSE}
+img = png::readPNG("data/versions/v0/v0.033/results/2025-07-02/rf/predicted_distribution.png")
+grid.raster(img)
+```
