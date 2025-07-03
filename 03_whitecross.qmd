@@ -24,6 +24,7 @@ format:
 
 ```{r setup, include=FALSE}
 source("setup.R")
+source("shared_vars.R")
 knitr::opts_chunk$set(echo = TRUE)
 coast = st_as_sf(read_coast())
 coast_bbox = st_bbox(coast)
@@ -37,14 +38,12 @@ obs = read_obs() %>%
 
 # Today's Forecast
 ```{r forecast, echo=FALSE}
-img = update_forecast(version = "v0", v = "v0.028", model = "rf")
-grid.raster(img)
+grid.raster(whitecross_img)
 ```
 
 # Forecast Animation
 ```{r animation, echo=FALSE}
-gif = make_movie(version = "v0", v = "v0.028", start_date = as.Date("2025-07-01"), end_date = as.Date("2025-07-08"), model = "rf")
-print(gif)
+whitecross_gif
 ```
 
 # Observation Distributions
