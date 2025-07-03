@@ -16,10 +16,22 @@ img = update_forecast(version = "v0", v = "v0.015", model = "rf")
 grid.raster(img)
 ```
 
+# Lion's Mane Jellyfish Sighting Forecast Animation
+```{r lm animation, echo=FALSE}
+gif = make_movie(version = "v0", v = "v0.015", start_date = as.Date("2025-07-01"), end_date = as.Date("2025-07-08"), model = "rf")
+print(gif)
+```
+
 # Moon Jellyfish Forecast
 ```{r moon, echo=FALSE}
 img = update_forecast(version = "v0", v = "v0.021", model = "rf")
 grid.raster(img)
+```
+
+# Moon Jellyfish Sighting Forecast Animation
+```{r moon animation, echo=FALSE}
+gif = make_movie(version = "v0", v = "v0.021", start_date = as.Date("2025-07-01"), end_date = as.Date("2025-07-08"), model = "rf")
+print(gif)
 ```
 
 # White Cross Jellyfish Forecast
@@ -28,8 +40,20 @@ img = update_forecast(version = "v0", v = "v0.028", model = "rf")
 grid.raster(img)
 ```
 
+# White Cross Jellyfish Sighting Forecast Animation
+```{r wc animation, echo=FALSE}
+gif = make_movie(version = "v0", v = "v0.028", start_date = as.Date("2025-07-01"), end_date = as.Date("2025-07-08"), model = "rf")
+print(gif)
+```
+
 # Comb Jellyfish Forecast
 ```{r comb, echo=FALSE}
 img = update_forecast(version = "v0", v = "v0.033", model = "rf")
 grid.raster(img)
+```
+
+# Comb Jellyfish Sighting Forecast Animation
+```{r comb animation, echo=FALSE}
+gif = make_movie(version = "v0", v = "v0.033", start_date = as.Date("2025-07-01"), end_date = as.Date("2025-07-08"), model = "rf")
+print(gif)
 ```

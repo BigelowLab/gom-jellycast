@@ -248,13 +248,12 @@ table(Predicted = df60$pred_presence, Actual = df60$actual_presence)
 
 
 ```{r}
-library(ggplot2)
-library(gganimate)
-library(png)
-library(grid)
-library(dplyr)
-library(gifski)
-library(animation)
+library(magick)
+
+png_df = extract_pngs("v0", "v0.015", as.Date("2025-07-01"), as.Date("2025-07-08"), "rf")
+pngs = image_read(png_df$file)
+animation = image_animate(pngs, fps = 2)
+image_write(animation, "rf_animation.gif")
 ```
 
 
