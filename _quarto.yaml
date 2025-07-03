@@ -4,6 +4,7 @@ project:
   execute-dir: project
   render:
     - index.qmd
+    - 00_forecasts.qmd
     - 01_lionsmane.qmd
     - 02_moon.qmd
     - 03_whitecross.qmd
@@ -22,6 +23,8 @@ website:
     contents:
       - href: index.qmd
         text: Home
+      - href: 00_forecasts.qmd
+        text: Forecasts
       - href: 01_lionsmane.qmd
         text: Lion's Mane Jellyfish
       - href: 02_moon.qmd

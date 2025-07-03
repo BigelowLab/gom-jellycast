@@ -44,7 +44,7 @@ obs = read_obs() %>%
 
 # Today's Forecast
 ```{r forecast, echo=FALSE}
-img = png::readPNG("data/versions/v0/v0.015/results/2025-07-02/rf/predicted_distribution.png")
+img = update_forecast(version = "v0", v = "v0.015", model = "rf")
 grid.raster(img)
 ```
 

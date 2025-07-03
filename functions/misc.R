@@ -216,6 +216,15 @@ model_rf = function(train, test, ntree = 500, roc = TRUE, acc = TRUE, conf = TRU
 
 }
   
-  
+
+update_forecast = function(version = "v0",
+                           v = "v0.015",
+                           date = Sys.Date(),
+                           model = "rf"){
+  date_str = format(date, "%Y-%m-%d")
+  file_path = file.path("data", "versions", version, v, "results", date_str, model, "predicted_distribution.png")
+  img = png::readPNG(file_path)
+  return(img)
+}
   
   
