@@ -1,4 +1,4 @@
-make_obs_bkg = function(sp = "lionsmane", bbox = read_coastline_buffer()){
+make_obs_bkg = function(sp = "lionsmane", bbox = read_coastline_buffer(), n = 1000, random = FALSE){
   #' Create list of two sf objects: observation and background points
   #'
   #' @param sp 
@@ -10,11 +10,25 @@ make_obs_bkg = function(sp = "lionsmane", bbox = read_coastline_buffer()){
   
   # Filter by species
   obs = df %>% filter(type == sp)
-  bkg = df %>% filter(type != sp)
   
   if (!is.null(bbox)) {
     obs = st_crop(obs, bbox)
-    bkg = st_crop(bkg, bbox)
+    
+    if (random) {
+      # generate random geometries
+      bkg_points = st_sample(bbox, size = n, type = "random")
+      
+      # sample attributes from obs to match the count
+      attr_sample = obs %>% 
+        st_drop_geometry() %>% 
+        slice_sample(n = length(bkg_points), replace = TRUE)
+      
+      # create new sf object with same columns
+      bkg = st_sf(attr_sample, geometry = bkg_points)
+    } else {
+      bkg = df %>% filter(type != sp)
+      bkg = st_crop(bkg, bbox)
+    }
   }
   
   return(list(obs = obs, bkg = bkg))

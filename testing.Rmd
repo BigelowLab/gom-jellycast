@@ -243,85 +243,60 @@ table(Predicted = df60$pred_presence, Actual = df60$actual_presence)
 ```
 
 
-# MOVIE
-
-
-
+# Histogram
 ```{r}
-library(magick)
+cfg = read_config("data/versions/v1/v1.015/v1.015.yaml")
+target_date = as.Date("2025-07-01")
+# run model_v1.R through df = write_df(x, month_obs, month_bkg)
 
-png_df = extract_pngs("v0", "v0.015", as.Date("2025-07-01"), as.Date("2025-07-08"), "rf")
-pngs = image_read(png_df$file)
-animation = image_animate(pngs, fps = 2)
-image_write(animation, "rf_animation.gif")
-```
+ggplot(df, aes(x = thetao, fill = factor(presence))) +
+  geom_histogram(alpha = 0.6, position = "identity", bins = 30) +
+  scale_fill_manual(values = c("0" = "grey70", "1" = "dodgerblue"),
+                    labels = c("Absence", "Presence")) +
+  labs(x = "Sea Surface Temperature (thetao, °C)",
+       fill = "Observation",
+       title = paste("SST distribution on", format(target_date, "%Y-%m-%d"))) +
+  theme_minimal()
 
-
-```{r}
-# Extract and load PNGs
-png_df <- extract_pngs("v0", "v0.015", as.Date("2025-07-01"), as.Date("2025-07-08"), "maxent")
-
-png_df$raster <- lapply(png_df$file, function(f) {
-  img <- readPNG(f)
-  rasterGrob(img, width = unit(1, "npc"), height = unit(1, "npc"))
-})
-png_df$frame <- seq_len(nrow(png_df))
-
-```
-
-```{r}
-frame_df <- data.frame(frame = png_df$frame)
-
-p <- ggplot(frame_df, aes(frame = frame)) +
-  geom_blank() +
-  transition_manual(frame) +
-  labs(title = "Date: {png_df$date[as.integer(current_frame)]}") +
-  theme_void()
+ggplot(df, aes(x = thetao, fill = factor(presence))) +
+  geom_histogram(bins = 30, alpha = 0.8, color = "black") +
+  scale_fill_manual(values = c("0" = "grey70", "1" = "dodgerblue"),
+                    labels = c("Absence", "Presence")) +
+  facet_wrap(~ presence, ncol = 1, 
+             labeller = as_labeller(c(`0` = "Absence", `1` = "Presence"))) +
+  labs(
+    title = paste("Stacked Histograms of SST (thetao) on", format(target_date, "%Y-%m-%d")),
+    x = "Sea Surface Temperature (°C)",
+    y = "Count",
+    fill = "Observation"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "none")
 
 
 
-ggplot(df, aes(x, y)) +
-  geom_point() +
-  transition_states(frame_date, transition_length = 2, state_length = 1) +
-  labs(title = "Date: {closest_state}")
-```
-
-```{r}
-anim <- animate(
-  p,
-  nframes = nrow(png_df),
-  fps = 2,
-  width = 800,
-  height = 600,
-  renderer = file_renderer(dir = "animation_frames", prefix = "frame_", overwrite = TRUE),
-  frame_vars = list(function(i) {
-    annotation_custom(png_df$raster[[i]], xmin=-Inf, xmax=Inf, ymin=-Inf, ymax=Inf)
-  })
-)
 
 ```
 
+# Ridgeline plots
 ```{r}
-system("convert -delay 50 -loop 0 animation_frames/frame_*.png my_animation.gif")
-browseURL("my_animation.gif")
+library(ggridges)
+
+df$presence <- factor(df$presence, levels = c(1, 0), labels = c("Presence", "Absence"))
+
+ggplot(df, aes(x = thetao, y = presence, fill = presence)) +
+  geom_density_ridges(alpha = 0.7, scale = 1.2) +
+  scale_fill_manual(values = c("Presence" = "dodgerblue", "Absence" = "grey70")) +
+  labs(
+    title = paste("Ridgeline Plot of SST (thetao) on", format(target_date, "%Y-%m-%d")),
+    x = "Sea Surface Temperature (°C)",
+    y = "",
+    fill = "Observation"
+  ) +
+  theme_minimal()
 
 ```
 
-
-# THIS WORKS
-```{r}
-png_files <- list.files("animation_frames", pattern = "\\.png$", full.names = TRUE)
-png_files <- sort(png_files)  # sort alphabetically (frame_001.png, frame_002.png, ...)
-
-for (file in png_files) {
-  img <- readPNG(file)
-  grid.newpage()              # clear previous plot
-  grid.raster(img)            # draw new image
-  Sys.sleep(0.7)              # wait before next frame
-}
-
-
-```
 
 
 

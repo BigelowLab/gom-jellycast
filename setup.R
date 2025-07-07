@@ -6,7 +6,7 @@
 # C. set the working directory
 # D. source each file in subdir 'functions'
 
-#' Here we list the packages required for the project dibdied in to group sources.
+#' Here we list the packages required for the project divided into group sources.
 #' 
 #' `cran` packages can be installed with `utils::install.packages()`
 #' `github` packages can be installed with `remotes::install_github()`
@@ -16,7 +16,6 @@ packages = list(
            "lubridate", "rnaturalearth", "raster", "magick"),
   github = c(jellydata = "BigelowLab")
 )
-
 
 #' Installation and loading from CRAN
 installed = installed.packages() |> dplyr::as_tibble()
@@ -39,7 +38,7 @@ for (package in names(packages$github)){
 }
 
 # define the project root
-here::i_am("setup.R")
+# here::i_am("setup.R")
 
 # source ancillary functions
 files = list.files("functions", pattern = "^.*\\.R$", full.names = TRUE)
