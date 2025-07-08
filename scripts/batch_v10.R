@@ -5,7 +5,7 @@
 # usage: 
 # $ Rscript /path/to/script.R /path/to/config.yaml start_date end_date
 # example:
-# Rscript scripts/batch_v0.R data/versions/v0/v0.001/v0.001.yaml start end
+# Rscript scripts/batch_v10.R data/versions/v1/v1.001/v1.001.yaml start end
 # 
 # params: 
 #   @param script to be run

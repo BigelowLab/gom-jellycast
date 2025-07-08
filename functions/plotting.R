@@ -105,7 +105,6 @@ predicted_dist = function(raster,
     city = c("Portland", "Boston", "Halifax")
   )
   
-  # NEW: Title mapping
   species_title = switch(species,
                          "lionsmane" = "Lion's Mane Jellyfish",
                          "moon" = "Moon Jellyfish",

@@ -142,7 +142,7 @@ main = function(cfg, target_date){
     
     stars::write_stars(maxent_res$prediction_raster, file.path(maxent_dir, "predicted_distribution.tif"))
     
-    dist_plot = predicted_dist(maxent_res$prediction_raster, the_date = target_date, add_points = "all", day_obs = day_obs, day_bkg = day_bkg)
+    dist_plot = predicted_dist(maxent_res$prediction_raster, the_date = target_date, add_points = "all", species = species, day_obs = day_obs, day_bkg = day_bkg)
     
     
     ggplot2::ggsave(
@@ -182,7 +182,7 @@ main = function(cfg, target_date){
     
     stars::write_stars(rf_res$prediction_raster, file.path(rf_dir, "predicted_distribution.tif"))
     
-    dist_plot = predicted_dist(rf_res$prediction_raster, the_date = target_date, add_points = "all", day_obs = day_obs, day_bkg = day_bkg)
+    dist_plot = predicted_dist(rf_res$prediction_raster, the_date = target_date, species = species, add_points = "all", day_obs = day_obs, day_bkg = day_bkg)
     ggplot2::ggsave(
       filename = file.path(rf_dir, "predicted_distribution.png"),
       plot = dist_plot,

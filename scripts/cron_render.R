@@ -40,7 +40,8 @@ if (Args$push){
   # add, commit, push
   ok = system("git add *")
   if (ok == 0){
-    ok = system(sprintf("git commit -a -m '%s'", format(Sys.time(), "%Y-%m-%dT%H:%M:%S")))
+    commit_msg = sprintf("%s forecast update", format(Sys.time(), "%Y-%m-%dT%H:%M:%S"))
+    ok = system(sprintf("git commit -m '%s'", commit_msg))
     if (ok == 0){
       ok = system("git push origin main")
       if (ok != 0) stop("unable to push to github")
