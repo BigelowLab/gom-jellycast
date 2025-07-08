@@ -35,7 +35,7 @@ suppressPackageStartupMessages({
 
 main <- function(date, configs) {
   date = as.Date(date)
-  model_script = "scripts/model_v0.R"
+  model_script = "/mnt/s1/projects/ecocast/projects/gom-jellycast-dev/scripts/model_v0.R"
   
   for (config in configs) {
     cfg = yaml::read_yaml(config)

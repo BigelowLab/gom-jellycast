@@ -39,6 +39,7 @@ for (package in names(packages$github)){
 
 # define the project root
 # here::i_am("setup.R")
+setwd("/mnt/s1/projects/ecocast/projects/gom-jellycast-dev")
 
 # source ancillary functions
 files = list.files("functions", pattern = "^.*\\.R$", full.names = TRUE)

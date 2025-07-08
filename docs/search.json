@@ -1,12 +1,12 @@
 [
   {
-    "objectID": "about.html",
-    "href": "about.html",
-    "title": "About",
+    "objectID": "00_forecasts.html",
+    "href": "00_forecasts.html",
+    "title": "Jellyfish Sighting Forecasts",
     "section": "",
-    "text": "The jellydata project was developed at Bigelow Laboratory’s Tandy Center for Ocean Forecasting to aid in the development of modeling studies requiring either observation/abundance point data or to modeled rasterized layers for subsequent use in modeling studies. Use the github issues tracker to post questions or report issues.\n\ncredit Colby, Bigelow\nblurb about Nick, Ben, Logan\n\n\n\n\n Back to top",
+    "text": "1 Today’s Lion’s Mane Jellyfish Sighting Forecast\n\n\n\n\n\n\n\n\n\n\n\n2 Lion’s Mane Jellyfish Sighting Forecast Animation\n\n\n\n\n\n\n\n\n\n\n\n3 Today’s Moon Jellyfish Forecast\n\n\n\n\n\n\n\n\n\n\n\n4 Moon Jellyfish Sighting Forecast Animation\n\n\n\n\n\n\n\n\n\n\n\n5 Today’s White Cross Jellyfish Forecast\n\n\n\n\n\n\n\n\n\n\n\n6 White Cross Jellyfish Sighting Forecast Animation\n\n\n\n\n\n\n\n\n\n\n\n7 Today’s Comb Jellyfish Forecast\n\n\n\n\n\n\n\n\n\n\n\n8 Comb Jellyfish Sighting Forecast Animation\n\n\n\n\n\n\n\n\n\n\n\n\n\n Back to top",
     "crumbs": [
-      "About"
+      "Forecasts"
     ]
   },
   {
@@ -30,6 +30,16 @@
     ]
   },
   {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "The jellydata project was developed at Bigelow Laboratory’s Tandy Center for Ocean Forecasting to aid in the development of modeling studies requiring either observation/abundance point data or to modeled rasterized layers for subsequent use in modeling studies. Use the github issues tracker to post questions or report issues.\n\ncredit Colby, Bigelow\nblurb about Nick, Ben, Logan\n\n\n\n\n Back to top",
+    "crumbs": [
+      "About"
+    ]
+  },
+  {
     "objectID": "index.html",
     "href": "index.html",
     "title": "gom-jellies-dev",
@@ -37,16 +47,6 @@
     "text": "For the gom-jellies project, observations come from community scientist reports. The following species have been selected for analysis:\n\nCyanea capillata (Lion’s Mane)\nAurelia aurita (Moon)\nStaurostoma mertensii (White Cross)\nCtenophores (Comb)\n\n\n1 All Observations\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n2 By Species\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n Back to top",
     "crumbs": [
       "Home"
-    ]
-  },
-  {
-    "objectID": "00_forecasts.html",
-    "href": "00_forecasts.html",
-    "title": "Jellyfish Sighting Forecasts",
-    "section": "",
-    "text": "1 Today’s Lion’s Mane Jellyfish Sighting Forecast\n\n\n\n\n\n\n\n\n\n\n\n2 Lion’s Mane Jellyfish Sighting Forecast Animation\n\n\n\n\n\n\n\n\n\n\n\n3 Today’s Moon Jellyfish Forecast\n\n\n\n\n\n\n\n\n\n\n\n4 Moon Jellyfish Sighting Forecast Animation\n\n\n\n\n\n\n\n\n\n\n\n5 Today’s White Cross Jellyfish Forecast\n\n\n\n\n\n\n\n\n\n\n\n6 White Cross Jellyfish Sighting Forecast Animation\n\n\n\n\n\n\n\n\n\n\n\n7 Today’s Comb Jellyfish Forecast\n\n\n\n\n\n\n\n\n\n\n\n8 Comb Jellyfish Sighting Forecast Animation\n\n\n\n\n\n\n\n\n\n\n\n\n\n Back to top",
-    "crumbs": [
-      "Forecasts"
     ]
   },
   {
