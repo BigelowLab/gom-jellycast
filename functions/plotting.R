@@ -95,15 +95,6 @@ predicted_dist = function(raster,
                           species = "lionsmane",
                           add_points = "none",
                           day_obs, day_bkg){
-
-  #' Generates a ggplot of the predicted distribution raster with optional polygon masking.
-  #'
-  #' @param raster stars object, prediction raster
-  #' @param polygon sf object, optional; spatial polygon for cropping and masking
-  #' @param the_date date object
-  #'
-  #'
-  #' @return ggplot object
   
   coast_buffer = read_coastline_buffer()
   coast_bbox = st_bbox(coast_buffer)
@@ -113,6 +104,14 @@ predicted_dist = function(raster,
     lat = c(43.6615, 42.3601, 44.6488),
     city = c("Portland", "Boston", "Halifax")
   )
+  
+  # NEW: Title mapping
+  species_title = switch(species,
+                         "lionsmane" = "Lion's Mane Jellyfish",
+                         "moon" = "Moon Jellyfish",
+                         "comb" = "Comb Jellyfish",
+                         "whitecross" = "White Cross Jellyfish",
+                         "Jellyfish")
   
   p = ggplot() +
     geom_stars(data = raster, na.rm = TRUE) +
@@ -129,20 +128,18 @@ predicted_dist = function(raster,
       expand = FALSE
     ) +
     labs(
-      title = paste("Comb Jellyfish Sighting Forecast for", format(the_date, "%Y-%m-%d")),
+      title = paste(species_title, "Sighting Forecast for", format(the_date, "%Y-%m-%d")),
       x = "Longitude", y = "Latitude"
     ) +
     theme_minimal() +
-    theme(panel.grid.major = element_line(color = "gray80", linewidth = 0.2)) + 
-  
+    theme(panel.grid.major = element_line(color = "gray80", linewidth = 0.2)) +
+    
     geom_point(data = labels, aes(x = lon, y = lat),
                shape = 8, size = 5, color = "red", alpha = 0.4) +
     geom_point(data = labels, aes(x = lon, y = lat),
                shape = 8, size = 3, color = "red") +
-    
     geom_text(data = labels, aes(x = lon, y = lat, label = city),
               nudge_x = -0.2, nudge_y = 0.2, hjust = 1, vjust = 0, size = 3.5, color = "black")
-  
   
   if ((add_points %in% c("obs", "all")) && nrow(day_obs) > 0) {
     p = p + geom_sf(data = day_obs %>% filter(type == species), 
@@ -154,9 +151,9 @@ predicted_dist = function(raster,
                     color = "blue", size = 1, shape = 21, fill = "blue", alpha = 0.4)
   }
   
-  
   return(p)
 }
+
 
 
 mask_to_polygon = function(raster, poly, crs_proj = 3857){
@@ -171,5 +168,55 @@ mask_to_polygon = function(raster, poly, crs_proj = 3857){
   return(st_transform(masked, 4326))
 }
 
+plot_hist = function(df = df,
+                     target_date = target_date,
+                     vars = c("thetao")){
+  long_df = df %>%
+    dplyr::select(all_of(c(vars, "presence"))) %>%
+    pivot_longer(cols = all_of(vars), names_to = "variable", values_to = "value")
+  
+  p = ggplot(long_df, aes(x = value, fill = factor(presence))) +
+    geom_histogram(bins = 30, alpha = 0.8, color = "black") +
+    scale_fill_manual(values = c("0" = "grey70", "1" = "dodgerblue"),
+                      labels = c("Absence", "Presence")) +
+    facet_grid(variable ~ presence,
+               labeller = labeller(
+                 presence = c(`0` = "Absence", `1` = "Presence")
+               )) +
+    labs(
+      title = paste("Stacked Histograms on", format(target_date, "%Y-%m-%d")),
+      x = "Value",
+      y = "Count",
+      fill = "Observation"
+    ) +
+    theme_minimal() +
+    theme(legend.position = "none")
+  
+  return(p)
+  
+}
 
+plot_ridge = function(df, target_date, vars = c("thetao", "deptho")) {
+  df$presence = factor(df$presence, levels = c(1, 0), labels = c("Presence", "Absence"))
+  
+  # reshape to long format for ggplot
+  long_df = df %>%
+    dplyr::select(all_of(c(vars, "presence"))) %>%
+    pivot_longer(cols = all_of(vars), names_to = "variable", values_to = "value")
+  
+  # build the ridge plot
+  p = ggplot(long_df, aes(x = value, y = presence, fill = presence)) +
+    geom_density_ridges(alpha = 0.7, scale = 1.2) +
+    scale_fill_manual(values = c("Presence" = "dodgerblue", "Absence" = "grey70")) +
+    facet_wrap(~ variable, scales = "free_x") +
+    labs(
+      title = paste("Ridgeline Plots on", format(target_date, "%Y-%m-%d")),
+      x = "Value",
+      y = "",
+      fill = "Observation"
+    ) +
+    theme_minimal()
+  
+  return(p)
+}
 

@@ -84,11 +84,11 @@ library(grid)
 
 extract_im = function(version = "v0", 
                       v = "v0.001",
-                      date = as.Date("2024-06-01"),
-                      model = "maxent") {
+                      date = Sys.Date(),
+                      model = "rf") {
   date_str = format(date, "%Y-%m-%d")
   path = file.path(
-    "data", "versions", version, v, "results", model, date_str, model,
+    "data", "versions", version, v, "results", date_str, model,
     "predicted_distribution.png"
   )
   
@@ -97,6 +97,7 @@ extract_im = function(version = "v0",
   
   return(invisible(img)) 
 }
+
 
 extract_accuracies = function(model = "maxent", 
                               date = as.Date("2023-07-01"),

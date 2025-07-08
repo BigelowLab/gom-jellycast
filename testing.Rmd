@@ -297,7 +297,65 @@ ggplot(df, aes(x = thetao, y = presence, fill = presence)) +
 
 ```
 
+```{r}
+
+cfg = read_config("data/versions/v1/v1.015/v1.015.yaml")
+target_date = as.Date("2025-07-01")
 
 
+  root = cfg[["root"]]
+  region = cfg[["region"]]
+  poly = read_coastline_buffer(buffer = 100000, path = "/mnt/s1/projects/ecocast/projects/gom-jellycast-dev/data/polygons")
+  species = cfg[["type"]]
+  duration = cfg[["duration"]]
+  variables = unlist(cfg[["predictors"]][["phy"]])
+  version = cfg[["version"]]
+  product = cfg[["product"]]
+  model = cfg[["model"]]
+  
+
+  target_month = lubridate::month(target_date)
+  
+  pts = make_obs_bkg(sp = species, random = TRUE)
+  obs = pts$obs
+  bkg = pts$bkg
+  
+  day_obs = obs %>% 
+    filter(date == target_date)
+  
+  day_bkg = bkg %>% 
+    filter(date == target_date)
+  
+  
+  month_obs = obs %>% filter(lubridate::month(date) == lubridate::month(target_date))
+  month_bkg = bkg %>% filter(lubridate::month(date) == lubridate::month(target_date))
+  
+  # covariate data
+  has_deptho = "deptho" %in% variables
+  if(has_deptho){
+
+    variables = setdiff(variables, "deptho")
+    
+    # path to deptho raster
+    deptho_path = file.path("/mnt/s1/projects/ecocast/coredata/copernicus", region, product, "static", "deptho.tif")
+    
+    deptho_rast = read_stars(deptho_path)
+    names(deptho_rast) = "deptho"
+  }
+  
+  x = write_covs(region = region, product = product, day = target_date, vars = variables)
+  
+  if (has_deptho) {
+    deptho_rast = st_warp(deptho_rast, x)
+    x = c(x, deptho_rast, along = NA_integer_, tolerance = 1e-6)
+  }
+  
+  # train and test data
+  df = write_df(x, month_obs, month_bkg)
+```
 
 
+```{r}
+plot_hist(df = df, target_date = Sys.Date(), vars = c("thetao", "deptho"))
+plot_ridge(df, Sys.Date(), vars = c("thetao", "deptho"))
+```
