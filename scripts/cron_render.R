@@ -9,7 +9,7 @@
 #   optional arguments:
 #   -d, --doc   the name of the document to render [default: README.Rmd]
 #   -p, --path  the path to the document [default:
-#                                         /mnt/s1/projects/ecocast/projects/tcof-reporter]
+#                                         /mnt/s1/projects/ecocast/projects/gom-jellycast-dev]
 
 suppressPackageStartupMessages({
   library(argparser)
