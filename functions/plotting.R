@@ -99,10 +99,10 @@ predicted_dist = function(raster,
   coast_buffer = read_coastline_buffer()
   coast_bbox = st_bbox(coast_buffer)
   
-  labels = data.frame(
-    lon = c(-70.2553, -71.0589, -63.5752), 
-    lat = c(43.6615, 42.3601, 44.6488),
-    city = c("Portland", "Boston", "Halifax")
+  labels = data.frame( 
+    lon = c(-70.2553, -71.0589, -63.5752,-69.63370815296172), 
+    lat = c(43.6615, 42.3601, 44.6488, 43.87573509566831),
+    city = c("Portland", "Boston", "Halifax", "Boothbay")
   )
   
   species_title = switch(species,
