@@ -100,10 +100,15 @@ predicted_dist = function(raster,
   coast_bbox = st_bbox(coast_buffer)
   
   labels = data.frame( 
-    lon = c(-70.2553, -71.0589, -63.5752,-69.63370815296172), 
-    lat = c(43.6615, 42.3601, 44.6488, 43.87573509566831),
+    lon = c(-70.2553, -71.0589, -63.5752, -69.6337), 
+    lat = c(43.6615, 42.3601, 44.6488, 43.8757),
     city = c("Portland", "Boston", "Halifax", "Boothbay")
-  )
+  ) %>%
+    mutate(
+      nudge_x = ifelse(city %in% c("Portland", "Boston"), -0.2, -0.2),
+      nudge_y = ifelse(city %in% c("Portland", "Boston"), 0, 0.2),
+      hjust = 1
+    )
   
   species_title = switch(species,
                          "lionsmane" = "Lion's Mane Jellyfish",
@@ -137,8 +142,12 @@ predicted_dist = function(raster,
                shape = 8, size = 5, color = "red", alpha = 0.4) +
     geom_point(data = labels, aes(x = lon, y = lat),
                shape = 8, size = 3, color = "red") +
-    geom_text(data = labels, aes(x = lon, y = lat, label = city),
-              nudge_x = -0.2, nudge_y = 0.2, hjust = 1, vjust = 0, size = 3.5, color = "black")
+    
+    geom_text(data = labels,
+              aes(x = lon, y = lat, label = city, hjust = hjust),
+              nudge_x = labels$nudge_x,
+              nudge_y = labels$nudge_y,
+              size = 3.5, color = "black")
   
   if ((add_points %in% c("obs", "all")) && nrow(day_obs) > 0) {
     p = p + geom_sf(data = day_obs %>% filter(type == species), 
@@ -152,6 +161,8 @@ predicted_dist = function(raster,
   
   return(p)
 }
+
+
 
 
 

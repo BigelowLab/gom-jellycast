@@ -18,18 +18,30 @@ all = read_obs() %>%
 obs = all %>%
   filter(type %in% c("lionsmane", "moon", "whitecross", "comb"))
 
+df = read.csv("jellyfish.csv") %>% 
+  drop_na(Size)
 ```
 
+<section>
+  <p>
+In the early 2010s, jellyfish began popping up all throughout the Gulf of Maine with seemingly no explanation. Scientists Nick Record and Ben Tupper of the Tandy Center for Ocean Forecasting in the Bigelow Laboratory for Ocean Sciences began asking community members to reach out with their jellyfish sightings in an effort to explain the sudden population increase. 
+  </p>
+  <p>
+This site features an array of jellyfish sighting predictions across the Gulf of Maine to increase public awareness and understanding on the importance and implications of jellyfish in our ecosystems. Tracking jellyfish is important for beachgoers and boaters alike. On a larger scale, changes in jellyfish populations allow scientists to examine the impacts of climate change. 
+  </p>
+  <p>
 For the [gom-jellies](https://github.com/BigelowLab/gom-jellies) project, observations come from community scientist reports. The following species have been selected for analysis:
 
   + *Cyanea capillata* (Lion's Mane)
   + *Aurelia aurita* (Moon)
   + *Staurostoma mertensii* (White Cross)
   + *Ctenophores* (Comb)
+  </p>
+</section>
 
 # All Observations
-```{r, echo = FALSE}
-ggplot() +
+```{r, echo = FALSE, warning = FALSE}
+p1 = ggplot() +
   geom_sf(data = coast, color = "black") +
   geom_sf(data = all, color = "steelblue", size = 1.5) +
   coord_sf(
@@ -37,9 +49,31 @@ ggplot() +
     ylim = c(coast_bbox["ymin"], coast_bbox["ymax"]),
     expand = FALSE
   ) +
-  labs(title = "Distribution of All Observations") + 
+  labs(title = "Distribution of All Observations",
+       x = "Longitude",
+       y = "Latitude") + 
+  theme_minimal() 
+
+p2 = ggplot() +
+  geom_sf(data = coast, fill = "grey90", color = "black") +
+  geom_point(data = df, aes(x = Lon, y = Lat, size = Size), 
+               color = "steelblue", alpha = 0.7) +
+  scale_size(range = c(1,8)) +
+  coord_sf(
+      xlim = c(coast_bbox["xmin"], coast_bbox["xmax"]),
+      ylim = c(coast_bbox["ymin"], coast_bbox["ymax"]),
+      expand = FALSE
+    ) +
   theme_minimal() +
-  theme(axis.title = element_blank())
+  labs(
+      title = "Distribution of All Observations by Size",
+      x = "Longitude",
+      y = "Latitude",
+      size = "Diameter (cm)"
+  )
+
+p1 + p2
+
 ```
 
 ```{r, echo = FALSE}
@@ -73,8 +107,7 @@ ggplot() +
     expand = FALSE
   ) +
   labs(title = "Filtered Distribution") + 
-  theme_minimal() +
-  theme(axis.title = element_blank())
+  theme_minimal()
 
 ggplot(obs, aes(x = factor(year), fill = type)) +
   geom_bar() +

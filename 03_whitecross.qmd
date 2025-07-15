@@ -11,10 +11,10 @@ format:
 
 <section>
   <p>
-    The Whitecross jelly (*Staurostoma mertensii*) is a less commonly observed species, named for the distinct white cross-shaped markings on its bell. It inhabits cold, northern waters and has been documented in regions such as coastal Norway.
+    The whitecross jellyfish (*Staurostoma mertensii*), often called the compass jellyfish, is recognized by its distinct brown V-shaped markings radiating from the center of its bell, resembling a compass rose or a white cross on top. The bell typically reaches 30 cm (12 inches) in diameter, with long marginal tentacles and four frilly oral arms that capture and transport prey. Compass jellies inhabit temperate coastal waters of the northeast Atlantic, North Sea, and Mediterranean, and are seasonally common along European coastlines. While their sting is moderately painful, it is generally not dangerous to humans.
   </p>
   <p>
-    This species remains relatively mysterious compared to other jellyfish, and sightings are often of scientific interest. Its delicate body and unique markings make it visually striking when encountered by divers or captured in photographs.
+    Their diet mainly consists of small fish, copepods, and zooplankton, which they immobilize with their nematocysts. They are in turn preyed on by sea turtles, ocean sunfish, and larger jellyfish species. Like many scyphozoan jellyfish, compass jellies live for about a year, progressing through a polyp stage before maturing into the familiar medusa. They play an important ecological role by controlling plankton populations and serving as food for higher predators, while also sometimes offering temporary shelter for small fish among their tentacles.
   </p>
   <p>
     <strong>Learn more:</strong><br>
@@ -56,9 +56,10 @@ ggplot() +
     ylim = c(coast_bbox["ymin"], coast_bbox["ymax"]),
     expand = FALSE
   ) +
-  theme_minimal() +
-  labs(title = "White Cross Jelly Observations") +
-  theme(axis.title = element_blank())
+  labs(title = "White Cross Jelly Observations",        
+       x = "Longitude",
+       y = "Latitude") + 
+  theme_minimal() 
 
 ggplot() +
   geom_sf(data = coast, color = "black") +
@@ -69,9 +70,10 @@ ggplot() +
     expand = FALSE
   ) +
   facet_wrap(~ year) +
-  theme_minimal() +
-  labs(title = "White Cross Jelly Observations by Year") +
-  theme(axis.title = element_blank())
+  labs(title = "White Cross Jelly Observations by Year",        
+       x = "Longitude",
+       y = "Latitude") + 
+  theme_minimal() 
 
 ggplot() +
   geom_sf(data = coast, color = "black") +
@@ -82,9 +84,10 @@ ggplot() +
     expand = FALSE
   ) +
   facet_wrap(~ month) +
-  theme_minimal() +
-  labs(title = "White Cross Jelly Observations by Month") +
-  theme(axis.title = element_blank())
+  labs(title = "White Cross Jelly Observations by Month",        
+       x = "Longitude",
+       y = "Latitude") + 
+  theme_minimal() 
 ```
 
 # Proportion of Observations Histograms

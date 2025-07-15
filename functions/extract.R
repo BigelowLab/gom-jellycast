@@ -111,8 +111,21 @@ extract_accuracies = function(model = "maxent",
 }
 
 
-
+extract_top_model = function(version = "v0",
+                             sp = "lionsmane"){
+  # returns the highest performing model and metric for a given species in a list
   
+  summary_path = file.path("data", "versions", version, "summary_statistics.csv")
+  df = read.csv2(summary_path, header = TRUE, sep = ",") %>% 
+    filter(species == sp,
+           stringr::str_detect(metric, "_acc")) %>% 
+    arrange(desc(Max))
+  
+  top_version = df$version[1]
+  top_model = sub("_.*", "", df$metric[1])
+
+  return(list(top_version, top_model))
+}
   
   
   

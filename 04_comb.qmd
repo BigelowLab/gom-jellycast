@@ -11,13 +11,10 @@ format:
 
 <section>
   <p>
-    Comb jellies, or *ctenophores*, are gelatinous marine animals known for their shimmering rows of cilia—called "combs"—that they use for swimming. Although similar in appearance to jellyfish, comb jellies belong to a separate phylum and lack stinging cells.
+    Comb jellies, belonging to the phylum Ctenophora, are not true jellyfish but are often mistaken for them due to their gelatinous bodies. Unlike jellyfish, they lack stinging cells (nematocysts) and instead capture prey using sticky cells called colloblasts. Most comb jellies are small, ranging from a few millimeters to 15 cm (6 inches), and have eight rows of ciliary plates (“combs”) that beat in coordinated waves, refracting light into brilliant, shimmering colors — a hallmark of comb jellies. They are found worldwide in both surface waters and deep seas, including coastal ecosystems like the Gulf of Maine.
   </p>
   <p>
-    They come in various shapes and sizes, often with beautiful iridescent colors that reflect light as they move. Many species are bioluminescent, lighting up with blue or green flashes in the dark.
-  </p>
-  <p>
-    Comb jellies are important predators of zooplankton and are found in oceans worldwide, from surface waters to the deep sea.
+    Comb jellies feed on zooplankton, larval fish, and even other comb jellies, using their sticky tentacles or lobes to ensnare prey. In some ecosystems, they are preyed on by sea turtles, larger fish, and other ctenophores. Many comb jellies have short life spans, often just a few months, but they play significant roles in marine food webs, sometimes outcompeting fish larvae for plankton and reshaping community dynamics. Unlike true jellyfish, comb jellies do not sting, making them harmless to humans.
   </p>
   <p>
     <strong>Learn more:</strong><br>
@@ -60,9 +57,10 @@ ggplot() +
     ylim = c(coast_bbox["ymin"], coast_bbox["ymax"]),
     expand = FALSE
   ) +
-  theme_minimal() +
-  labs(title = "Comb Jelly Observations") +
-  theme(axis.title = element_blank())
+  labs(title = "Comb Jelly Observations",        
+       x = "Longitude",
+       y = "Latitude") + 
+  theme_minimal() 
 
 ggplot() +
   geom_sf(data = coast, color = "black") +
@@ -73,9 +71,10 @@ ggplot() +
     expand = FALSE
   ) +
   facet_wrap(~ year) +
-  theme_minimal() +
-  labs(title = "Comb Jelly Observations by Year") +
-  theme(axis.title = element_blank())
+  labs(title = "Comb Jelly Observations by Year",        
+       x = "Longitude",
+       y = "Latitude") + 
+  theme_minimal() 
 
 ggplot() +
   geom_sf(data = coast, color = "black") +
@@ -86,9 +85,10 @@ ggplot() +
     expand = FALSE
   ) +
   facet_wrap(~ month) +
-  theme_minimal() +
-  labs(title = "Comb Jelly Observations by Month") +
-  theme(axis.title = element_blank())
+  labs(title = "Comb Jelly Observations by Month",        
+       x = "Longitude",
+       y = "Latitude") + 
+  theme_minimal() 
 ```
 
 # Proportion of Observations Histograms

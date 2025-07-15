@@ -11,14 +11,10 @@ format:
 
 <section>
   <p>
-    The lion’s mane jellyfish (*Cyanea capillata*) is one of the largest known species of jellyfish, named for its long, trailing tentacles that resemble a lion’s mane. It can have a bell diameter of over 2 meters (6.5 feet) and tentacles extending more than 30 meters (100 feet), though most are much smaller.
+    The lion’s mane jellyfish (*Cyanea capillata*) is one of the largest known species of jellyfish, named for its long, reddish-brown or orange tentacles which resemble a lion’s mane. Lion’s manes can have a bell diameter of over 2 meters (7 feet) with tentacles extending more than 30 meters (100 feet) used to sting and capture prey. These jellies are typically found in cooler bodies of water such as the North Atlantic and North Pacific Oceans and are especially common in the Gulf of Maine. While lion’s mane stings are not usually fatal, they are extremely painful and contact should be avoided.
   </p>
   <p>
-    These jellyfish are typically found in the cold, northern waters of the Atlantic and Pacific Oceans, 
-    especially in the Gulf of Maine, Arctic, and North Sea. They drift with ocean currents and feed on small fish, plankton, and other jellyfish, capturing prey with stinging cells in their tentacles.
-  </p>
-  <p>
-    While their sting is painful, it is usually not dangerous to humans. Encounters are most common during the summer months, when they come closer to shore.
+	Their diet consists mainly of small fish, zooplankton, copepods, and other jellyfish and are typically preyed on by sea turtles, sunfish, and some seabirds. Most lion’s mane jellyfish have a lifespan of approximately one year, however, they play a vital role in marine ecosystems by providing shelter to smaller sea creatures.
   </p>
   <p>
     <strong>Learn more:</strong><br>
@@ -63,9 +59,10 @@ ggplot() +
     ylim = c(coast_bbox["ymin"], coast_bbox["ymax"]),
     expand = FALSE
   ) +
-  theme_minimal() +
-  labs(title = "Lion's Mane Observations") +
-  theme(axis.title = element_blank())
+  labs(title = "Lion's Mane Observations",
+       x = "Longitude",
+       y = "Latitude") + 
+  theme_minimal() 
 
 ggplot() +
   geom_sf(data = coast, color = "black") +
@@ -76,9 +73,10 @@ ggplot() +
     expand = FALSE
   ) +
   facet_wrap(~ year) +
-  theme_minimal() +
-  labs(title = "Lion's Mane Observations by Year") +
-  theme(axis.title = element_blank())
+  labs(title = "Lion's Mane Observations by Year",
+       x = "Longitude",
+       y = "Latitude") + 
+  theme_minimal() 
 
 ggplot() +
   geom_sf(data = coast, color = "black") +
@@ -89,9 +87,10 @@ ggplot() +
     expand = FALSE
   ) +
   facet_wrap(~ month) +
-  theme_minimal() +
-  labs(title = "Lion's Mane Observations by Month") +
-  theme(axis.title = element_blank())
+  labs(title = "Lion's Mane Observations by Month",
+       x = "Longitude",
+       y = "Latitude") + 
+  theme_minimal()
 ```
 
 # Proportion of Observations Histograms

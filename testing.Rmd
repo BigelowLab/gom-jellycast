@@ -359,3 +359,28 @@ target_date = as.Date("2025-07-01")
 plot_hist(df = df, target_date = Sys.Date(), vars = c("thetao", "deptho"))
 plot_ridge(df, Sys.Date(), vars = c("thetao", "deptho"))
 ```
+
+# plotting by size?
+```{r}
+obs = read.csv("jellyfish.csv") %>% 
+  drop_na(Size)
+glimpse(obs)
+coast = read_coast()
+coast_bbox = st_bbox(coast)
+
+
+ggplot() +
+  geom_sf(data = coast, fill = "grey90", color = "black") +
+  geom_point(data = obs, aes(x = Lon, y = Lat, size = Size), 
+             color = "blue", alpha = 0.7) +
+  scale_size(range = c(1,8)) +
+  coord_sf(xlim = c(coast_bbox["xmin"], coast_bbox["xmax"]),
+           ylim = c(coast_bbox["ymin"], coast_bbox["ymax"])) +
+  theme_minimal() +
+  labs(
+    title = "Observations by Location and Size with Coastline",
+    x = "Longitude",
+    y = "Latitude",
+    size = "Size"
+  )
+```

@@ -11,13 +11,10 @@ format:
 
 <section>
   <p>
-    The moon jelly (*Aurelia aurita*) is a widely distributed and easily recognizable jellyfish, known for its translucent, saucer-shaped bell and four horseshoe-shaped gonads visible through the top. It typically grows to about 25–40 cm (10–16 inches) in diameter.
+    The moon jelly (*Aurelia aurita*) is one of the most recognizable jellyfish species, known for its translucent, saucer-shaped bell marked by four horseshoe-shaped gonads visible through the top. Moon jellies typically have a bell diameter of 25–40 cm (10–16 inches), with short, fine tentacles around the edge that they use to collect plankton and small organisms from the water. They are found in temperate and tropical coastal waters worldwide, including the Atlantic, Pacific, and Gulf of Maine, often in bays and estuaries where currents concentrate food. Moon jelly stings are generally mild and harmless to humans, often causing little more than minor irritation.
   </p>
   <p>
-    Moon jellies are found in coastal waters around the world and prefer calm bays and harbors. They feed mainly on small plankton and fish eggs, using their fringe of short tentacles and mucus-covered bell to trap food.
-  </p>
-  <p>
-    While their sting is harmless to humans, they are often studied in aquariums and marine biology for their simple body structure and gentle movement.
+	Their diet mainly consists of zooplankton, copepods, mollusk larvae, and small crustaceans, which they trap using their mucus-covered bell and delicate tentacles. Moon jellies are preyed on by sea turtles, sunfish, larger jellyfish, and some seabirds. Like most jellyfish, they have a short lifespan of about a year, cycling through polyp and medusa stages. Despite their delicate appearance, moon jellies are crucial to marine ecosystems, serving as both predators and prey and sometimes providing temporary shelter or a food source for small juvenile fish and crustaceans.
   </p>
   <p>
     <strong>Learn more:</strong><br>
@@ -60,9 +57,10 @@ ggplot() +
     ylim = c(coast_bbox["ymin"], coast_bbox["ymax"]),
     expand = FALSE
   ) +
-  theme_minimal() +
-  labs(title = "Moon Jelly Observations") +
-  theme(axis.title = element_blank())
+  labs(title = "Moon Jelly Observations",
+       x = "Longitude",
+       y = "Latitude") + 
+  theme_minimal() 
 
 ggplot() +
   geom_sf(data = coast, color = "black") +
@@ -73,9 +71,10 @@ ggplot() +
     expand = FALSE
   ) +
   facet_wrap(~ year) +
-  theme_minimal() +
-  labs(title = "Moon Jelly Observations by Year") +
-  theme(axis.title = element_blank())
+  labs(title = "Moon Jelly Observations by Year",       
+       x = "Longitude",
+       y = "Latitude") + 
+  theme_minimal()
 
 ggplot() +
   geom_sf(data = coast, color = "black") +
@@ -86,9 +85,10 @@ ggplot() +
     expand = FALSE
   ) +
   facet_wrap(~ month) +
-  theme_minimal() +
-  labs(title = "Moon Jelly Observations by Month") +
-  theme(axis.title = element_blank())
+  labs(title = "Moon Jelly Observations by Month",
+       x = "Longitude",
+       y = "Latitude") + 
+  theme_minimal() 
 ```
 
 # Proportion of Observations Histograms
