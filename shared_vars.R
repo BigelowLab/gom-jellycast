@@ -13,3 +13,4 @@ whitecross_gif = make_movie(version = "v1", v = whitecross_top[1], model = white
 comb_top = extract_top_model(version = "v1", sp = "comb")
 comb_img = extract_im(version = "v1", v = comb_top[1], model = comb_top[2])
 comb_gif = make_movie(version = "v1", v = comb_top[1], model = comb_top[2])
+

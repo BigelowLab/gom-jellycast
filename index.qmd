@@ -19,7 +19,8 @@ obs = all %>%
   filter(type %in% c("lionsmane", "moon", "whitecross", "comb"))
 
 df = read.csv("jellyfish.csv") %>% 
-  drop_na(Size)
+  drop_na(Size) %>% 
+  filter(Year != "2016")
 ```
 
 <section>

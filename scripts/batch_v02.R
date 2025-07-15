@@ -65,16 +65,15 @@ main <- function(date, start_config, end_config) {
     }
   }
   
-  extract_summary()
+  extract_summary(version = "v0")
   invisible(0)
 }
 
 source("/mnt/s1/projects/ecocast/projects/gom-jellycast-dev/setup.R")
 
-Args = argparser::arg_parser("Run a series of configs for a single date") %>% 
-  add_argument("date", help = "single date (YYYY-MM-DD)") %>% 
-  add_argument("start_config", help = "start config YAML file") %>% 
-  add_argument("end_config", help = "end config YAML file") %>% 
+Args = arg_parser("Run multiple configs for a single date") %>%
+  add_argument("date", help = "single date (YYYY-MM-DD)") %>%
+  add_argument("--configs", nargs=2, help = "start and end config YAML files") %>%
   parse_args()
 
-main(Args$date, Args$start_config, Args$end_config)
+main(Args$date, Args$configs[1], Args$configs[2])
