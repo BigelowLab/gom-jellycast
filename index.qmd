@@ -8,19 +8,23 @@ coast = read_coast()
 coast_bbox = st_bbox(coast)
 
 all = read_obs() %>%
-  filter(source == "record") %>%
+  filter(source == "record",
+         date >= as.Date("2017-01-01")) %>%
   st_as_sf(coords = c("lon", "lat"), crs = 4326) %>% 
-    mutate(year = year(date),
-         month = factor(month(date, label = TRUE, abbr = TRUE),
-                        levels = month.abb),
-         type = as.factor(type))
+  mutate(
+    year = year(date),
+    month = factor(month(date, label = TRUE, abbr = TRUE), levels = month.abb),
+    type = as.factor(type),
+    size_fixed = ifelse(is.na(size), 1, size)
+  )
+
 
 obs = all %>%
   filter(type %in% c("lionsmane", "moon", "whitecross", "comb"))
 
-df = read.csv("jellyfish.csv") %>% 
-  drop_na(Size) %>% 
-  filter(Year != "2016")
+# df = read.csv("jellyfish.csv") %>% 
+#   drop_na(Size) %>% 
+#   filter(Year != "2016")
 ```
 
 <section>
@@ -41,7 +45,7 @@ For the [gom-jellies](https://github.com/BigelowLab/gom-jellies) project, observ
 </section>
 
 # All Observations
-```{r, echo = FALSE, warning = FALSE}
+```{r fig.height=10,fig.width=20, echo = FALSE, warning = FALSE}
 p1 = ggplot() +
   geom_sf(data = coast, color = "black") +
   geom_sf(data = all, color = "steelblue", size = 1.5) +
@@ -50,28 +54,29 @@ p1 = ggplot() +
     ylim = c(coast_bbox["ymin"], coast_bbox["ymax"]),
     expand = FALSE
   ) +
-  labs(title = "Distribution of All Observations",
-       x = "Longitude",
-       y = "Latitude") + 
-  theme_minimal() 
+  labs(
+    title = "Distribution of All Observations",
+    x = "Longitude",
+    y = "Latitude"
+  ) +
+  theme_minimal(base_size = 24)
 
 p2 = ggplot() +
   geom_sf(data = coast, fill = "grey90", color = "black") +
-  geom_point(data = df, aes(x = Lon, y = Lat, size = Size), 
-               color = "steelblue", alpha = 0.7) +
+  geom_sf(data = all, aes(size = size_fixed), color = "steelblue", alpha = 0.7) +
   scale_size(range = c(1,8)) +
   coord_sf(
-      xlim = c(coast_bbox["xmin"], coast_bbox["xmax"]),
-      ylim = c(coast_bbox["ymin"], coast_bbox["ymax"]),
-      expand = FALSE
-    ) +
-  theme_minimal() +
+    xlim = c(coast_bbox["xmin"], coast_bbox["xmax"]),
+    ylim = c(coast_bbox["ymin"], coast_bbox["ymax"]),
+    expand = FALSE
+  ) +
   labs(
-      title = "Distribution of All Observations by Size",
-      x = "Longitude",
-      y = "Latitude",
-      size = "Diameter (cm)"
-  )
+    title = "Distribution of All Observations by Size",
+    x = "Longitude",
+    y = "Latitude",
+    size = "Diameter (cm)"
+  ) +
+  theme_minimal(base_size = 24)
 
 p1 + p2
 
