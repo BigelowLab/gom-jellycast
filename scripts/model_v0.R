@@ -213,9 +213,9 @@ main = function(cfg, target_date){
 # Source environment setup
 source("/mnt/s1/projects/ecocast/projects/gom-jellycast-dev/setup.R")
 
-Args = argparser::arg_parser("Monthly model builder and predictor") |>
-  add_argument("config", help = "path to config file") |>
-  add_argument("date", help = "forecast date (YYYY-MM-DD)") |>
+Args = argparser::arg_parser("Monthly model builder and predictor", name = "model_v0.R") |>
+  argparser::add_argument("config", help = "path to config file") |>
+  argparser::add_argument("date", help = "forecast date (YYYY-MM-DD)") |>
   parse_args()
 cfg = yaml::read_yaml(Args$config)
 target_date = as.Date(Args$date)

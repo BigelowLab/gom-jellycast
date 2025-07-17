@@ -8,8 +8,7 @@ coast = read_coast()
 coast_bbox = st_bbox(coast)
 
 all = read_obs() %>%
-  filter(source == "record",
-         date >= as.Date("2017-01-01")) %>%
+  filter(source == "record") %>%
   st_as_sf(coords = c("lon", "lat"), crs = 4326) %>% 
   mutate(
     year = year(date),
@@ -18,13 +17,8 @@ all = read_obs() %>%
     size_fixed = ifelse(is.na(size), 1, size)
   )
 
-
 obs = all %>%
   filter(type %in% c("lionsmane", "moon", "whitecross", "comb"))
-
-# df = read.csv("jellyfish.csv") %>% 
-#   drop_na(Size) %>% 
-#   filter(Year != "2016")
 ```
 
 <section>
@@ -46,7 +40,7 @@ For the [gom-jellies](https://github.com/BigelowLab/gom-jellies) project, observ
 
 # All Observations
 ```{r fig.height=10,fig.width=20, echo = FALSE, warning = FALSE}
-p1 = ggplot() +
+p1 <- ggplot() +
   geom_sf(data = coast, color = "black") +
   geom_sf(data = all, color = "steelblue", size = 1.5) +
   coord_sf(
@@ -61,7 +55,7 @@ p1 = ggplot() +
   ) +
   theme_minimal(base_size = 24)
 
-p2 = ggplot() +
+p2 <- ggplot() +
   geom_sf(data = coast, fill = "grey90", color = "black") +
   geom_sf(data = all, aes(size = size_fixed), color = "steelblue", alpha = 0.7) +
   scale_size(range = c(1,8)) +
@@ -82,29 +76,51 @@ p1 + p2
 
 ```
 
-```{r, echo = FALSE}
-ggplot(data = all, aes(x = factor(year))) +
+```{r fig.height=10,fig.width=20, echo = FALSE, warning = FALSE}
+p1 <- ggplot(data = all, aes(x = factor(year))) +
   geom_bar(fill = "steelblue") +
-  theme_minimal() +
   labs(
     title = "Number of Observations per Year",
     x = "Year",
     y = "Count"
-  )
+  ) +
+  theme_minimal(base_size = 24)
 
-ggplot(all, aes(x = factor(month))) +
+p2 <- ggplot(all, aes(x = factor(year), y = size_fixed)) +
+  geom_bar(stat = "summary", fun = "mean", fill = "steelblue") +
+  labs(
+    title = "Average Bell Diameter of Observations per Year",
+    x = "Year",
+    y = "Average Diameter (cm)"
+  ) +
+  theme_minimal(base_size = 24)
+
+p1 + p2
+
+p3 <- ggplot(all, aes(x = factor(month))) +
   geom_bar(fill = "steelblue") +
-  theme_minimal() +
   labs(
     title = "Number of Observations per Month",
     x = "Month",
     y = "Count"
-  )
+  ) +
+  theme_minimal(base_size = 24)
+
+p4 <- ggplot(all, aes(x = factor(month), y = size_fixed)) +
+  geom_bar(stat = "summary", fun = "mean", fill = "steelblue") +
+  labs(
+    title = "Average Bell Diameter of Observations per Month",
+    x = "Month",
+    y = "Average Diameter (cm)"
+  ) +
+  theme_minimal(base_size = 24)
+
+p3 + p4
 ```
 
 # By Species
-```{r, echo = FALSE}
-ggplot() +
+```{r fig.height=10,fig.width=20, echo = FALSE, warning = FALSE}
+p1 <- ggplot() +
   geom_sf(data = coast, color = "black") +
   geom_sf(data = obs, aes(color = type), size = 1.5) +
   coord_sf(
@@ -112,27 +128,69 @@ ggplot() +
     ylim = c(coast_bbox["ymin"], coast_bbox["ymax"]),
     expand = FALSE
   ) +
-  labs(title = "Filtered Distribution") + 
-  theme_minimal()
+  labs(title = "Distribution of Filtered Observations") +
+  theme_minimal(base_size = 24)
 
-ggplot(obs, aes(x = factor(year), fill = type)) +
+
+p2 <- ggplot() +
+  geom_sf(data = coast, fill = "grey90", color = "black") +
+  geom_sf(data = obs, aes(size = size_fixed, color = type), alpha = 0.7) +
+  scale_size(range = c(1,8)) +
+  coord_sf(
+    xlim = c(coast_bbox["xmin"], coast_bbox["xmax"]),
+    ylim = c(coast_bbox["ymin"], coast_bbox["ymax"]),
+    expand = FALSE
+  ) +
+  labs(
+    title = "Distribution of Filtered Observations by Size",
+    x = "Longitude",
+    y = "Latitude",
+    size = "Diameter (cm)"
+  ) +
+  theme_minimal(base_size = 24)
+
+p1 + p2
+
+p3 <- ggplot(obs, aes(x = factor(year), fill = type)) +
   geom_bar() +
-  theme_minimal() +
   labs(
     title = "Number of Observations per Year",
     x = "Year",
     y = "Count"
-  )
+  ) +
+  theme_minimal(base_size = 24)
 
-ggplot(obs, aes(x = factor(month), fill = type)) +
+p4 <- ggplot(obs, aes(x = factor(year), y = size, fill = type)) +
+  geom_bar(stat = "summary", fun = "mean") +
+  labs(
+    title = "Average Bell Diameter of Observations per Year",
+    x = "Year",
+    y = "Average Diameter (cm)"
+  ) + 
+  theme_minimal(base_size = 24)
+
+p3 + p4
+
+p5 <- ggplot(obs, aes(x = factor(month), fill = type)) +
   geom_bar() +
-  theme_minimal() +
   labs(
     title = "Number of Observations per Month",
     x = "Month",
     y = "Count"
-  )
+  ) +
+  theme_minimal(base_size = 24)
 
+
+p6 <- ggplot(obs, aes(x = factor(month), y = size, fill = type)) +
+  geom_bar(stat = "summary", fun = "mean") +
+  labs(
+    title = "Average Bell Diameter of Observations per Month",
+    x = "Month",
+    y = "Average Diameter (cm)"
+  ) + 
+  theme_minimal(base_size = 24)
+
+p5 + p6
 ```
 
 

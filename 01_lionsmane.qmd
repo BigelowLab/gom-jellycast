@@ -31,12 +31,14 @@ source("shared_vars.R")
 knitr::opts_chunk$set(echo = TRUE)
 coast = st_as_sf(read_coast())
 coast_bbox = st_bbox(coast)
+
 obs = read_obs() %>% 
   filter(type == "lionsmane", source == "record") %>% 
   st_as_sf(coords = c("lon", "lat"), crs = 4326) %>% 
   mutate(year = factor(year(date)),
          month = factor(month(date, label = TRUE, abbr = TRUE), 
-                        levels = month.abb))
+                        levels = month.abb),
+         size_fixed = ifelse(is.na(size), 1, size))
 ```
 
 # Today's Forecast
@@ -51,7 +53,7 @@ lionsmane_gif
 
 # Observation Distributions
 ```{r dist, echo=FALSE}
-ggplot() +
+p1 <- ggplot() +
   geom_sf(data = coast, color = "black") +
   geom_sf(data = obs, color = "red", size = 1.5) +
   coord_sf(
@@ -64,7 +66,26 @@ ggplot() +
        y = "Latitude") + 
   theme_minimal() 
 
-ggplot() +
+p2 <- ggplot() +
+  geom_sf(data = coast, fill = "grey90", color = "black") +
+  geom_sf(data = obs, aes(size = size_fixed), color = "steelblue", alpha = 0.7) +
+  scale_size(range = c(1,8)) +
+  coord_sf(
+    xlim = c(coast_bbox["xmin"], coast_bbox["xmax"]),
+    ylim = c(coast_bbox["ymin"], coast_bbox["ymax"]),
+    expand = FALSE
+  ) +
+  labs(
+    title = "Lion's Mane Observations by Size",
+    x = "Longitude",
+    y = "Latitude",
+    size = "Diameter (cm)"
+  ) +
+  theme_minimal(base_size = 24)
+
+p1 + p2
+
+p3 <- ggplot() +
   geom_sf(data = coast, color = "black") +
   geom_sf(data = obs, color = "red", size = 1.5, alpha = 0.7) +
   coord_sf(
@@ -77,6 +98,23 @@ ggplot() +
        x = "Longitude",
        y = "Latitude") + 
   theme_minimal() 
+
+p4 <- ggplot() +
+  geom_sf(data = coast, fill = "grey90", color = "black") +
+  geom_sf(data = obs, aes(size = size_fixed), color = "steelblue", alpha = 0.7) +
+  scale_size(range = c(1,8)) +
+  coord_sf(
+    xlim = c(coast_bbox["xmin"], coast_bbox["xmax"]),
+    ylim = c(coast_bbox["ymin"], coast_bbox["ymax"]),
+    expand = FALSE
+  ) +
+  labs(
+    title = "Lion's Mane Observations by Size",
+    x = "Longitude",
+    y = "Latitude",
+    size = "Diameter (cm)"
+  ) +
+  theme_minimal(base_size = 24)
 
 ggplot() +
   geom_sf(data = coast, color = "black") +
