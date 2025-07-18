@@ -196,7 +196,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#todays-forecast" id="toc-todays-forecast" class="nav-link active" data-scroll-target="#todays-forecast"><span class="header-section-number">1</span> Today’s Forecast</a></li>
   <li><a href="#forecast-animation" id="toc-forecast-animation" class="nav-link" data-scroll-target="#forecast-animation"><span class="header-section-number">2</span> Forecast Animation</a></li>
   <li><a href="#observation-distributions" id="toc-observation-distributions" class="nav-link" data-scroll-target="#observation-distributions"><span class="header-section-number">3</span> Observation Distributions</a></li>
-  <li><a href="#proportion-of-observations-histograms" id="toc-proportion-of-observations-histograms" class="nav-link" data-scroll-target="#proportion-of-observations-histograms"><span class="header-section-number">4</span> Proportion of Observations Histograms</a></li>
+  <li><a href="#histograms-of-the-proportion-of-comb-jelly-observations" id="toc-histograms-of-the-proportion-of-comb-jelly-observations" class="nav-link" data-scroll-target="#histograms-of-the-proportion-of-comb-jelly-observations"><span class="header-section-number">4</span> Histograms of the Proportion of Comb Jelly Observations</a></li>
   </ul>
 </nav>
     </div>
@@ -333,8 +333,8 @@ Comb jellies feed on zooplankton, larval fish, and even other comb jellies, usin
 </div>
 </div>
 </section>
-<section id="proportion-of-observations-histograms" class="level1" data-number="4">
-<h1 data-number="4"><span class="header-section-number">4</span> Proportion of Observations Histograms</h1>
+<section id="histograms-of-the-proportion-of-comb-jelly-observations" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Histograms of the Proportion of Comb Jelly Observations</h1>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -342,7 +342,7 @@ Comb jellies feed on zooplankton, larval fish, and even other comb jellies, usin
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">after_stat</span>(prop), <span class="at">group =</span> <span class="dv">1</span>), <span class="at">fill =</span> <span class="st">"steelblue"</span>) <span class="sc">+</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Proportion of Comb Jelly Observations per Year"</span>,</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Proportions by Year"</span>,</span>
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Year"</span>,</span>
 <span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Proportion"</span></span>
 <span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -361,7 +361,7 @@ Comb jellies feed on zooplankton, larval fish, and even other comb jellies, usin
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_discrete</span>(<span class="at">drop =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Proportion of Comb Jelly Observations per Month"</span>,</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Proportion by Month"</span>,</span>
 <span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Month"</span>,</span>
 <span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Proportion"</span></span>
 <span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>

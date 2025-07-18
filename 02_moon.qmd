@@ -34,7 +34,8 @@ obs = read_obs() %>%
   st_as_sf(coords = c("lon", "lat"), crs = 4326) %>% 
   mutate(year = factor(year(date)),
          month = factor(month(date, label = TRUE, abbr = TRUE), 
-                        levels = month.abb))
+                        levels = month.abb),
+         size_fixed = ifelse(is.na(size), 1, size))
 ```
 
 # Today's Forecast
@@ -113,3 +114,25 @@ ggplot(obs, aes(x = month)) +
   )
 ```
 
+# Histograms of Average Bell Diameter of Moon Jelly Observations 
+```{r fig.height=10,fig.width=20, echo = FALSE, warning = FALSE}
+p1 <- ggplot(obs, aes(x = factor(year), y = size_fixed)) +
+  geom_bar(stat = "summary", fun = "mean", fill = "steelblue") +
+  labs(
+    title = "Average Bell Diameter by Year",
+    x = "Year",
+    y = "Average Diameter (cm)"
+  ) +
+  theme_minimal(base_size = 24)
+
+p2 <- ggplot(obs, aes(x = factor(month), y = size_fixed)) +
+  geom_bar(stat = "summary", fun = "mean", fill = "steelblue") +
+  labs(
+    title = "Average Bell Diameter by Month",
+    x = "Month",
+    y = "Average Diameter (cm)"
+  ) +
+  theme_minimal(base_size = 24)
+
+p1 + p2
+```

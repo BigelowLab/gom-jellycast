@@ -33,7 +33,8 @@ obs = read_obs() %>%
   st_as_sf(coords = c("lon", "lat"), crs = 4326) %>% 
   mutate(year = factor(year(date)),
          month = factor(month(date, label = TRUE, abbr = TRUE), 
-                        levels = month.abb))
+                        levels = month.abb),
+         size_fixed = ifelse(is.na(size), 1, size))
 ```
 
 # Today's Forecast

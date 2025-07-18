@@ -34,7 +34,8 @@ obs = read_obs() %>%
   st_as_sf(coords = c("lon", "lat"), crs = 4326) %>% 
   mutate(year = factor(year(date)),
          month = factor(month(date, label = TRUE, abbr = TRUE), 
-                        levels = month.abb))
+                        levels = month.abb),
+         size_fixed = ifelse(is.na(size), 1, size))
 ```
 
 # Today's Forecast
@@ -91,13 +92,13 @@ ggplot() +
   theme_minimal() 
 ```
 
-# Proportion of Observations Histograms
+# Histograms of the Proportion of Comb Jelly Observations
 ```{r hist}
 ggplot(obs, aes(x = year)) +
   geom_bar(aes(y = after_stat(prop), group = 1), fill = "steelblue") +
   theme_minimal() +
   labs(
-    title = "Proportion of Comb Jelly Observations per Year",
+    title = "Proportions by Year",
     x = "Year",
     y = "Proportion"
   )
@@ -107,7 +108,7 @@ ggplot(obs, aes(x = month)) +
   scale_x_discrete(drop = FALSE) +
   theme_minimal() +
   labs(
-    title = "Proportion of Comb Jelly Observations per Month",
+    title = "Proportion by Month",
     x = "Month",
     y = "Proportion"
   )
