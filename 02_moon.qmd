@@ -49,8 +49,8 @@ moon_gif
 ```
 
 # Observation Distributions
-```{r dist}
-ggplot() +
+```{r fig.height=10,fig.width=20, echo = FALSE, warning = FALSE}
+p1 <- ggplot() +
   geom_sf(data = coast, color = "black") +
   geom_sf(data = obs, color = "red", size = 1.5) +
   coord_sf(
@@ -61,9 +61,29 @@ ggplot() +
   labs(title = "Moon Jelly Observations",
        x = "Longitude",
        y = "Latitude") + 
-  theme_minimal() 
+  theme_minimal(base_size = 24)
 
-ggplot() +
+p2 <- ggplot() +
+  geom_sf(data = coast, fill = "grey90", color = "black") +
+  geom_sf(data = obs, aes(size = size_fixed), color = "steelblue", alpha = 0.7) +
+  scale_size(range = c(1,8)) +
+  coord_sf(
+    xlim = c(coast_bbox["xmin"], coast_bbox["xmax"]),
+    ylim = c(coast_bbox["ymin"], coast_bbox["ymax"]),
+    expand = FALSE
+  ) +
+  labs(
+    title = "Moon Jelly Observations by Size",
+    x = "Longitude",
+    y = "Latitude",
+    size = "Diameter (cm)"
+  ) +
+  theme_minimal(base_size = 24)
+
+p1 + p2
+
+# Year
+p3 <- ggplot() +
   geom_sf(data = coast, color = "black") +
   geom_sf(data = obs, color = "red", size = 1.5, alpha = 0.7) +
   coord_sf(
@@ -72,46 +92,82 @@ ggplot() +
     expand = FALSE
   ) +
   facet_wrap(~ year) +
-  labs(title = "Moon Jelly Observations by Year",       
+  labs(title = "Yearly Moon Jelly Observations",       
        x = "Longitude",
-       y = "Latitude") + 
-  theme_minimal()
+       y = "Latitude") +
+  theme_minimal(base_size = 24)
 
-ggplot() +
+p4 <- ggplot() +
   geom_sf(data = coast, color = "black") +
-  geom_sf(data = obs, color = "red", size = 1.5, alpha = 0.7) +
+  geom_sf(data = obs, aes(y = size_fixed), color = "steelblue", size = 1.5, alpha = 0.7) +
+  coord_sf(
+    xlim = c(coast_bbox["xmin"], coast_bbox["xmax"]),
+    ylim = c(coast_bbox["ymin"], coast_bbox["ymax"]),
+    expand = FALSE
+  ) +
+  facet_wrap(~ year) +
+  labs(title = "Yearly Moon Jelly Observations by Size",
+       x = "Longitude",
+       y = "Latitude") +
+  theme_minimal(base_size = 24)
+
+p3 + p4
+
+# Month
+p5 <- ggplot() +
+  geom_sf(data = coast, color = "black") +
+  geom_sf(data = obs, color = "steelblue", size = 1.5, alpha = 0.7) +
   coord_sf(
     xlim = c(coast_bbox["xmin"], coast_bbox["xmax"]),
     ylim = c(coast_bbox["ymin"], coast_bbox["ymax"]),
     expand = FALSE
   ) +
   facet_wrap(~ month) +
-  labs(title = "Moon Jelly Observations by Month",
+  labs(title = "Monthly Moon Jelly Observations",
        x = "Longitude",
-       y = "Latitude") + 
-  theme_minimal() 
+       y = "Latitude") +
+  theme_minimal(base_size = 24)
+
+p6 <- ggplot() +
+  geom_sf(data = coast, color = "black") +
+  geom_sf(data = obs, aes(y = size_fixed), color = "steelblue", size = 1.5, alpha = 0.7) +
+  coord_sf(
+    xlim = c(coast_bbox["xmin"], coast_bbox["xmax"]),
+    ylim = c(coast_bbox["ymin"], coast_bbox["ymax"]),
+    expand = FALSE
+  ) +
+  facet_wrap(~ month) +
+  labs(title = "Monthly Moon Jelly Observations by Size",
+       x = "Longitude",
+       y = "Latitude") +
+  theme_minimal(base_size = 24)
+
+p5 + p6
+
 ```
 
-# Proportion of Observations Histograms
-```{r hist}
-ggplot(obs, aes(x = year)) +
+# Histograms of the Proportion of Moon Jelly Observations
+```{r fig.height=10,fig.width=20, echo = FALSE, warning = FALSE}
+p1 <- ggplot(obs, aes(x = year)) +
   geom_bar(aes(y = after_stat(prop), group = 1), fill = "steelblue") +
-  theme_minimal() +
   labs(
-    title = "Proportion of Moon Jelly Observations per Year",
+    title = "Proportion by Year",
     x = "Year",
     y = "Proportion"
-  )
+  ) +
+  theme_minimal(base_size = 24)
 
-ggplot(obs, aes(x = month)) +
+p2 <- ggplot(obs, aes(x = month)) +
   geom_bar(aes(y = after_stat(prop), group = 1), fill = "steelblue") +
   scale_x_discrete(drop = FALSE) +
-  theme_minimal() +
   labs(
-    title = "Proportion of Moon Jelly Observations per Month",
+    title = "Proportion by Month",
     x = "Month",
     y = "Proportion"
-  )
+  ) +
+  theme_minimal(base_size = 24)
+
+p1 + p2
 ```
 
 # Histograms of Average Bell Diameter of Moon Jelly Observations 
