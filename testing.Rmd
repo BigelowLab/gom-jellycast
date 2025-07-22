@@ -384,3 +384,176 @@ ggplot() +
     size = "Size"
   )
 ```
+
+
+# read_obs() with satellite map 
+```{r}
+library(ggspatial)
+library(rosm)
+
+ggplot() +
+  annotation_map_tile(type = "osm", zoomin = 0) +
+  geom_sf(data = coast, color = "black", fill = NA) +
+  geom_sf(data = df, color = "steelblue", size = 1.5) +
+  coord_sf(
+    xlim = c(coast_bbox["xmin"], coast_bbox["xmax"]),
+    ylim = c(coast_bbox["ymin"], coast_bbox["ymax"]),
+    expand = FALSE
+  ) +
+  labs(
+    title = "Distribution of All Observations",
+    x = "Longitude",
+    y = "Latitude"
+  ) +
+  theme_minimal(base_size = 24)
+```
+
+
+# scroll through years
+```{r}
+library(plotly)
+
+
+
+df_points <- df %>%
+  mutate(lon = st_coordinates(.)[, 1],
+         lat = st_coordinates(.)[, 2]) %>%
+  st_set_geometry(NULL)
+
+df_points$year <- lubridate::year(df_points$date)
+
+
+# Crop df_points
+df_points_crop <- df_points %>%
+  filter(
+    lon >= coast_bbox["xmin"],
+    lon <= coast_bbox["xmax"],
+    lat >= coast_bbox["ymin"],
+    lat <= coast_bbox["ymax"]
+  )
+
+# Crop coast_coords
+coast_coords_crop <- coast_coords %>%
+  filter(
+    lon >= coast_bbox["xmin"],
+    lon <= coast_bbox["xmax"],
+    lat >= coast_bbox["ymin"],
+    lat <= coast_bbox["ymax"]
+  )
+
+
+coast_coords <- st_cast(st_union(coast), "MULTILINESTRING") %>%
+  st_coordinates() %>%
+  as.data.frame() %>%
+  rename(lon = X, lat = Y)
+
+plot_ly() %>%
+  add_lines(
+    data = coast_coords_crop,
+    x = ~lon, y = ~lat,
+    line = list(color = 'black'),
+    name = "Coast"
+  ) %>%
+  add_markers(
+    data = df_points_crop,
+    x = ~lon, y = ~lat,
+    frame = ~year,
+    marker = list(color = 'red', size = 8, opacity = 0.7),
+    text = ~paste("Year:", year),
+    hoverinfo = "text",
+    name = "Observations"
+  ) %>%
+  layout(
+    title = "Yearly Moon Jelly Observations",
+    xaxis = list(title = "Longitude"),
+    yaxis = list(title = "Latitude"),
+    showlegend = FALSE
+  ) %>%
+  animation_opts(
+    frame = 1000, transition = 0, redraw = FALSE
+  )
+
+```
+
+```{r}
+library(sf)
+library(dplyr)
+library(lubridate)
+library(plotly)
+
+# Step 1: Read your coastline (replace with your actual function or filepath)
+coastline <- read_coastline()  # your sf MULTILINESTRING object
+
+# Step 2: Define bounding box (or get from coastline)
+coast_bbox <- st_bbox(coastline)
+
+# Step 3: Crop coastline to bounding box (optional, but faster)
+coastline_crop <- st_crop(coastline, coast_bbox)
+
+# Step 4: Simplify coastline to reduce zigzagging
+# Adjust dTolerance as needed (in degrees, since this is lon/lat)
+coastline_simp <- st_simplify(coastline_crop, dTolerance = 0.01)  
+
+# Step 5: Extract coordinates from simplified coastline for Plotly
+coast_coords <- coastline_simp %>%
+  st_cast("MULTILINESTRING") %>%
+  st_coordinates() %>%
+  as.data.frame() %>%
+  rename(lon = X, lat = Y)
+
+# Step 6: Prepare observations data frame (replace `df` with your data)
+df_points <- df %>%
+  mutate(
+    lon = st_coordinates(.)[,1],
+    lat = st_coordinates(.)[,2]
+  ) %>%
+  st_set_geometry(NULL)
+
+# Step 7: Extract year from date column
+df_points$year <- year(df_points$date)
+
+# Step 8: Crop observations to bounding box
+df_points_crop <- df_points %>%
+  filter(
+    lon >= coast_bbox["xmin"],
+    lon <= coast_bbox["xmax"],
+    lat >= coast_bbox["ymin"],
+    lat <= coast_bbox["ymax"]
+  )
+
+# Step 9: Plot animated map with plotly
+plot_ly() %>%
+  add_lines(
+    data = coast_coords,
+    x = ~lon, y = ~lat,
+    line = list(color = 'black'),
+    name = "Coastline"
+  ) %>%
+  add_markers(
+    data = df_points_crop,
+    x = ~lon, y = ~lat,
+    frame = ~year,
+    marker = list(color = 'red', size = 8, opacity = 0.7),
+    text = ~paste("Year:", year),
+    hoverinfo = "text",
+    name = "Observations"
+  ) %>%
+  layout(
+    title = "Yearly Moon Jelly Observations",
+    xaxis = list(title = "Longitude", range = c(coast_bbox["xmin"], coast_bbox["xmax"])),
+    yaxis = list(title = "Latitude", range = c(coast_bbox["ymin"], coast_bbox["ymax"])),
+    showlegend = FALSE
+  ) %>%
+  animation_opts(
+    frame = 1000, transition = 0, redraw = FALSE
+  )
+
+```
+
+
+
+
+
+
+
+

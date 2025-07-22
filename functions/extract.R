@@ -85,7 +85,10 @@ library(grid)
 extract_im = function(version = "v0", 
                       v = "v0.001",
                       date = Sys.Date(),
-                      model = "rf") {
+                      model = "rf",
+                      width = 800,
+                      height = 600) {
+  
   date_str = format(date, "%Y-%m-%d")
   path = file.path(
     "data", "versions", version, v, "results", date_str, model,
@@ -93,10 +96,19 @@ extract_im = function(version = "v0",
   )
   
   img = png::readPNG(path)
-  grid::grid.raster(img)
+  
+  # Display with fixed size using grid graphics
+  grid::grid.newpage()
+  grid::grid.raster(
+    img, 
+    width = grid::unit(1, "npc"), 
+    height = grid::unit(1, "npc")
+  )
   
   return(invisible(img)) 
 }
+
+
 
 
 extract_accuracies = function(model = "maxent", 

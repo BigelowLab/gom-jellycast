@@ -52,7 +52,7 @@ moon_gif
 ```{r fig.height=10,fig.width=20, echo = FALSE, warning = FALSE}
 p1 <- ggplot() +
   geom_sf(data = coast, color = "black") +
-  geom_sf(data = obs, color = "red", size = 1.5) +
+  geom_sf(data = obs, color = "steelblue", size = 2.5) +
   coord_sf(
     xlim = c(coast_bbox["xmin"], coast_bbox["xmax"]),
     ylim = c(coast_bbox["ymin"], coast_bbox["ymax"]),
@@ -83,66 +83,66 @@ p2 <- ggplot() +
 p1 + p2
 
 # Year
-p3 <- ggplot() +
-  geom_sf(data = coast, color = "black") +
-  geom_sf(data = obs, color = "red", size = 1.5, alpha = 0.7) +
-  coord_sf(
-    xlim = c(coast_bbox["xmin"], coast_bbox["xmax"]),
-    ylim = c(coast_bbox["ymin"], coast_bbox["ymax"]),
-    expand = FALSE
-  ) +
-  facet_wrap(~ year) +
-  labs(title = "Yearly Moon Jelly Observations",       
-       x = "Longitude",
-       y = "Latitude") +
-  theme_minimal(base_size = 24)
-
-p4 <- ggplot() +
-  geom_sf(data = coast, color = "black") +
-  geom_sf(data = obs, aes(y = size_fixed), color = "steelblue", size = 1.5, alpha = 0.7) +
-  coord_sf(
-    xlim = c(coast_bbox["xmin"], coast_bbox["xmax"]),
-    ylim = c(coast_bbox["ymin"], coast_bbox["ymax"]),
-    expand = FALSE
-  ) +
-  facet_wrap(~ year) +
-  labs(title = "Yearly Moon Jelly Observations by Size",
-       x = "Longitude",
-       y = "Latitude") +
-  theme_minimal(base_size = 24)
-
-p3 + p4
+# p3 <- ggplot() +
+#   geom_sf(data = coast, color = "black") +
+#   geom_sf(data = obs, color = "steelblue", size = 1.5, alpha = 0.7) +
+#   coord_sf(
+#     xlim = c(coast_bbox["xmin"], coast_bbox["xmax"]),
+#     ylim = c(coast_bbox["ymin"], coast_bbox["ymax"]),
+#     expand = FALSE
+#   ) +
+#   facet_wrap(~ year) +
+#   labs(title = "Yearly Moon Jelly Observations",       
+#        x = "Longitude",
+#        y = "Latitude") +
+#   theme_minimal(base_size = 24)
+# 
+# p4 <- ggplot() +
+#   geom_sf(data = coast, color = "black") +
+#   geom_sf(data = obs, aes(y = size_fixed), color = "steelblue", size = 1.5, alpha = 0.7) +
+#   coord_sf(
+#     xlim = c(coast_bbox["xmin"], coast_bbox["xmax"]),
+#     ylim = c(coast_bbox["ymin"], coast_bbox["ymax"]),
+#     expand = FALSE
+#   ) +
+#   facet_wrap(~ year) +
+#   labs(title = "Yearly Moon Jelly Observations by Size",
+#        x = "Longitude",
+#        y = "Latitude") +
+#   theme_minimal(base_size = 24)
+# 
+# p3 + p4
 
 # Month
-p5 <- ggplot() +
-  geom_sf(data = coast, color = "black") +
-  geom_sf(data = obs, color = "steelblue", size = 1.5, alpha = 0.7) +
-  coord_sf(
-    xlim = c(coast_bbox["xmin"], coast_bbox["xmax"]),
-    ylim = c(coast_bbox["ymin"], coast_bbox["ymax"]),
-    expand = FALSE
-  ) +
-  facet_wrap(~ month) +
-  labs(title = "Monthly Moon Jelly Observations",
-       x = "Longitude",
-       y = "Latitude") +
-  theme_minimal(base_size = 24)
-
-p6 <- ggplot() +
-  geom_sf(data = coast, color = "black") +
-  geom_sf(data = obs, aes(y = size_fixed), color = "steelblue", size = 1.5, alpha = 0.7) +
-  coord_sf(
-    xlim = c(coast_bbox["xmin"], coast_bbox["xmax"]),
-    ylim = c(coast_bbox["ymin"], coast_bbox["ymax"]),
-    expand = FALSE
-  ) +
-  facet_wrap(~ month) +
-  labs(title = "Monthly Moon Jelly Observations by Size",
-       x = "Longitude",
-       y = "Latitude") +
-  theme_minimal(base_size = 24)
-
-p5 + p6
+# p5 <- ggplot() +
+#   geom_sf(data = coast, color = "black") +
+#   geom_sf(data = obs, color = "steelblue", size = 1.5, alpha = 0.7) +
+#   coord_sf(
+#     xlim = c(coast_bbox["xmin"], coast_bbox["xmax"]),
+#     ylim = c(coast_bbox["ymin"], coast_bbox["ymax"]),
+#     expand = FALSE
+#   ) +
+#   facet_wrap(~ month) +
+#   labs(title = "Monthly Moon Jelly Observations",
+#        x = "Longitude",
+#        y = "Latitude") +
+#   theme_minimal(base_size = 24)
+# 
+# p6 <- ggplot() +
+#   geom_sf(data = coast, color = "black") +
+#   geom_sf(data = obs, aes(y = size_fixed), color = "steelblue", size = 1.5, alpha = 0.7) +
+#   coord_sf(
+#     xlim = c(coast_bbox["xmin"], coast_bbox["xmax"]),
+#     ylim = c(coast_bbox["ymin"], coast_bbox["ymax"]),
+#     expand = FALSE
+#   ) +
+#   facet_wrap(~ month) +
+#   labs(title = "Monthly Moon Jelly Observations by Size",
+#        x = "Longitude",
+#        y = "Latitude") +
+#   theme_minimal(base_size = 24)
+# 
+# p5 + p6
 
 ```
 
