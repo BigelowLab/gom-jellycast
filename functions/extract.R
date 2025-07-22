@@ -13,29 +13,37 @@ extract_top_results = function(cfg, metric, n){
   return(df)
 }
 
-
-extract_summary = function(version = "v0"){
-  library(dplyr)
-  library(yaml)
-  
+extract_summary = function(version = "v0") {
   dir_path = file.path("data/versions", version)
   sub_dir_path = list.dirs(dir_path, full.names = FALSE, recursive = FALSE)
   
-  metrics = c("maxent_roc", "maxent_accuracy", "rf_roc", "rf_accuracy")
+  metrics = c("maxent_roc", "maxent_accuracy", 
+              "rf_roc", "rf_accuracy", 
+              "brt_roc", "brt_accuracy", 
+              "glm_roc", "glm_accuracy", 
+              "nn_roc", "nn_accuracy")
   summary_list = list()
   
-  for (v in sub_dir_path){
+  for (v in sub_dir_path) {
     summary_path = file.path(dir_path, v, "results_summary.csv")
     config_path = file.path(dir_path, v, paste0(v, ".yaml"))
     
-    # Extract species from config
+    # Extract config info
     species_name = NA
-    if (file.exists(config_path)){
+    preds = NA
+    random_bkg = NA
+    
+    if (file.exists(config_path)) {
       config = yaml::read_yaml(config_path)
       species_name = config$type
+      preds = paste(unlist(config$predictors), collapse = ",")
+      
+      if (!is.null(config$random)) {
+        random_bkg = config$random
+      }
     }
     
-    if (file.exists(summary_path)){
+    if (file.exists(summary_path)) {
       df = read.table(summary_path, header = TRUE, sep = ",", stringsAsFactors = FALSE) %>%
         dplyr::select(any_of(metrics)) %>%
         dplyr::mutate(across(everything(), as.numeric))
@@ -53,6 +61,8 @@ extract_summary = function(version = "v0"){
         stat_row = data.frame(
           version = v,
           species = species_name,
+          predictors = preds,
+          random_bkg = random_bkg,
           metric = m,
           Min = s[["Min."]],
           Q1 = s[["1st Qu."]],
@@ -67,8 +77,7 @@ extract_summary = function(version = "v0"){
     }
   }
   
-  summary_df = bind_rows(summary_list)
-  
+  summary_df = dplyr::bind_rows(summary_list)
   output_path = file.path(dir_path, "summary_statistics.csv")
   write.csv(summary_df, output_path, row.names = FALSE)
   
@@ -77,10 +86,6 @@ extract_summary = function(version = "v0"){
 }
 
 
-
-
-library(png)
-library(grid)
 
 extract_im = function(version = "v0", 
                       v = "v0.001",
@@ -130,12 +135,13 @@ extract_top_model = function(version = "v0",
   summary_path = file.path("data", "versions", version, "summary_statistics.csv")
   df = read.csv2(summary_path, header = TRUE, sep = ",") %>% 
     filter(species == sp,
-           stringr::str_detect(metric, "_acc")) %>% 
+           stringr::str_detect(metric, "_acc"),
+           Max < 1) %>%  
     arrange(desc(Max))
   
   top_version = df$version[1]
   top_model = sub("_.*", "", df$metric[1])
-
+  
   return(list(top_version, top_model))
 }
   

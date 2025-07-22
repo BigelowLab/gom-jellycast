@@ -10,6 +10,20 @@ df = read_obs() %>%
   st_as_sf(coords = c("lon", "lat"), crs = 4326)
 ```
 
+# count how many obs per year
+```{r}
+obs = read_obs() %>% 
+  filter(source == "record", type %in% c("lionsmane", "moon", "comb", "whitecross")) %>% 
+  mutate(year = factor(year(date)),
+         month = factor(month(date, label = TRUE, abbr = TRUE), 
+                        levels = month.abb),
+         size_fixed = ifelse(is.na(size), 1, size)) %>% 
+    group_by(year) %>%
+  summarise(count = n()) %>%
+  arrange(year)
+```
+
+
 ```{r}
 # prod = "GLOBAL_ANALYSISFORECAST_PHY_001_024"
 # path = copernicus_path("nwa", prod) %>% 
@@ -552,7 +566,30 @@ plot_ly() %>%
 
 
 
+# reading results
+```{r}
+sum0 <- read.csv("data/versions/v0/summary_statistics.csv")
+sum1 <- read.csv("data/versions/v1/summary_statistics.csv")
 
+extract_top_model(version = "v0", sp = "lionsmane") # v0.011, rf
+extract_top_model(version = "v0", sp = "moon") # v0.021, maxent
+extract_top_model(version = "v0", sp = "whitecross") # v0.027, rf
+extract_top_model(version = "v0", sp = "comb") # v0.033, rf
+
+extract_top_model(version = "v1", sp = "lionsmane") # v1.020, rf
+extract_top_model(version = "v1", sp = "moon") # v1.022, rf
+extract_top_model(version = "v1", sp = "whitecross") # v1.027, rf
+extract_top_model(version = "v1", sp = "comb") # v1.034, maxent
+```
+
+```{r}
+sum2 <- read.csv("data/versions/v2/summary_statistics.csv")
+
+
+
+
+
+```
 
 
 
