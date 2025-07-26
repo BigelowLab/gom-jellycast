@@ -35,7 +35,7 @@ extract_summary = function(version = "v0") {
     
     if (file.exists(config_path)) {
       config = yaml::read_yaml(config_path)
-      species_name = config$type
+      species_name = config$obs$type
       preds = paste(unlist(config$predictors), collapse = ",")
       
       if (!is.null(config$random)) {

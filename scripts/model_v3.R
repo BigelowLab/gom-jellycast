@@ -34,7 +34,7 @@ main <- function(cfg, target_date){
   root = cfg[["root"]]
   region = cfg[["region"]]
   poly = read_coastline_buffer(buffer = 100000, path = "/mnt/s1/projects/ecocast/projects/gom-jellycast-dev/data/polygons")
-  species = cfg[["type"]]
+  species = cfg[["obs"]][["type"]]
   duration = cfg[["duration"]]
   variables = unlist(cfg[["predictors"]][["phy"]])
   version = cfg[["version"]]
