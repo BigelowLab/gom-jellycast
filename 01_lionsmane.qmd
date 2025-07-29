@@ -27,7 +27,7 @@ format:
 
 ```{r setup, include=FALSE}
 source("setup.R")
-source("shared_vars.R")
+# source("shared_vars.R")
 knitr::opts_chunk$set(echo = TRUE)
 coast = st_as_sf(read_coast())
 coast_bbox = st_bbox(coast)
@@ -39,15 +39,18 @@ obs = read_obs() %>%
          month = factor(month(date, label = TRUE, abbr = TRUE), 
                         levels = month.abb),
          size_fixed = ifelse(is.na(size), 1, size))
+
+lionsmane_top = extract_top_model(version = "v2", sp = "lionsmane")
 ```
 
 # Today's Forecast
 ```{r forecast, echo=FALSE}
-grid.raster(lionsmane_img)
+lionsmane_img = extract_im(version = "v2", v = lionsmane_top[1], model = lionsmane_top[2])
 ```
 
 # Forecast Animation
 ```{r animation, echo=FALSE}
+lionsmane_gif = make_movie(version = "v2", v = lionsmane_top[1], model = lionsmane_top[2])
 lionsmane_gif
 ```
 

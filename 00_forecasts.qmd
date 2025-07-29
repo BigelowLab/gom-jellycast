@@ -7,54 +7,54 @@ format:
 
 ```{r setup, include=FALSE}
 source("setup.R")
-source("shared_vars.R")
 knitr::opts_chunk$set(echo = TRUE)
+
+lionsmane_top = extract_top_model(version = "v2", sp = "lionsmane")
+moon_top = extract_top_model(version = "v2", sp = "moon")
+whitecross_top = extract_top_model(version = "v2", sp = "whitecross")
+comb_top = extract_top_model(version = "v2", sp = "comb")
 ```
 
 # Today's Lion's Mane Jellyfish Sighting Forecast
 ```{r lionsmane, echo=FALSE}
-# lionsmane_img = update_forecast(version = "v0", v = "v0.015", model = "rf")
-grid.raster(lionsmane_img)
+lionsmane_img = extract_im(version = "v2", v = lionsmane_top[1], model = lionsmane_top[2])
 ```
 
 # Lion's Mane Jellyfish Sighting Forecast Animation
 ```{r lm animation, echo=FALSE}
-# lionsmane_gif = make_movie(version = "v0", v = "v0.015", start_date = as.Date("2025-07-01"), end_date = as.Date("2025-07-08"), model = "rf")
+lionsmane_gif = make_movie(version = "v2", v = lionsmane_top[1], model = lionsmane_top[2])
 lionsmane_gif
 ```
 
 # Today's Moon Jellyfish Forecast
 ```{r moon, echo=FALSE}
-# moon_img = update_forecast(version = "v0", v = "v0.021", model = "rf")
-grid.raster(moon_img)
+moon_img = extract_im(version = "v2", v = moon_top[1], model = moon_top[2])
 ```
 
 # Moon Jellyfish Sighting Forecast Animation
 ```{r moon animation, echo=FALSE}
-# moon_gif = make_movie(version = "v0", v = "v0.021", start_date = as.Date("2025-07-01"), end_date = as.Date("2025-07-08"), model = "rf")
+moon_gif = make_movie(version = "v2", v = moon_top[1], model = moon_top[2])
 moon_gif
 ```
 
 # Today's White Cross Jellyfish Forecast
 ```{r whitecross, echo=FALSE}
-# whitecross_img = update_forecast(version = "v0", v = "v0.028", model = "rf")
-grid.raster(whitecross_img)
+whitecross_img = extract_im(version = "v2", v = whitecross_top[1], model = whitecross_top[2])
 ```
 
 # White Cross Jellyfish Sighting Forecast Animation
 ```{r wc animation, echo=FALSE}
-# whitecross_gif = make_movie(version = "v0", v = "v0.028", start_date = as.Date("2025-07-01"), end_date = as.Date("2025-07-08"), model = "rf")
+whitecross_gif = make_movie(version = "v2", v = whitecross_top[1], model = whitecross_top[2])
 whitecross_gif
 ```
 
 # Today's Comb Jellyfish Forecast
 ```{r comb, echo=FALSE}
-# comb_img = update_forecast(version = "v0", v = "v0.033", model = "rf")
-grid.raster(comb_img)
+comb_img = extract_im(version = "v2", v = comb_top[1], model = comb_top[2])
 ```
 
 # Comb Jellyfish Sighting Forecast Animation
 ```{r comb animation, echo=FALSE}
-# comb_gif = make_movie(version = "v0", v = "v0.033", start_date = as.Date("2025-07-01"), end_date = as.Date("2025-07-08"), model = "rf")
+comb_gif = make_movie(version = "v2", v = comb_top[1], model = comb_top[2])
 comb_gif
 ```
