@@ -24,6 +24,10 @@ extract_summary = function(version = "v0") {
               "nn_roc", "nn_accuracy")
   summary_list = list()
   
+  get_or_na <- function(x, name) {
+    if (name %in% names(x)) return(x[[name]]) else return(NA)
+  }
+  
   for (v in sub_dir_path) {
     summary_path = file.path(dir_path, v, "results_summary.csv")
     config_path = file.path(dir_path, v, paste0(v, ".yaml"))
@@ -51,8 +55,8 @@ extract_summary = function(version = "v0") {
       for (m in metrics) {
         col_vals = df[[m]]
         
-        if (all(is.na(col_vals))) {
-          message(sprintf("Skipping %s for %s (all NA)", m, v))
+        if (length(col_vals) == 0) {
+          message(sprintf("Skipping %s for %s (empty column)", m, v))
           next
         }
         
@@ -64,12 +68,12 @@ extract_summary = function(version = "v0") {
           predictors = preds,
           random_bkg = random_bkg,
           metric = m,
-          Min = s[["Min."]],
-          Q1 = s[["1st Qu."]],
-          Median = s[["Median"]],
-          Mean = s[["Mean"]],
-          Q3 = s[["3rd Qu."]],
-          Max = s[["Max."]]
+          Min = get_or_na(s, "Min."),
+          Q1 = get_or_na(s, "1st Qu."),
+          Median = get_or_na(s, "Median"),
+          Mean = get_or_na(s, "Mean"),
+          Q3 = get_or_na(s, "3rd Qu."),
+          Max = get_or_na(s, "Max.")
         )
         
         summary_list[[paste(v, m, sep = "_")]] = stat_row
@@ -84,7 +88,6 @@ extract_summary = function(version = "v0") {
   message(sprintf("summary statistics written to: %s", output_path))
   return(summary_df)
 }
-
 
 
 extract_im = function(version = "v0", 
