@@ -24,10 +24,6 @@ extract_summary = function(version = "v0") {
               "nn_roc", "nn_accuracy")
   summary_list = list()
   
-  get_or_na <- function(x, name) {
-    if (name %in% names(x)) return(x[[name]]) else return(NA)
-  }
-  
   for (v in sub_dir_path) {
     summary_path = file.path(dir_path, v, "results_summary.csv")
     config_path = file.path(dir_path, v, paste0(v, ".yaml"))
@@ -35,16 +31,13 @@ extract_summary = function(version = "v0") {
     # Extract config info
     species_name = NA
     preds = NA
-    random_bkg = NA
+    random_bkg = TRUE
     
     if (file.exists(config_path)) {
       config = yaml::read_yaml(config_path)
       species_name = config$obs$type
       preds = paste(unlist(config$predictors), collapse = ",")
-      
-      if (!is.null(config$random)) {
-        random_bkg = config$random
-      }
+      random_bkg = config$obs$random
     }
     
     if (file.exists(summary_path)) {
@@ -55,8 +48,8 @@ extract_summary = function(version = "v0") {
       for (m in metrics) {
         col_vals = df[[m]]
         
-        if (length(col_vals) == 0) {
-          message(sprintf("Skipping %s for %s (empty column)", m, v))
+        if (all(is.na(col_vals))) {
+          message(sprintf("Skipping %s for %s (all NA)", m, v))
           next
         }
         
@@ -68,12 +61,12 @@ extract_summary = function(version = "v0") {
           predictors = preds,
           random_bkg = random_bkg,
           metric = m,
-          Min = get_or_na(s, "Min."),
-          Q1 = get_or_na(s, "1st Qu."),
-          Median = get_or_na(s, "Median"),
-          Mean = get_or_na(s, "Mean"),
-          Q3 = get_or_na(s, "3rd Qu."),
-          Max = get_or_na(s, "Max.")
+          Min = s[["Min."]],
+          Q1 = s[["1st Qu."]],
+          Median = s[["Median"]],
+          Mean = s[["Mean"]],
+          Q3 = s[["3rd Qu."]],
+          Max = s[["Max."]]
         )
         
         summary_list[[paste(v, m, sep = "_")]] = stat_row
