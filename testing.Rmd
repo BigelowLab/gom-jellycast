@@ -585,7 +585,10 @@ extract_top_model(version = "v1", sp = "comb") # v1.034, maxent
 ```{r}
 sum2 <- read.csv("data/versions/v2/summary_statistics.csv")
 
-
+extract_top_model(version = "v2", sp = "lionsmane") # v2.014, rf
+extract_top_model(version = "v2", sp = "moon") # v2.034, rf
+extract_top_model(version = "v2", sp = "whitecross") # v2.058, rf
+extract_top_model(version = "v2", sp = "comb") # v2.078, nn
 
 
 

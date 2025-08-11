@@ -14,7 +14,7 @@ suppressPackageStartupMessages({
 })
 
 main <- function(start_date, end_date, start_config, end_config) {
-  model_script <- "/mnt/s1/projects/ecocast/projects/gom-jellycast-dev/scripts/model_v4.R"
+  model_script <- "/mnt/s1/projects/ecocast/projects/gom-jellycast-dev/scripts/model_v4b.R"
   config_dir <- dirname(dirname(start_config))
   
   all_configs <- list.files(config_dir, pattern = "\\.yaml$", recursive = TRUE, full.names = TRUE)
