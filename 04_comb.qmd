@@ -46,8 +46,8 @@ img = extract_im(version = "v2", v = top[1], model = top[2])
 
 # Forecast Animation
 ```{r animation, echo=FALSE}
-gif = make_movie(version = "v2", v = top[1], model = top[2])
-gif
+# gif = make_movie(version = "v2", v = top[1], model = top[2])
+# gif
 ```
 
 # Observation Distributions

@@ -1,0 +1,72 @@
+[
+  {
+    "objectID": "00_forecasts.html",
+    "href": "00_forecasts.html",
+    "title": "Jellyfish Sighting Forecasts",
+    "section": "",
+    "text": "1 Today’s Lion’s Mane Jellyfish Sighting Forecast\n\n\n\n\n\n\n\n\n\n\n\n2 Lion’s Mane Jellyfish Sighting Forecast Animation\n\n\n\n\n\n\n\n\n\n\n\n3 Today’s Moon Jellyfish Forecast\n\n\n\n\n\n\n\n\n\n\n\n4 Moon Jellyfish Sighting Forecast Animation\n\n\n\n\n\n\n\n\n\n\n\n5 Today’s White Cross Jellyfish Forecast\n\n\n\n\n\n\n\n\n\n\n\n6 White Cross Jellyfish Sighting Forecast Animation\n\n\n\n\n\n\n\n\n\n\n\n7 Today’s Comb Jellyfish Forecast\n\n\n\n\n\n\n\n\n\n\n\n8 Comb Jellyfish Sighting Forecast Animation\n\n\n\n\n Back to top",
+    "crumbs": [
+      "Forecasts"
+    ]
+  },
+  {
+    "objectID": "03_whitecross.html",
+    "href": "03_whitecross.html",
+    "title": "White Cross Jellyfish",
+    "section": "",
+    "text": "The whitecross jellyfish (Staurostoma mertensii), often called the compass jellyfish, is recognized by its distinct brown V-shaped markings radiating from the center of its bell, resembling a compass rose or a white cross on top. The bell typically reaches 30 cm (12 inches) in diameter, with long marginal tentacles and four frilly oral arms that capture and transport prey. Compass jellies inhabit temperate coastal waters of the northeast Atlantic, North Sea, and Mediterranean, and are seasonally common along European coastlines. While their sting is moderately painful, it is generally not dangerous to humans.\n\n\nTheir diet mainly consists of small fish, copepods, and zooplankton, which they immobilize with their nematocysts. They are in turn preyed on by sea turtles, ocean sunfish, and larger jellyfish species. Like many scyphozoan jellyfish, compass jellies live for about a year, progressing through a polyp stage before maturing into the familiar medusa. They play an important ecological role by controlling plankton populations and serving as food for higher predators, while also sometimes offering temporary shelter for small fish among their tentacles.\n\n\nLearn more: Wikimedia Commons Photo\n\n\n\n1 Today’s Forecast\n\n\n\n\n\n\n\n\n\n\n\n2 Forecast Animation\n\n\n\n\n\n\n\n\n\n\n\n3 Observation Distributions\n\n\n\n\n\n\n\n\n\n\n\n4 Histograms of the Proportion of White Cross Jelly Observations\n\n\n\n\n\n\n\n\n\n\n\n5 Histograms of Average Bell Diameter of White Cross Jelly Observations\n\n\n\n\n\n\n\n\n\n\n\n\n\n Back to top",
+    "crumbs": [
+      "White Cross Jellyfish"
+    ]
+  },
+  {
+    "objectID": "01_lionsmane.html",
+    "href": "01_lionsmane.html",
+    "title": "Lion’s Mane Jellyfish",
+    "section": "",
+    "text": "The lion’s mane jellyfish (Cyanea capillata) is one of the largest known species of jellyfish, named for its long, reddish-brown or orange tentacles which resemble a lion’s mane. Lion’s manes can have a bell diameter of over 2 meters (7 feet) with tentacles extending more than 30 meters (100 feet) used to sting and capture prey. These jellies are typically found in cooler bodies of water such as the North Atlantic and North Pacific Oceans and are especially common in the Gulf of Maine. While lion’s mane stings are not usually fatal, they are extremely painful and contact should be avoided.\n\n\nTheir diet consists mainly of small fish, zooplankton, copepods, and other jellyfish and are typically preyed on by sea turtles, sunfish, and some seabirds. Most lion’s mane jellyfish have a lifespan of approximately one year, however, they play a vital role in marine ecosystems by providing shelter to smaller sea creatures.\n\n\nLearn more: Wikipedia – Lion’s Mane Jellyfish NOAA Ocean Service Aquarium of the Pacific\n\n\n\n1 Today’s Forecast\n\n\n\n\n\n\n\n\n\n\n\n2 Forecast Animation\n\n\n\n\n\n\n\n\n\n\n\n3 Observation Distributions\n\n\n\n\n\n\n\n\n\n\n\n4 Histograms of the Proportion of Lion’s Mane Observations\n\n\n\n\n\n\n\n\n\n\n\n5 Histograms of Average Bell Diameter of Lion’s Mane Observations\n\n\n\n\n\n\n\n\n\n\n\n\n\n Back to top",
+    "crumbs": [
+      "Lion's Mane Jellyfish"
+    ]
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "The jellydata project was developed at Bigelow Laboratory’s Tandy Center for Ocean Forecasting to aid in the development of modeling studies requiring either observation/abundance point data or to modeled rasterized layers for subsequent use in modeling studies. Use the github issues tracker to post questions or report issues.\n\ncredit Colby, Bigelow\nblurb about Nick, Ben, Logan\n\n\n\n\n Back to top",
+    "crumbs": [
+      "About"
+    ]
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "gom-jellies-dev",
+    "section": "",
+    "text": "In the early 2010s, jellyfish began popping up all throughout the Gulf of Maine with seemingly no explanation. Scientists Nick Record and Ben Tupper of the Tandy Center for Ocean Forecasting in the Bigelow Laboratory for Ocean Sciences began asking community members to reach out with their jellyfish sightings in an effort to explain the sudden population increase.\n\n\nThis site features an array of jellyfish sighting predictions across the Gulf of Maine to increase public awareness and understanding on the importance and implications of jellyfish in our ecosystems. Tracking jellyfish is important for beachgoers and boaters alike. On a larger scale, changes in jellyfish populations allow scientists to examine the impacts of climate change.\n\n\nFor the gom-jellies project, observations come from community scientist reports. The following species have been selected for analysis:\n\nCyanea capillata (Lion’s Mane)\nAurelia aurita (Moon)\nStaurostoma mertensii (White Cross)\nCtenophores (Comb)\n\n\n\n\n1 All Observations\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n2 By Species\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n Back to top",
+    "crumbs": [
+      "Home"
+    ]
+  },
+  {
+    "objectID": "02_moon.html",
+    "href": "02_moon.html",
+    "title": "Moon Jellyfish",
+    "section": "",
+    "text": "The moon jelly (Aurelia aurita) is one of the most recognizable jellyfish species, known for its translucent, saucer-shaped bell marked by four horseshoe-shaped gonads visible through the top. Moon jellies typically have a bell diameter of 25–40 cm (10–16 inches), with short, fine tentacles around the edge that they use to collect plankton and small organisms from the water. They are found in temperate and tropical coastal waters worldwide, including the Atlantic, Pacific, and Gulf of Maine, often in bays and estuaries where currents concentrate food. Moon jelly stings are generally mild and harmless to humans, often causing little more than minor irritation.\n\n\nTheir diet mainly consists of zooplankton, copepods, mollusk larvae, and small crustaceans, which they trap using their mucus-covered bell and delicate tentacles. Moon jellies are preyed on by sea turtles, sunfish, larger jellyfish, and some seabirds. Like most jellyfish, they have a short lifespan of about a year, cycling through polyp and medusa stages. Despite their delicate appearance, moon jellies are crucial to marine ecosystems, serving as both predators and prey and sometimes providing temporary shelter or a food source for small juvenile fish and crustaceans.\n\n\nLearn more: Wikipedia – Moon Jelly Aquarium of the Pacific\n\n\n\n1 Today’s Forecast\n\n\n\n\n\n\n\n\n\n\n\n2 Forecast Animation\n\n\n\n\n\n\n\n\n\n\n\n3 Observation Distributions\n\n\n\n\n\n\n\n\n\n\n\n4 Histograms of the Proportion of Moon Jelly Observations\n\n\n\n\n\n\n\n\n\n\n\n5 Histograms of Average Bell Diameter of Moon Jelly Observations\n\n\n\n\n\n\n\n\n\n\n\n\n\n Back to top",
+    "crumbs": [
+      "Moon Jellyfish"
+    ]
+  },
+  {
+    "objectID": "04_comb.html",
+    "href": "04_comb.html",
+    "title": "Comb Jellyfish",
+    "section": "",
+    "text": "Comb jellies, belonging to the phylum Ctenophora, are not true jellyfish but are often mistaken for them due to their gelatinous bodies. Unlike jellyfish, they lack stinging cells (nematocysts) and instead capture prey using sticky cells called colloblasts. Most comb jellies are small, ranging from a few millimeters to 15 cm (6 inches), and have eight rows of ciliary plates (“combs”) that beat in coordinated waves, refracting light into brilliant, shimmering colors — a hallmark of comb jellies. They are found worldwide in both surface waters and deep seas, including coastal ecosystems like the Gulf of Maine.\n\n\nComb jellies feed on zooplankton, larval fish, and even other comb jellies, using their sticky tentacles or lobes to ensnare prey. In some ecosystems, they are preyed on by sea turtles, larger fish, and other ctenophores. Many comb jellies have short life spans, often just a few months, but they play significant roles in marine food webs, sometimes outcompeting fish larvae for plankton and reshaping community dynamics. Unlike true jellyfish, comb jellies do not sting, making them harmless to humans.\n\n\nLearn more: Wikipedia – Comb Jelly Wikimedia Commons Photo\n\n\n\n1 Today’s Forecast\n\n\n\n\n\n\n\n\n\n\n\n2 Forecast Animation\n\n\n3 Observation Distributions\n\n\n\n\n\n\n\n\n\n\n\n4 Histograms of the Proportion of Comb Jelly Observations\n\n\n\n\n\n\n\n\n\n\n\n5 Histograms of Average Bell Diameter of Comb Jelly Observations\n\n\n\n\n\n\n\n\n\n\n\n\n\n Back to top",
+    "crumbs": [
+      "Comb Jellyfish"
+    ]
+  }
+]
