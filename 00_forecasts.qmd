@@ -48,13 +48,13 @@ whitecross_gif = make_movie(version = "v2", v = whitecross_top[1], model = white
 whitecross_gif
 ```
 
-# Today's Comb Jellyfish Forecast
-```{r comb, echo=FALSE}
-comb_img = extract_im(version = "v2", v = comb_top[1], model = comb_top[2])
-```
+<!-- # Today's Comb Jellyfish Forecast -->
+<!-- ```{r comb, echo=FALSE} -->
+<!-- comb_img = extract_im(version = "v2", v = comb_top[1], model = comb_top[2]) -->
+<!-- ``` -->
 
-# Comb Jellyfish Sighting Forecast Animation
-```{r comb animation, echo=FALSE}
-# comb_gif = make_movie(version = "v2", v = comb_top[1], model = comb_top[2])
-# comb_gif
-```
+<!-- # Comb Jellyfish Sighting Forecast Animation -->
+<!-- ```{r comb animation, echo=FALSE} -->
+<!-- # comb_gif = make_movie(version = "v2", v = comb_top[1], model = comb_top[2]) -->
+<!-- # comb_gif -->
+<!-- ``` -->

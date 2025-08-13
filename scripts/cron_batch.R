@@ -23,15 +23,15 @@ app <- "Rscript"
 #   charlier::sendmail(to = "llngai26@colby.edu", subject = "error in batch_v12.R", message = out2)
 # }
 
-script1 <- sprintf("batch_v23.R --dates %s %s", format(Sys.Date(), "%Y-%m-%d"), format(Sys.Date() + 8, "%Y-%m-%d"))
+script1 <- sprintf("batch_v23.R --dates %s %s", format(Sys.Date(), "%Y-%m-%d"), format(Sys.Date() + 6, "%Y-%m-%d"))
 args1 <- sprintf("%s/scripts/%s --configs %s/data/versions/v2/v2.001/v2.001.yaml %s/data/versions/v2/v2.080/v2.080.yaml", path, script1, path, path)
 
 system2(app, args1)
 
-script2 <- sprintf("batch_v4.R --dates %s %s", format(Sys.Date(), "%Y-%m-%d"), format(Sys.Date() + 8, "%Y-%m-%d"))
-args2 <- sprintf("%s/scripts/%s --configs %s/data/versions/v4/v4.001/v4.001.yaml %s/data/versions/v4/v4.160/v4.160.yaml", path, script2, path, path)
-
-system2(app2, args2)
+# script2 <- sprintf("batch_v4.R --dates %s %s", format(Sys.Date(), "%Y-%m-%d"), format(Sys.Date() + 6, "%Y-%m-%d"))
+# args2 <- sprintf("%s/scripts/%s --configs %s/data/versions/v4/v4.001/v4.001.yaml %s/data/versions/v4/v4.160/v4.160.yaml", path, script2, path, path)
+# 
+# system2(app, args2)
 
 
 charlier::sendmail(to = "llngai26@colby.edu", subject = "updating forecasts")
