@@ -1,11 +1,11 @@
 # author: Logan Ngai
-# date: 2025-07-22
+# date: 2025-08-13
 
 # use this script to build and write models from the terminal
 # usage: 
 # $ Rscript /path/to/script.R /path/to/config.yaml YYYY-MM-DD
 # example:
-# Rscript scripts/model_v2.R data/versions/v2/v0.001/v0.001.yaml 2025-06-01
+# Rscript scripts/model_v5.R data/versions/v5/v5.001/v5.001.yaml 2025-06-01
 # 
 # params: 
 #   @param script to be run
@@ -64,24 +64,24 @@ main <- function(cfg, target_date){
   
   day_obs = obs %>% filter(date == target_date)
   day_bkg = bkg %>% filter(date == target_date)
-
-  # # for 30 day range across all years
-  # obs$yday = lubridate::yday(obs$date)
-  # bkg$yday = lubridate::yday(bkg$date)
-  # 
-  # day_window = 30
-  # month_obs = obs %>% filter(abs(yday - target_yday) <= day_window / 2)
-  # month_bkg = bkg %>% filter(abs(yday - target_yday) <= day_window / 2)
-  # 
-  # 
+  
+  # for 30 day range across all years
+  obs$yday = lubridate::yday(obs$date)
+  bkg$yday = lubridate::yday(bkg$date)
+  
+  day_window = 30
+  month_obs = obs %>% filter(abs(yday - target_yday) <= day_window / 2)
+  month_bkg = bkg %>% filter(abs(yday - target_yday) <= day_window / 2)
+  
+  
   # 30 day range
   # month_obs = obs %>% filter(date >= target_date - 29 & date <= target_date)
   # month_bkg = bkg %>% filter(date >= target_date - 29 & date <= target_date)
   
   # original
-  month_obs = obs %>% filter(lubridate::month(date) == lubridate::month(target_date))
-  month_bkg = bkg %>% filter(lubridate::month(date) == lubridate::month(target_date))
-
+  # month_obs = obs %>% filter(lubridate::month(date) == lubridate::month(target_date))
+  # month_bkg = bkg %>% filter(lubridate::month(date) == lubridate::month(target_date))
+  
   summary_row = data.frame(
     version = version,
     species = species,
@@ -216,7 +216,7 @@ main <- function(cfg, target_date){
     summary_row$nn_accuracy = as.numeric(nn_res$accuracy$.estimate)
   }
   
-
+  
   if (file.exists(summary_path)) {
     summary_df = read.csv(summary_path, stringsAsFactors = FALSE)
     summary_df = summary_df[summary_df$date != summary_row$date, ]
@@ -232,7 +232,7 @@ main <- function(cfg, target_date){
 # Source environment setup
 source("/mnt/s1/projects/ecocast/projects/gom-jellycast-dev/setup.R")
 
-Args = argparser::arg_parser("Monthly model builder and predictor", name = "model_v2.R") |>
+Args = argparser::arg_parser("Monthly model builder and predictor", name = "model_v5.R") |>
   argparser::add_argument("config", help = "path to config file") |>
   argparser::add_argument("date", help = "forecast date (YYYY-MM-DD)") |>
   parse_args()

@@ -62,10 +62,10 @@ extract_summary = function(version = "v0") {
           random_bkg = random_bkg,
           metric = m,
           Min = s[["Min."]],
-          Q1 = s[["1st Qu."]],
+          # Q1 = s[["1st Qu."]],
           Median = s[["Median"]],
           Mean = s[["Mean"]],
-          Q3 = s[["3rd Qu."]],
+          # Q3 = s[["3rd Qu."]],
           Max = s[["Max."]]
         )
         
