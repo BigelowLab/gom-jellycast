@@ -140,6 +140,84 @@ extract_top_model = function(version = "v0",
   
   return(list(top_version, top_model))
 }
+
+extract_monthly_summary = function(version = "v2"){
+  dir_path = file.path("data/versions", version)
+  sub_dir_path = list.dirs(dir_path, full.names = FALSE, recursive = FALSE)
+  
+  metrics = c("maxent_roc", "maxent_accuracy", 
+              "rf_roc", "rf_accuracy", 
+              "brt_roc", "brt_accuracy", 
+              "glm_roc", "glm_accuracy", 
+              "nn_roc", "nn_accuracy")
+  
+  summary_list = list()
+  
+  for (v in sub_dir_path) {
+    summary_path = file.path(dir_path, v, "results_summary.csv")
+    config_path = file.path(dir_path, v, paste0(v, ".yaml"))
+    
+    # Extract config info
+    species_name = NA
+    preds = NA
+    random_bkg = TRUE
+    
+    if (file.exists(config_path)) {
+      config = yaml::read_yaml(config_path)
+      species_name = config$obs$type
+      preds = paste(unlist(config$predictors), collapse = ",")
+      random_bkg = config$obs$random
+    }
+    
+    if (file.exists(summary_path)) {
+      df = read.table(summary_path, header = TRUE, sep = ",", stringsAsFactors = FALSE)
+      df$date = as.Date(df$date)
+      df$month = format(df$date, "%Y-%m")
+      
+      df = df %>%
+        dplyr::select(month, all_of(metrics)) %>%
+        dplyr::mutate(across(all_of(metrics), as.numeric))
+      
+      for (m in metrics) {
+        df_m = df %>%
+          group_by(month) %>%
+          summarise(
+            Min = min(.data[[m]], na.rm = TRUE),
+            Median = median(.data[[m]], na.rm = TRUE),
+            Mean = mean(.data[[m]], na.rm = TRUE),
+            Max = max(.data[[m]], na.rm = TRUE),
+            .groups = "drop"
+          )
+        
+        df_m = df_m %>%
+          mutate(
+            version = v,
+            species = species_name,
+            predictors = preds,
+            random_bkg = random_bkg,
+            metric = m
+          )
+        summary_list[[paste(v, m, sep = "_")]] = df_m
+      }
+    }
+  }
+  
+  summary_df = bind_rows(summary_list) %>%
+    relocate(version, species, predictors, random_bkg, month, metric, Min, Median, Mean, Max)
+  
+  output_path = file.path(dir_path, "summary_statistics_monthly.csv")
+  write.csv(summary_df, output_path, row.names = FALSE)
+  
+  message(sprintf("monthly summary statistics written to: %s", output_path))
+  return(summary_df)
+}
+
+
+
+
+
+
+
   
   
   

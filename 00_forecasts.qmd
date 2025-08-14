@@ -11,29 +11,36 @@ knitr::opts_chunk$set(echo = TRUE)
 
 lionsmane_top = extract_top_model(version = "v2", sp = "lionsmane")
 moon_top = extract_top_model(version = "v2", sp = "moon")
-whitecross_top = extract_top_model(version = "v2", sp = "whitecross")
-comb_top = extract_top_model(version = "v2", sp = "comb")
+# whitecross_top = extract_top_model(version = "v2", sp = "whitecross")
+# comb_top = extract_top_model(version = "v2", sp = "comb")
 ```
 
 # Today's Lion's Mane Jellyfish Sighting Forecast
 ```{r lionsmane, echo=FALSE}
-lionsmane_img = extract_im(version = "v2", v = lionsmane_top[1], model = lionsmane_top[2])
+# lionsmane_img = extract_im(version = "v2", v = lionsmane_top[1], model = lionsmane_top[2])
+
+lionsmane_img = extract_im(version = "v2", v = lionsmane_top[1], model = "rf")
 ```
 
 # Lion's Mane Jellyfish Sighting Forecast Animation
 ```{r lm animation, echo=FALSE}
-lionsmane_gif = make_movie(version = "v2", v = lionsmane_top[1], model = lionsmane_top[2])
+# lionsmane_gif = make_movie(version = "v2", v = lionsmane_top[1], model = lionsmane_top[2])
+lionsmane_gif = make_movie(version = "v2", v = lionsmane_top[1], model = "rf")
 lionsmane_gif
 ```
 
 # Today's Moon Jellyfish Forecast
 ```{r moon, echo=FALSE}
-moon_img = extract_im(version = "v2", v = moon_top[1], model = moon_top[2])
+# moon_img = extract_im(version = "v2", v = moon_top[1], model = moon_top[2])
+
+moon_img = extract_im(version = "v2", v = moon_top[1], model = "rf")
+
 ```
 
 # Moon Jellyfish Sighting Forecast Animation
 ```{r moon animation, echo=FALSE}
-moon_gif = make_movie(version = "v2", v = moon_top[1], model = moon_top[2])
+# moon_gif = make_movie(version = "v2", v = moon_top[1], model = moon_top[2])
+moon_gif = make_movie(version = "v2", v = moon_top[1], model = "rf")
 moon_gif
 ```
 
