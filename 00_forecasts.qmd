@@ -37,16 +37,16 @@ moon_gif = make_movie(version = "v2", v = moon_top[1], model = moon_top[2])
 moon_gif
 ```
 
-# Today's White Cross Jellyfish Forecast
-```{r whitecross, echo=FALSE}
-whitecross_img = extract_im(version = "v2", v = whitecross_top[1], model = whitecross_top[2])
-```
+<!-- # Today's White Cross Jellyfish Forecast -->
+<!-- ```{r whitecross, echo=FALSE} -->
+<!-- whitecross_img = extract_im(version = "v2", v = whitecross_top[1], model = whitecross_top[2]) -->
+<!-- ``` -->
 
-# White Cross Jellyfish Sighting Forecast Animation
-```{r wc animation, echo=FALSE}
-whitecross_gif = make_movie(version = "v2", v = whitecross_top[1], model = whitecross_top[2])
-whitecross_gif
-```
+<!-- # White Cross Jellyfish Sighting Forecast Animation -->
+<!-- ```{r wc animation, echo=FALSE} -->
+<!-- whitecross_gif = make_movie(version = "v2", v = whitecross_top[1], model = whitecross_top[2]) -->
+<!-- whitecross_gif -->
+<!-- ``` -->
 
 <!-- # Today's Comb Jellyfish Forecast -->
 <!-- ```{r comb, echo=FALSE} -->

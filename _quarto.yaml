@@ -7,8 +7,8 @@ project:
     - 00_forecasts.qmd
     - 01_lionsmane.qmd
     - 02_moon.qmd
-    - 03_whitecross.qmd
-    - 04_comb.qmd
+    # - 03_whitecross.qmd
+    # - 04_comb.qmd
     - about.qmd
 execute: 
   cache: false
@@ -29,10 +29,10 @@ website:
         text: Lion's Mane Jellyfish
       - href: 02_moon.qmd
         text: Moon Jellyfish
-      - href: 03_whitecross.qmd
-        text: White Cross Jellyfish
-      - href: 04_comb.qmd
-        text: Comb Jellyfish
+      # - href: 03_whitecross.qmd
+      #   text: White Cross Jellyfish
+      # - href: 04_comb.qmd
+      #   text: Comb Jellyfish
       - href: about.qmd
         text: About
 tools:

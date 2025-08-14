@@ -39,16 +39,16 @@ obs = read_obs() %>%
 top = extract_top_model(version = "v2", sp = "comb")
 ```
 
-<!-- # Today's Forecast -->
-<!-- ```{r forecast, echo=FALSE} -->
-<!-- img = extract_im(version = "v2", v = top[1], model = top[2]) -->
-<!-- ``` -->
+# Today's Forecast
+```{r forecast, echo=FALSE}
+img = extract_im(version = "v2", v = top[1], model = top[2])
+```
 
-<!-- # Forecast Animation -->
-<!-- ```{r animation, echo=FALSE} -->
-<!-- # gif = make_movie(version = "v2", v = top[1], model = top[2]) -->
-<!-- # gif -->
-<!-- ``` -->
+# Forecast Animation
+```{r animation, echo=FALSE}
+# gif = make_movie(version = "v2", v = top[1], model = top[2])
+# gif
+```
 
 # Observation Distributions
 ```{r fig.height=10,fig.width=20, echo = FALSE, warning = FALSE}
