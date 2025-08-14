@@ -64,24 +64,10 @@ main <- function(cfg, target_date){
   
   day_obs = obs %>% filter(date == target_date)
   day_bkg = bkg %>% filter(date == target_date)
-  
-  # for 30 day range across all years
-  obs$yday = lubridate::yday(obs$date)
-  bkg$yday = lubridate::yday(bkg$date)
-  
-  day_window = 30
-  month_obs = obs %>% filter(abs(yday - target_yday) <= day_window / 2)
-  month_bkg = bkg %>% filter(abs(yday - target_yday) <= day_window / 2)
-  
-  
-  # 30 day range
-  # month_obs = obs %>% filter(date >= target_date - 29 & date <= target_date)
-  # month_bkg = bkg %>% filter(date >= target_date - 29 & date <= target_date)
-  
-  # original
-  # month_obs = obs %>% filter(lubridate::month(date) == lubridate::month(target_date))
-  # month_bkg = bkg %>% filter(lubridate::month(date) == lubridate::month(target_date))
-  
+
+  month_obs = obs %>% filter(lubridate::month(date) == lubridate::month(target_date))
+  month_bkg = bkg %>% filter(lubridate::month(date) == lubridate::month(target_date))
+
   summary_row = data.frame(
     version = version,
     species = species,

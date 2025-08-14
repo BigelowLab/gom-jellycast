@@ -1,16 +1,17 @@
-make_obs_bkg = function(sp = "lionsmane", bbox = read_coastline_buffer(), n = 1000, random = FALSE){
+make_obs_bkg = function(sp = "lionsmane", 
+                        bbox = read_coastline_buffer(), 
+                        n = 100, 
+                        random = FALSE){
   #' Create list of two sf objects: observation and background points
   #'
   #' @param sp 
   #' @return observation and background points
   
-  df = read_obs() %>% 
-    filter(source == "record") %>% 
+  obs = read_obs() %>% 
+    filter(source == "record",
+           type == sp) %>% 
     st_as_sf(coords = c("lon", "lat"), crs = 4326)
-  
-  # Filter by species
-  obs = df %>% filter(type == sp)
-  
+
   if (!is.null(bbox)) {
     obs = st_crop(obs, bbox)
     
@@ -95,14 +96,6 @@ write_df = function(x, obs, bkg){
   #' @param bkg 
   #' @return 
   
-  # v = extract_points(x, obs, form = "wide") %>% 
-  #   tidyr::drop_na() %>% 
-  #   dplyr::mutate(presence = as.factor(1))
-  # 
-  # z = extract_points(x, bkg, form = "wide") %>% 
-  #   tidyr::drop_na() %>% 
-  #   dplyr::mutate(presence = as.factor(0))
-  
   v = extract_points(x, obs, form = "wide") %>% 
     tidyr::drop_na() %>% 
     dplyr::mutate(presence = 1)
@@ -132,15 +125,3 @@ prep_split = function(seed = 123, data = df){
   return(list(train = train, test = test))
 }
 
-
-# update_forecast = function(version = "v0",
-#                            v = "v0.015",
-#                            date = Sys.Date(),
-#                            model = "rf"){
-#   date_str = format(date, "%Y-%m-%d")
-#   file_path = file.path("data", "versions", version, v, "results", date_str, model, "predicted_distribution.png")
-#   img = png::readPNG(file_path)
-#   return(img)
-# }
-  
-  
