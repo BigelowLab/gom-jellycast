@@ -156,25 +156,70 @@ main <- function(cfg, target_date){
     summary_row$rf_accuracy = as.numeric(rf_res$accuracy$.estimate)
   }
   
+  # if (isTRUE(model$brt)) {
+  #   charlier::info("running boosted regression trees model")
+  #   dir.create(file.path(results_dir, "brt"), showWarnings = FALSE)
+  #   brt_res = model_brt(train, test)
+  #   df_covs = as.data.frame(x, xy = TRUE, na.rm = FALSE)
+  #   df_covs$pred = predict(brt_res$model, newdata = df_covs, type = "response")
+  #   brt_pred = x[1]; brt_pred[[1]] = matrix(df_covs$pred, nrow = dim(x)[1], ncol = dim(x)[2]); names(brt_pred) = "predicted_distribution"
+  #   if (!is.null(cfg[["polygons"]])) {
+  #     brt_pred = st_crop(brt_pred, st_bbox(poly))
+  #     brt_pred = brt_pred[poly]
+  #   }
+  #   write_stars(brt_pred, file.path(results_dir, "brt", "predicted_distribution.tif"))
+  #   dist_plot = predicted_dist(brt_pred, the_date = target_date, species = species, add_points = "all", day_obs, day_bkg)
+  #   ggsave(file.path(results_dir, "brt", "predicted_distribution.png"), dist_plot, width = 8, height = 6, dpi = 300)
+  #   saveRDS(brt_res, file = file.path(results_dir, "brt", "brt.rds"))
+  #   save_model_plots(brt_res, brt_res$test_data, file.path(results_dir, "brt"))
+  #   summary_row$brt_roc = as.numeric(brt_res$roc_auc$.estimate)
+  #   summary_row$brt_accuracy = as.numeric(brt_res$accuracy$.estimate)
+  # }
+
   if (isTRUE(model$brt)) {
     charlier::info("running boosted regression trees model")
     dir.create(file.path(results_dir, "brt"), showWarnings = FALSE)
-    brt_res = model_brt(train, test)
-    df_covs = as.data.frame(x, xy = TRUE, na.rm = FALSE)
-    df_covs$pred = predict(brt_res$model, newdata = df_covs, type = "response")
-    brt_pred = x[1]; brt_pred[[1]] = matrix(df_covs$pred, nrow = dim(x)[1], ncol = dim(x)[2]); names(brt_pred) = "predicted_distribution"
-    if (!is.null(cfg[["polygons"]])) {
-      brt_pred = st_crop(brt_pred, st_bbox(poly))
-      brt_pred = brt_pred[poly]
-    }
+    
+    # Fit BRT model
+    brt_res <- model_brt(train, test)
+    
+    # Convert stars raster to sf points
+    x_points <- st_as_sf(x, as_points = TRUE, merge = FALSE)
+    
+    # Keep only points inside water polygon
+    x_water <- x_points[poly, ]
+    
+    # Convert to data frame for prediction
+    df_covs <- st_drop_geometry(x_water)
+    
+    # Predict only on water
+    pred_values <- predict(brt_res$model, newdata = df_covs, type = "response")
+    
+    # Assign predictions to sf points
+    x_water$predicted_distribution <- pred_values
+    
+    # Rasterize back to stars object
+    brt_pred <- st_rasterize(x_water["predicted_distribution"])
+    
+    # Write raster
     write_stars(brt_pred, file.path(results_dir, "brt", "predicted_distribution.tif"))
-    dist_plot = predicted_dist(brt_pred, the_date = target_date, species = species, add_points = "all", day_obs, day_bkg)
-    ggsave(file.path(results_dir, "brt", "predicted_distribution.png"), dist_plot, width = 8, height = 6, dpi = 300)
+    
+    # Plot predicted distribution
+    dist_plot <- predicted_dist(brt_pred, the_date = target_date, species = species,
+                                add_points = "all", day_obs, day_bkg)
+    ggsave(file.path(results_dir, "brt", "predicted_distribution.png"),
+           dist_plot, width = 8, height = 6, dpi = 300)
+    
+    # Save model object and plots
     saveRDS(brt_res, file = file.path(results_dir, "brt", "brt.rds"))
     save_model_plots(brt_res, brt_res$test_data, file.path(results_dir, "brt"))
-    summary_row$brt_roc = as.numeric(brt_res$roc_auc$.estimate)
-    summary_row$brt_accuracy = as.numeric(brt_res$accuracy$.estimate)
+    
+    # Record performance metrics
+    summary_row$brt_roc <- as.numeric(brt_res$roc_auc$.estimate)
+    summary_row$brt_accuracy <- as.numeric(brt_res$accuracy$.estimate)
   }
+  
+  
   
   if (isTRUE(model$glm)) {
     charlier::info("running general linear model")

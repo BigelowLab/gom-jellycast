@@ -24,7 +24,7 @@ app <- "Rscript"
 # }
 
 script1 <- sprintf("batch_v23.R --dates %s %s", format(Sys.Date(), "%Y-%m-%d"), format(Sys.Date() + 6, "%Y-%m-%d"))
-args1 <- sprintf("%s/scripts/%s --configs %s/data/versions/v2/v2.001/v2.001.yaml %s/data/versions/v2/v2.060/v2.060.yaml", path, script1, path, path)
+args1 <- sprintf("%s/scripts/%s --configs %s/data/versions/v2/v2.001/v2.001.yaml %s/data/versions/v2/v2.040/v2.040.yaml", path, script1, path, path)
 
 system2(app, args1)
 

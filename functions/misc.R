@@ -1,39 +1,163 @@
-make_obs_bkg = function(sp = "lionsmane", 
-                        bbox = read_coastline_buffer(), 
-                        n = 100, 
-                        random = FALSE){
+#' make_obs_bkg <- function(sp = "lionsmane", 
+#'                          bbox = read_coastline_buffer(), 
+#'                          n = 500, 
+#'                          random = "true abs") {
+#'   #' Create list of two sf objects: observation and background points
+#'   #'
+#'   #' @param sp species name
+#'   #' @param bbox bounding box (sf object or NULL)
+#'   #' @param n number of background points if random = TRUE
+#'   #' @param random logical: generate random background points?
+#'   #'
+#'   #' @return list(obs = sf, bkg = sf)
+#'   
+#'   df <- read_obs() %>% 
+#'     filter(source == "record") %>% 
+#'     st_as_sf(coords = c("lon", "lat"), crs = 4326) 
+#'   
+#'   obs <- df %>%
+#'     filter(type == sp)
+#'   
+#'   if(!is.null(bbox)){
+#'     obs <- st_crop(obs, bbox)
+#'   }
+#' 
+#'   if (!is.null(bbox)){ 
+#'     obs = st_crop(obs, bbox) 
+#'     
+#'     if(random == "true abs"){ 
+#'       bkg = df %>% filter(type != sp) 
+#'       bkg = st_crop(bkg, bbox) 
+#'     } 
+#'     
+#'     if(random == "random"){ 
+#'       # generate random geometries 
+#'       bkg_points = st_sample(bbox, size = n, type = "random") 
+#'       
+#'       # sample attributes from obs to match the count 
+#'       attr_sample = obs %>% st_drop_geometry() %>% 
+#'         slice_sample(n = length(bkg_points), replace = TRUE) 
+#'       
+#'       # create new sf object with same columns 
+#'       bkg = st_sf(attr_sample, geometry = bkg_points) 
+#'     }
+#'     
+#'     
+#'     if (random == "both") {
+#'       # true absences
+#'       bkg_abs <- df %>% filter(type != sp)
+#'       bkg_abs <- st_crop(bkg_abs, bbox)
+#'       
+#'       # random background
+#'       bkg_points <- st_sample(bbox, size = n, type = "random") 
+#'       attr_sample <- obs %>% st_drop_geometry() %>% 
+#'         slice_sample(n = length(bkg_points), replace = TRUE) 
+#'       bkg_rand <- st_sf(attr_sample, geometry = bkg_points) 
+#'       
+#'       # combine both
+#'       bkg <- rbind(bkg_abs, bkg_rand)
+#'     }
+#'     
+#'   }
+#'   
+#'   return(list(obs = obs, bkg = bkg))
+#' }
+#' 
+#' make_obs_bkg <- function(sp = "lionsmane", 
+#'                          bbox = read_coastline_buffer(), 
+#'                          n = 500, 
+#'                          random = FALSE) {
+#'   #' Create list of two sf objects: observation and background points
+#'   #'
+#'   #' @param sp species name
+#'   #' @param bbox bounding box (sf object or NULL)
+#'   #' @param n number of background points if random = TRUE
+#'   #' @param random logical: generate random background points?
+#'   #'
+#'   #' @return list(obs = sf, bkg = sf)
+#'   
+#'   df <- read_obs() %>% 
+#'     filter(source == "record") %>% 
+#'     st_as_sf(coords = c("lon", "lat"), crs = 4326) 
+#'   
+#'   obs <- df %>%
+#'     filter(type == sp)
+#'   
+#'   if(!is.null(bbox)){
+#'     obs <- st_crop(obs, bbox)
+#'   }
+#' 
+#'   if (!is.null(bbox)){ 
+#'     obs = st_crop(obs, bbox) 
+#'     
+#'     if (random){ 
+#'       # generate random geometries 
+#'       bkg_points = st_sample(bbox, size = n, type = "random") 
+#'       
+#'       # sample attributes from obs to match the count 
+#'       attr_sample = obs %>% st_drop_geometry() %>% 
+#'         slice_sample(n = length(bkg_points), replace = TRUE) 
+#'       
+#'       # create new sf object with same columns 
+#'       bkg = st_sf(attr_sample, geometry = bkg_points) 
+#'     } else { 
+#'         bkg = df %>% filter(type != sp) 
+#'         bkg = st_crop(bkg, bbox) 
+#'     } 
+#'     
+#'   }
+#'   
+#'   return(list(obs = obs, bkg = bkg))
+#' }
+
+
+make_obs_bkg <- function(sp = "lionsmane", 
+                         bbox = read_coastline_buffer(), 
+                         n = 500, 
+                         random = FALSE) {
   #' Create list of two sf objects: observation and background points
   #'
-  #' @param sp 
-  #' @return observation and background points
+  #' @param sp species name
+  #' @param bbox bounding box (sf object or NULL)
+  #' @param n number of background points if random = TRUE
+  #' @param random logical: generate random background points?
+  #'
+  #' @return list(obs = sf, bkg = sf)
   
-  obs = read_obs() %>% 
-    filter(source == "record",
-           type == sp) %>% 
-    st_as_sf(coords = c("lon", "lat"), crs = 4326)
-
-  if (!is.null(bbox)) {
-    obs = st_crop(obs, bbox)
+  df <- read_obs() %>% 
+    filter(source == "record") %>% 
+    st_as_sf(coords = c("lon", "lat"), crs = 4326) 
+  
+  obs <- df %>%
+    filter(type == sp)
+  
+  if(!is.null(bbox)){
+    obs <- st_crop(obs, bbox)
+  }
+  
+  if (!is.null(bbox)){ 
+    obs = st_crop(obs, bbox) 
     
-    if (random) {
-      # generate random geometries
-      bkg_points = st_sample(bbox, size = n, type = "random")
+    if (random){ 
+      # generate random geometries 
+      bkg_points = st_sample(bbox, size = n, type = "random") 
       
-      # sample attributes from obs to match the count
-      attr_sample = obs %>% 
-        st_drop_geometry() %>% 
-        slice_sample(n = length(bkg_points), replace = TRUE)
+      # sample attributes from obs to match the count 
+      attr_sample = obs %>% st_drop_geometry() %>% 
+        slice_sample(n = length(bkg_points), replace = TRUE) 
       
-      # create new sf object with same columns
-      bkg = st_sf(attr_sample, geometry = bkg_points)
-    } else {
-      bkg = df %>% filter(type != sp)
-      bkg = st_crop(bkg, bbox)
-    }
+      # create new sf object with same columns 
+      bkg = st_sf(attr_sample, geometry = bkg_points) 
+    } else { 
+      bkg = df %>% filter(type != sp) 
+      bkg = st_crop(bkg, bbox) 
+    } 
+    
   }
   
   return(list(obs = obs, bkg = bkg))
 }
+
 
 csv_make_obs_bkg = function(sp = "lionsmane"){
   df = read.csv("/mnt/s1/projects/ecocast/projects/gom-jellycast-dev/jellyfish.csv") %>% 
