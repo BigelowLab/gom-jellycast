@@ -36,18 +36,20 @@ obs = read_obs() %>%
                         levels = month.abb),
          size_fixed = ifelse(is.na(size), 1, size))
 
-top = extract_top_model(version = "v2", sp = "moon")
+moon_top = extract_top_model(version = "v2", sp = "moon")
 ```
 
 # Today's Forecast
 ```{r forecast, echo=FALSE}
-img = extract_im(version = "v2", v = top[1], model = top[2])
+# img = extract_im(version = "v2", v = top[1], model = top[2])
+moon_img = extract_im(version = "v2", v = moon_top[1], model = "rf")
 ```
 
 # Forecast Animation
 ```{r animation, echo=FALSE}
-gif = make_movie(version = "v2", v = top[1], model = top[2])
-gif
+# gif = make_movie(version = "v2", v = top[1], model = top[2])
+moon_gif = make_movie(version = "v2", v = moon_top[1], model = "rf")
+moon_gif
 ```
 
 # Observation Distributions
