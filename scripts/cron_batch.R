@@ -1,4 +1,4 @@
-path <- "/mnt/s1/projects/ecocast/projects/gom-jellycast-dev"
+path <- "/mnt/s1/projects/ecocast/projects/gom-jellycast"
 app <- "Rscript"
 
 # script1 <- sprintf("batch_v02.R %s", format(Sys.Date() + 8, "%Y-%m-%d"))

@@ -11,7 +11,7 @@ suppressPackageStartupMessages({
 })
 
 main <- function(start_date, end_date, start_config, end_config) {
-  model_script <- "/mnt/s1/projects/ecocast/projects/gom-jellycast-dev/scripts/model_v2.R"
+  model_script <- "/mnt/s1/projects/ecocast/projects/gom-jellycast/scripts/model_v2.R"
   config_dir <- dirname(dirname(start_config))
   
   all_configs <- list.files(config_dir, pattern = "\\.yaml$", recursive = TRUE, full.names = TRUE)
@@ -49,7 +49,7 @@ main <- function(start_date, end_date, start_config, end_config) {
   invisible(0)
 }
 
-source("/mnt/s1/projects/ecocast/projects/gom-jellycast-dev/setup.R")
+source("/mnt/s1/projects/ecocast/projects/gom-jellycast/setup.R")
 
 Args <- arg_parser("Run multiple configs over multiple dates") %>%
   add_argument("--dates", nargs = 2, help = "start and end date (YYYY-MM-DD YYYY-MM-DD)") %>%

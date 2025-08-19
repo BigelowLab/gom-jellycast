@@ -5,7 +5,7 @@
 #' @param path string, path to the directory
 #' @return sf object for the coastline
 
-make_coastline = function(region = "nwa", scale = "medium", path = "/mnt/s1/projects/ecocast/projects/gom-jellycast-dev/data/polygons"){
+make_coastline = function(region = "nwa", scale = "medium", path = "/mnt/s1/projects/ecocast/projects/gom-jellycast/polygons"){
   coast = rnaturalearth::ne_coastline(scale = scale, returnclass = c("sf"))
   bb = cofbb::get_bb(region, form = "sf")
   coast = sf::st_crop(coast, bb)
@@ -21,7 +21,7 @@ make_coastline = function(region = "nwa", scale = "medium", path = "/mnt/s1/proj
 #' @param path string, path to the directory
 #' @return sf object for the coastline
 
-read_coastline = function(region = "nwa", scale = "medium", path = "/mnt/s1/projects/ecocast/projects/gom-jellycast-dev/data/polygons"){
+read_coastline = function(region = "nwa", scale = "medium", path = "/mnt/s1/projects/ecocast/projects/gom-jellycast/data/polygons"){
   filename = file.path(path, sprintf("coastline_%s_%s.gpkg", region, scale))
   coast = sf::read_sf(filename)
   return(coast)
@@ -34,7 +34,7 @@ read_coastline = function(region = "nwa", scale = "medium", path = "/mnt/s1/proj
 #' @param file string/NULL, name of output file to create or NULL to not write a file
 #' @return sf object of a buffered coastline
 
-make_coastline_buffer = function(x = read_coastline(), buffer = 50000, region = "nwa", scale = "medium", path = "/mnt/s1/projects/ecocast/projects/gom-jellycast-dev/data/polygons"){
+make_coastline_buffer = function(x = read_coastline(), buffer = 50000, region = "nwa", scale = "medium", path = "/mnt/s1/projects/ecocast/projects/gom-jellycast/data/polygons"){
   sf::sf_use_s2(FALSE) #don't use s2
   eckertIV <- "+proj=eck4 +lon_0=0 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs"
   p = sf::st_transform(x, crs = eckertIV) |> #go to eckertIV projection
@@ -57,7 +57,7 @@ make_coastline_buffer = function(x = read_coastline(), buffer = 50000, region = 
 #' @param path string, path to the directory
 #' @return sf object 
 
-read_coastline_buffer = function(region = "nwa", scale = "medium", buffer = 100000, path = "/mnt/s1/projects/ecocast/projects/gom-jellycast-dev/data/polygons"){
+read_coastline_buffer = function(region = "nwa", scale = "medium", buffer = 100000, path = "/mnt/s1/projects/ecocast/projects/gom-jellycast/data/polygons"){
   filename = file.path(path, sprintf("coastline_%s_%s_%d.gpkg", region, scale, buffer))
   buffer = read_sf(filename)
   return(buffer)

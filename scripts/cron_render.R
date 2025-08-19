@@ -9,7 +9,7 @@
 #   optional arguments:
 #   -d, --doc   the name of the document to render [default: README.Rmd]
 #   -p, --path  the path to the document [default:
-#                                         /mnt/s1/projects/ecocast/projects/gom-jellycast-dev]
+#                                         /mnt/s1/projects/ecocast/projects/gom-jellycast]
 
 suppressPackageStartupMessages({
   library(argparser)
@@ -23,7 +23,7 @@ Args = argparser::arg_parser("Render and push documentation",
                default = "README.Rmd",
                help = "the name of the document to render") |>
   add_argument("--path",
-               default = "/mnt/s1/projects/ecocast/projects/gom-jellycast-dev",
+               default = "/mnt/s1/projects/ecocast/projects/gom-jellycast",
                help = 'the path to the document') |>
   add_argument("--push",
                flag = TRUE,

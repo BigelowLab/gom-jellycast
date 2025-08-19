@@ -1,13 +1,13 @@
 ---
-title: "gom-jellies-dev"
+title: "gom-jellycast"
 ---
 
 ```{r setup, echo = FALSE, include = FALSE}
 source("setup.R")
-coast = read_coast()
-coast_bbox = st_bbox(coast)
+buffer <- read_coastline_buffer()
+buffer_bbox <- st_bbox(buffer)
 
-all <- read_obs() %>%
+obs <- read_obs() %>%
   st_as_sf(coords = c("lon", "lat"), crs = 4326) %>% 
   mutate(
     year = year(date),
@@ -15,10 +15,9 @@ all <- read_obs() %>%
     type = as.factor(type),
     size_fixed = ifelse(is.na(size), 1, size)
   ) %>% 
-  filter(source == "record")
-
-obs <- all %>% 
-  filter(type %in% c("lionsmane", "moon", "whitecross", "comb"))
+  filter(source == "record", 
+         type %in% c("lionsmane", "moon")) %>% 
+  st_filter(st_as_sfc(buffer_bbox))
 ```
 
 <section>
@@ -26,26 +25,24 @@ obs <- all %>%
 In the early 2010s, jellyfish began popping up all throughout the Gulf of Maine with seemingly no explanation. Scientists Nick Record and Ben Tupper of the Tandy Center for Ocean Forecasting in the Bigelow Laboratory for Ocean Sciences began asking community members to reach out with their jellyfish sightings in an effort to explain the sudden population increase. 
   </p>
   <p>
-This site features an array of jellyfish sighting predictions across the Gulf of Maine to increase public awareness and understanding on the importance and implications of jellyfish in our ecosystems. Tracking jellyfish is important for beachgoers and boaters alike. On a larger scale, changes in jellyfish populations allow scientists to examine the impacts of climate change. 
+This site features an array of jellyfish sighting predictions across the Gulf of Maine to increase public awareness and understanding on the importance and implications of jellyfish in our ecosystems. Tracking jellyfish is important and interesting for beachgoers and boaters alike. On a larger scale, changes in jellyfish populations allow scientists to examine the impacts of climate change. 
   </p>
   <p>
-For the [gom-jellies](https://github.com/BigelowLab/gom-jellies) project, observations come from community scientist reports. The following species have been selected for analysis:
+For the [Gulf of Maine Jellyfish Encounter Likelihood Forecast](https://github.com/BigelowLab/gom-jellycast) project, observations come from community scientist reports. The following species have been selected for analysis:
 
   + *Cyanea capillata* (Lion's Mane)
   + *Aurelia aurita* (Moon)
-  + *Staurostoma mertensii* (White Cross)
-  + *Ctenophores* (Comb)
   </p>
 </section>
 
 # All Observations
 ```{r fig.height=10,fig.width=20, echo = FALSE, warning = FALSE}
 p1 <- ggplot() +
-  geom_sf(data = coast, color = "black") +
-  geom_sf(data = all, color = "steelblue", size = 1.5) +
+  geom_sf(data = read_coastline(), color = "black") +
+  geom_sf(data = obs, color = "steelblue", size = 1.5) +
   coord_sf(
-    xlim = c(coast_bbox["xmin"], coast_bbox["xmax"]),
-    ylim = c(coast_bbox["ymin"], coast_bbox["ymax"]),
+    xlim = c(buffer_bbox["xmin"], buffer_bbox["xmax"]),
+    ylim = c(buffer_bbox["ymin"], buffer_bbox["ymax"]),
     expand = FALSE
   ) +
   labs(
@@ -56,12 +53,17 @@ p1 <- ggplot() +
   theme_minimal(base_size = 24)
 
 p2 <- ggplot() +
-  geom_sf(data = coast, fill = "grey90", color = "black") +
-  geom_sf(data = all, aes(size = size_fixed), color = "steelblue", alpha = 0.7) +
-  scale_size(range = c(1,8)) +
+  geom_sf(data = read_coastline(), color = "black") +
+  geom_sf(
+    data = obs,
+    aes(size = size_fixed),
+    color = "steelblue",
+    alpha = 0.4  
+  ) +
+  scale_size_area(max_size = 8) +  
   coord_sf(
-    xlim = c(coast_bbox["xmin"], coast_bbox["xmax"]),
-    ylim = c(coast_bbox["ymin"], coast_bbox["ymax"]),
+    xlim = c(buffer_bbox["xmin"], buffer_bbox["xmax"]),
+    ylim = c(buffer_bbox["ymin"], buffer_bbox["ymax"]),
     expand = FALSE
   ) +
   labs(
@@ -70,14 +72,15 @@ p2 <- ggplot() +
     y = "Latitude",
     size = "Diameter (cm)"
   ) +
-  theme_minimal(base_size = 24)
+  theme_minimal(base_size = 24) +
+  guides(size = guide_legend(override.aes = list(alpha = 1)))
 
 p1 + p2
 
 ```
 
 ```{r fig.height=10,fig.width=20, echo = FALSE, warning = FALSE}
-p1 <- ggplot(data = all, aes(x = factor(year))) +
+p3 <- ggplot(data = obs, aes(x = factor(year))) +
   geom_bar(fill = "steelblue") +
   labs(
     title = "Number of Observations per Year",
@@ -86,18 +89,7 @@ p1 <- ggplot(data = all, aes(x = factor(year))) +
   ) +
   theme_minimal(base_size = 24)
 
-# p2 <- ggplot(all, aes(x = factor(year), y = size_fixed)) +
-#   geom_bar(stat = "summary", fun = "mean", fill = "steelblue") +
-#   labs(
-#     title = "Average Bell Diameter of Observations per Year",
-#     x = "Year",
-#     y = "Average Diameter (cm)"
-#   ) +
-#   theme_minimal(base_size = 24)
-
-# p1 + p2
-
-p3 <- ggplot(all, aes(x = factor(month))) +
+p4 <- ggplot(obs, aes(x = factor(month))) +
   geom_bar(fill = "steelblue") +
   labs(
     title = "Number of Observations per Month",
@@ -106,95 +98,53 @@ p3 <- ggplot(all, aes(x = factor(month))) +
   ) +
   theme_minimal(base_size = 24)
 
-# p4 <- ggplot(all, aes(x = factor(month), y = size_fixed)) +
-#   geom_bar(stat = "summary", fun = "mean", fill = "steelblue") +
-#   labs(
-#     title = "Average Bell Diameter of Observations per Month",
-#     x = "Month",
-#     y = "Average Diameter (cm)"
-#   ) +
-#   theme_minimal(base_size = 24)
-
-# p3 + p4
-
-p1 + p3
+p3 + p4
 ```
 
 # By Species
 ```{r fig.height=10,fig.width=20, echo = FALSE, warning = FALSE}
-p1 <- ggplot() +
-  geom_sf(data = coast, color = "black") +
-  geom_sf(data = obs, aes(color = type), size = 1.5) +
-  coord_sf(
-    xlim = c(coast_bbox["xmin"], coast_bbox["xmax"]),
-    ylim = c(coast_bbox["ymin"], coast_bbox["ymax"]),
-    expand = FALSE
-  ) +
-  labs(title = "Distribution of Filtered Observations") +
-  theme_minimal(base_size = 24)
+lm <- obs %>% 
+  filter(type == "lionsmane")
 
-
-p2 <- ggplot() +
-  geom_sf(data = coast, fill = "grey90", color = "black") +
-  geom_sf(data = obs, aes(size = size_fixed, color = type), alpha = 0.7) +
-  scale_size(range = c(1,8)) +
+p5 <- ggplot() +
+  geom_sf(data = read_coastline(), color = "black") +
+  geom_sf(data = lm, aes(size = size_fixed), color = "steelblue", alpha = 0.4) +
+  scale_size_area(max_size = 8) +  
   coord_sf(
-    xlim = c(coast_bbox["xmin"], coast_bbox["xmax"]),
-    ylim = c(coast_bbox["ymin"], coast_bbox["ymax"]),
+    xlim = c(buffer_bbox["xmin"], buffer_bbox["xmax"]),
+    ylim = c(buffer_bbox["ymin"], buffer_bbox["ymax"]),
     expand = FALSE
   ) +
   labs(
-    title = "Distribution of Filtered Observations by Size",
+    title = "Distribution of Lion's Mane Jellyfish Observations by Size",
     x = "Longitude",
     y = "Latitude",
     size = "Diameter (cm)"
   ) +
-  theme_minimal(base_size = 24)
+  theme_minimal(base_size = 24) +
+  guides(size = guide_legend(override.aes = list(alpha = 1)))
 
-p1 + p2
+moon <- obs %>% 
+  filter(type == "moon")
 
-p3 <- ggplot(obs, aes(x = factor(year), fill = type)) +
-  geom_bar() +
-  labs(
-    title = "Number of Observations per Year",
-    x = "Year",
-    y = "Count"
+p6 <- ggplot() +
+  geom_sf(data = read_coastline(), color = "black") +
+  geom_sf(data = moon, aes(size = size_fixed), color = "steelblue", alpha = 0.4) +
+  scale_size_area(max_size = 8) +  
+  coord_sf(
+    xlim = c(buffer_bbox["xmin"], buffer_bbox["xmax"]),
+    ylim = c(buffer_bbox["ymin"], buffer_bbox["ymax"]),
+    expand = FALSE
   ) +
-  theme_minimal(base_size = 24)
-
-# p4 <- ggplot(obs, aes(x = factor(year), y = size, fill = type)) +
-#   geom_bar(stat = "summary", fun = "mean") +
-#   labs(
-#     title = "Average Bell Diameter of Observations per Year",
-#     x = "Year",
-#     y = "Average Diameter (cm)"
-#   ) + 
-#   theme_minimal(base_size = 24)
-# 
-# p3 + p4
-
-p5 <- ggplot(obs, aes(x = factor(month), fill = type)) +
-  geom_bar() +
-  labs(
-    title = "Number of Observations per Month",
-    x = "Month",
-    y = "Count"
+  labs(title = "Distribution of Moon Jellyfish Observations by Size",
+    x = "Longitude",
+    y = "Latitude",
+    size = "Diameter (cm)"
   ) +
-  theme_minimal(base_size = 24)
+  theme_minimal(base_size = 24) +
+  guides(size = guide_legend(override.aes = list(alpha = 1)))
 
-
-# p6 <- ggplot(obs, aes(x = factor(month), y = size, fill = type)) +
-#   geom_bar(stat = "summary", fun = "mean") +
-#   labs(
-#     title = "Average Bell Diameter of Observations per Month",
-#     x = "Month",
-#     y = "Average Diameter (cm)"
-#   ) + 
-#   theme_minimal(base_size = 24)
-# 
-# p5 + p6
-
-p3 + p5
+p5 + p6
 ```
 
 

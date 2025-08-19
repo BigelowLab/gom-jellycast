@@ -33,7 +33,7 @@ suppressPackageStartupMessages({
 main <- function(cfg, target_date){
   root = cfg[["root"]]
   region = cfg[["region"]]
-  poly = read_coastline_buffer(buffer = 100000, path = "/mnt/s1/projects/ecocast/projects/gom-jellycast-dev/data/polygons")
+  poly = read_coastline_buffer(buffer = 100000, path = "/mnt/s1/projects/ecocast/projects/gom-jellycast/data/polygons")
   species = cfg[["obs"]][["type"]]
   duration = cfg[["duration"]]
   variables = unlist(cfg[["predictors"]][["phy"]])
@@ -275,7 +275,7 @@ main <- function(cfg, target_date){
 
 
 # Source environment setup
-source("/mnt/s1/projects/ecocast/projects/gom-jellycast-dev/setup.R")
+source("/mnt/s1/projects/ecocast/projects/gom-jellycast/setup.R")
 
 Args = argparser::arg_parser("Monthly model builder and predictor", name = "model_v2.R") |>
   argparser::add_argument("config", help = "path to config file") |>

@@ -26,15 +26,21 @@ format:
 ```{r setup, include=FALSE}
 source("setup.R")
 knitr::opts_chunk$set(echo = TRUE)
-coast = st_as_sf(read_coast())
-coast_bbox = st_bbox(coast)
-obs = read_obs() %>% 
-  filter(type == "moon", source == "record") %>% 
+buffer <- read_coastline_buffer()
+buffer_bbox <- st_bbox(buffer)
+
+obs <- read_obs() %>%
   st_as_sf(coords = c("lon", "lat"), crs = 4326) %>% 
-  mutate(year = factor(year(date)),
-         month = factor(month(date, label = TRUE, abbr = TRUE), 
-                        levels = month.abb),
-         size_fixed = ifelse(is.na(size), 1, size))
+  mutate(
+    year = year(date),
+    month = factor(month(date, label = TRUE, abbr = TRUE), levels = month.abb),
+    type = as.factor(type),
+    size_fixed = ifelse(is.na(size), 1, size)
+  ) %>% 
+  filter(source == "record", 
+         type == "moon") %>% 
+  st_filter(st_as_sfc(buffer_bbox))
+
 
 moon_top = extract_top_model(version = "v2", sp = "moon")
 ```
@@ -54,100 +60,23 @@ moon_gif
 
 # Observation Distributions
 ```{r fig.height=10,fig.width=20, echo = FALSE, warning = FALSE}
-p1 <- ggplot() +
-  geom_sf(data = coast, color = "black") +
-  geom_sf(data = obs, color = "steelblue", size = 2.5) +
+ggplot() +
+  geom_sf(data = read_coastline(), color = "black") +
+  geom_sf(data = obs, aes(size = size_fixed), color = "steelblue", alpha = 0.4) +
+  scale_size_area(max_size = 8) +  
   coord_sf(
-    xlim = c(coast_bbox["xmin"], coast_bbox["xmax"]),
-    ylim = c(coast_bbox["ymin"], coast_bbox["ymax"]),
-    expand = FALSE
-  ) +
-  labs(title = "Moon Jelly Observations",
-       x = "Longitude",
-       y = "Latitude") + 
-  theme_minimal(base_size = 24)
-
-p2 <- ggplot() +
-  geom_sf(data = coast, fill = "grey90", color = "black") +
-  geom_sf(data = obs, aes(size = size_fixed), color = "steelblue", alpha = 0.7) +
-  scale_size(range = c(1,8)) +
-  coord_sf(
-    xlim = c(coast_bbox["xmin"], coast_bbox["xmax"]),
-    ylim = c(coast_bbox["ymin"], coast_bbox["ymax"]),
+    xlim = c(buffer_bbox["xmin"], buffer_bbox["xmax"]),
+    ylim = c(buffer_bbox["ymin"], buffer_bbox["ymax"]),
     expand = FALSE
   ) +
   labs(
-    title = "Moon Jelly Observations by Size",
+    title = "Distribution of Moon Jellyfish Observations by Size",
     x = "Longitude",
     y = "Latitude",
     size = "Diameter (cm)"
   ) +
-  theme_minimal(base_size = 24)
-
-p1 + p2
-
-# Year
-# p3 <- ggplot() +
-#   geom_sf(data = coast, color = "black") +
-#   geom_sf(data = obs, color = "steelblue", size = 1.5, alpha = 0.7) +
-#   coord_sf(
-#     xlim = c(coast_bbox["xmin"], coast_bbox["xmax"]),
-#     ylim = c(coast_bbox["ymin"], coast_bbox["ymax"]),
-#     expand = FALSE
-#   ) +
-#   facet_wrap(~ year) +
-#   labs(title = "Yearly Moon Jelly Observations",       
-#        x = "Longitude",
-#        y = "Latitude") +
-#   theme_minimal(base_size = 24)
-# 
-# p4 <- ggplot() +
-#   geom_sf(data = coast, color = "black") +
-#   geom_sf(data = obs, aes(y = size_fixed), color = "steelblue", size = 1.5, alpha = 0.7) +
-#   coord_sf(
-#     xlim = c(coast_bbox["xmin"], coast_bbox["xmax"]),
-#     ylim = c(coast_bbox["ymin"], coast_bbox["ymax"]),
-#     expand = FALSE
-#   ) +
-#   facet_wrap(~ year) +
-#   labs(title = "Yearly Moon Jelly Observations by Size",
-#        x = "Longitude",
-#        y = "Latitude") +
-#   theme_minimal(base_size = 24)
-# 
-# p3 + p4
-
-# Month
-# p5 <- ggplot() +
-#   geom_sf(data = coast, color = "black") +
-#   geom_sf(data = obs, color = "steelblue", size = 1.5, alpha = 0.7) +
-#   coord_sf(
-#     xlim = c(coast_bbox["xmin"], coast_bbox["xmax"]),
-#     ylim = c(coast_bbox["ymin"], coast_bbox["ymax"]),
-#     expand = FALSE
-#   ) +
-#   facet_wrap(~ month) +
-#   labs(title = "Monthly Moon Jelly Observations",
-#        x = "Longitude",
-#        y = "Latitude") +
-#   theme_minimal(base_size = 24)
-# 
-# p6 <- ggplot() +
-#   geom_sf(data = coast, color = "black") +
-#   geom_sf(data = obs, aes(y = size_fixed), color = "steelblue", size = 1.5, alpha = 0.7) +
-#   coord_sf(
-#     xlim = c(coast_bbox["xmin"], coast_bbox["xmax"]),
-#     ylim = c(coast_bbox["ymin"], coast_bbox["ymax"]),
-#     expand = FALSE
-#   ) +
-#   facet_wrap(~ month) +
-#   labs(title = "Monthly Moon Jelly Observations by Size",
-#        x = "Longitude",
-#        y = "Latitude") +
-#   theme_minimal(base_size = 24)
-# 
-# p5 + p6
-
+  theme_minimal(base_size = 24) +
+  guides(size = guide_legend(override.aes = list(alpha = 1)))
 ```
 
 # Histograms of the Proportion of Moon Jelly Observations
