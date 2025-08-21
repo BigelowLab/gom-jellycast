@@ -35,8 +35,8 @@ For the [Gulf of Maine Jellyfish Encounter Likelihood Forecast](https://github.c
   </p>
 </section>
 
-# All Observations
-```{r fig.height=10,fig.width=20, echo = FALSE, warning = FALSE}
+# Observations Summary
+```{r fig.height=15,fig.width=30, echo = FALSE, warning = FALSE}
 p1 <- ggplot() +
   geom_sf(data = read_coastline(), color = "black") +
   geom_sf(data = obs, color = "steelblue", size = 1.5) +
@@ -101,8 +101,8 @@ p4 <- ggplot(obs, aes(x = factor(month))) +
 p3 + p4
 ```
 
-# By Species
-```{r fig.height=10,fig.width=20, echo = FALSE, warning = FALSE}
+# Species Distributions by Size
+```{r fig.height=15,fig.width=30, echo = FALSE, warning = FALSE}
 lm <- obs %>% 
   filter(type == "lionsmane")
 
@@ -116,7 +116,7 @@ p5 <- ggplot() +
     expand = FALSE
   ) +
   labs(
-    title = "Distribution of Lion's Mane Jellyfish Observations by Size",
+    title = "Lion's Mane Jellyfish",
     x = "Longitude",
     y = "Latitude",
     size = "Diameter (cm)"
@@ -136,7 +136,7 @@ p6 <- ggplot() +
     ylim = c(buffer_bbox["ymin"], buffer_bbox["ymax"]),
     expand = FALSE
   ) +
-  labs(title = "Distribution of Moon Jellyfish Observations by Size",
+  labs(title = "Moon Jellyfish",
     x = "Longitude",
     y = "Latitude",
     size = "Diameter (cm)"

@@ -17,11 +17,12 @@ extract_summary = function(version = "v0") {
   dir_path = file.path("data/versions", version)
   sub_dir_path = list.dirs(dir_path, full.names = FALSE, recursive = FALSE)
   
-  metrics = c("maxent_roc", "maxent_accuracy", 
-              "rf_roc", "rf_accuracy", 
-              "brt_roc", "brt_accuracy", 
-              "glm_roc", "glm_accuracy", 
-              "nn_roc", "nn_accuracy")
+  metrics = c("maxent_roc", "maxent_accuracy", "maxent_tss",
+              "rf_roc", "rf_accuracy", "rf_tss",
+              "brt_roc", "brt_accuracy", "brt_tss",
+              "glm_roc", "glm_accuracy", "glm_tss",
+              "nn_roc", "nn_accuracy", "nn_tss")
+  
   summary_list = list()
   
   for (v in sub_dir_path) {
@@ -81,6 +82,7 @@ extract_summary = function(version = "v0") {
   message(sprintf("summary statistics written to: %s", output_path))
   return(summary_df)
 }
+
 
 
 extract_im = function(version = "v0", 

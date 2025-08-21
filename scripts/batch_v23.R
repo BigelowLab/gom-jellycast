@@ -33,10 +33,10 @@ main <- function(start_date, end_date, start_config, end_config) {
     version <- cfg[["version"]]
     
     for (d in dates) {
-      cmd <- sprintf("Rscript %s %s %s", 
-                    as.character(model_script), 
-                    as.character(config), 
-                    format(as.Date(d), "%Y-%m-%d"))
+      cmd <- sprintf("Rscript %s --config %s --date %s", 
+                     as.character(model_script), 
+                     as.character(config), 
+                     format(as.Date(d), "%Y-%m-%d"))
       
       exit_code = system(cmd)
       if (exit_code != 0) {

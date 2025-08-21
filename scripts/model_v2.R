@@ -88,10 +88,16 @@ main <- function(cfg, target_date){
     date = format(target_date, "%Y-%m-%d"),
     obs_count = nrow(day_obs),
     bkg_count = nrow(day_bkg),
-    maxent_roc = NA_real_,
+    maxent_auc = NA_real_,
     maxent_accuracy = NA_real_,
-    rf_roc = NA_real_,
-    rf_accuracy = NA_real_
+    rf_auc = NA_real_,
+    rf_accuracy = NA_real_,
+    brt_auc = NA_real_,
+    brt_accuracy = NA_real_,
+    glm_auc = NA_real_,
+    glm_accuracy = NA_real_,
+    nn_auc = NA_real_,
+    nn_accuracy = NA_real_
   )
   
   if(nrow(day_obs) > 0 & nrow(day_bkg) > 0){
@@ -132,7 +138,7 @@ main <- function(cfg, target_date){
     ggsave(file.path(results_dir, "maxent", "predicted_distribution.png"), dist_plot, width = 8, height = 6, dpi = 300)
     saveRDS(maxent_res, file = file.path(results_dir, "maxent", "maxent.rds"))
     save_model_plots(maxent_res, maxent_res$test_data, file.path(results_dir, "maxent"))
-    summary_row$maxent_roc = as.numeric(maxent_res$roc_auc$.estimate)
+    summary_row$maxent_auc = as.numeric(maxent_res$auc$.estimate)
     summary_row$maxent_accuracy = as.numeric(maxent_res$accuracy$.estimate)
   }
   
@@ -152,7 +158,7 @@ main <- function(cfg, target_date){
     ggsave(file.path(results_dir, "rf", "predicted_distribution.png"), dist_plot, width = 8, height = 6, dpi = 300)
     saveRDS(rf_res, file = file.path(results_dir, "rf", "rf.rds"))
     save_model_plots(rf_res, rf_res$test_data, file.path(results_dir, "rf"))
-    summary_row$rf_roc = as.numeric(rf_res$roc_auc$.estimate)
+    summary_row$rf_auc = as.numeric(rf_res$auc$.estimate)
     summary_row$rf_accuracy = as.numeric(rf_res$accuracy$.estimate)
   }
   
@@ -172,54 +178,10 @@ main <- function(cfg, target_date){
     ggsave(file.path(results_dir, "brt", "predicted_distribution.png"), dist_plot, width = 8, height = 6, dpi = 300)
     saveRDS(brt_res, file = file.path(results_dir, "brt", "brt.rds"))
     save_model_plots(brt_res, brt_res$test_data, file.path(results_dir, "brt"))
-    summary_row$brt_roc = as.numeric(brt_res$roc_auc$.estimate)
+    summary_row$brt_auc = as.numeric(brt_res$auc$.estimate)
     summary_row$brt_accuracy = as.numeric(brt_res$accuracy$.estimate)
   }
 
-  # if (isTRUE(model$brt)) {
-  #   charlier::info("running boosted regression trees model")
-  #   dir.create(file.path(results_dir, "brt"), showWarnings = FALSE)
-  #   
-  #   # Fit BRT model
-  #   brt_res <- model_brt(train, test)
-  #   
-  #   # Convert stars raster to sf points
-  #   x_points <- st_as_sf(x, as_points = TRUE, merge = FALSE)
-  #   
-  #   # Keep only points inside water polygon
-  #   x_water <- x_points[poly, ]
-  #   
-  #   # Convert to data frame for prediction
-  #   df_covs <- st_drop_geometry(x_water)
-  #   
-  #   # Predict only on water
-  #   pred_values <- predict(brt_res$model, newdata = df_covs, type = "response")
-  #   
-  #   # Assign predictions to sf points
-  #   x_water$predicted_distribution <- pred_values
-  #   
-  #   # Rasterize back to stars object
-  #   brt_pred <- st_rasterize(x_water["predicted_distribution"])
-  #   
-  #   # Write raster
-  #   write_stars(brt_pred, file.path(results_dir, "brt", "predicted_distribution.tif"))
-  #   
-  #   # Plot predicted distribution
-  #   dist_plot <- predicted_dist(brt_pred, the_date = target_date, species = species,
-  #                               add_points = "all", day_obs, day_bkg)
-  #   ggsave(file.path(results_dir, "brt", "predicted_distribution.png"),
-  #          dist_plot, width = 8, height = 6, dpi = 300)
-  #   
-  #   # Save model object and plots
-  #   saveRDS(brt_res, file = file.path(results_dir, "brt", "brt.rds"))
-  #   save_model_plots(brt_res, brt_res$test_data, file.path(results_dir, "brt"))
-  #   
-  #   # Record performance metrics
-  #   summary_row$brt_roc <- as.numeric(brt_res$roc_auc$.estimate)
-  #   summary_row$brt_accuracy <- as.numeric(brt_res$accuracy$.estimate)
-  # }
-  # 
-  
   
   if (isTRUE(model$glm)) {
     charlier::info("running general linear model")
@@ -237,7 +199,7 @@ main <- function(cfg, target_date){
     ggsave(file.path(results_dir, "glm", "predicted_distribution.png"), dist_plot, width = 8, height = 6, dpi = 300)
     saveRDS(glm_res, file = file.path(results_dir, "glm", "glm.rds"))
     save_model_plots(glm_res, glm_res$test_data, file.path(results_dir, "glm"))
-    summary_row$glm_roc = as.numeric(glm_res$roc_auc$.estimate)
+    summary_row$glm_auc = as.numeric(glm_res$auc$.estimate)
     summary_row$glm_accuracy = as.numeric(glm_res$accuracy$.estimate)
   }
   
@@ -257,7 +219,7 @@ main <- function(cfg, target_date){
     ggsave(file.path(results_dir, "nn", "predicted_distribution.png"), dist_plot, width = 8, height = 6, dpi = 300)
     saveRDS(nn_res, file = file.path(results_dir, "nn", "nn.rds"))
     save_model_plots(nn_res, nn_res$test_data, file.path(results_dir, "nn"))
-    summary_row$nn_roc = as.numeric(nn_res$roc_auc$.estimate)
+    summary_row$nn_auc = as.numeric(nn_res$auc$.estimate)
     summary_row$nn_accuracy = as.numeric(nn_res$accuracy$.estimate)
   }
   
@@ -265,7 +227,7 @@ main <- function(cfg, target_date){
   if (file.exists(summary_path)) {
     summary_df = read.csv(summary_path, stringsAsFactors = FALSE)
     summary_df = summary_df[summary_df$date != summary_row$date, ]
-    summary_df = rbind(summary_df, summary_row)
+    summary_df = dplyr::bind_rows(summary_df, summary_row)
     write.csv(summary_df, summary_path, row.names = FALSE)
   } else {
     write.csv(summary_row, summary_path, row.names = FALSE)
@@ -278,8 +240,8 @@ main <- function(cfg, target_date){
 source("/mnt/s1/projects/ecocast/projects/gom-jellycast/setup.R")
 
 Args = argparser::arg_parser("Monthly model builder and predictor", name = "model_v2.R") |>
-  argparser::add_argument("config", help = "path to config file") |>
-  argparser::add_argument("date", help = "forecast date (YYYY-MM-DD)") |>
+  argparser::add_argument("--config", help = "path to config file") |>
+  argparser::add_argument("--date", help = "forecast date (YYYY-MM-DD)") |>
   parse_args()
 cfg = yaml::read_yaml(Args$config)
 target_date = as.Date(Args$date)

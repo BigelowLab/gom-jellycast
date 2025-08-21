@@ -627,5 +627,18 @@ lm <- read_obs() %>%
 ```
 
 
+# adding TSS to results
+```{r}
+cfg = read_config("data/versions/v5/v5.001/v5.001.yaml")
+target_date = as.Date("2025-08-19")
+```
+
+
+
+
+
+
+
+
 
 
