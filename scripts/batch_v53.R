@@ -1,5 +1,5 @@
 # author: Logan Ngai
-# date: 2025-07-22
+# date: 2025-08-25
 # usage:
 # Rscript scripts/batch_v23.R \
 # --dates 2025-07-22 2025-07-30 \
@@ -11,7 +11,7 @@ suppressPackageStartupMessages({
 })
 
 main <- function(start_date, end_date, start_config, end_config) {
-  model_script <- "/mnt/s1/projects/ecocast/projects/gom-jellycast/scripts/model_v2.R"
+  model_script <- "/mnt/s1/projects/ecocast/projects/gom-jellycast/scripts/model_v5.R"
   config_dir <- dirname(dirname(start_config))
   
   all_configs <- list.files(config_dir, pattern = "\\.yaml$", recursive = TRUE, full.names = TRUE)
@@ -40,12 +40,12 @@ main <- function(start_date, end_date, start_config, end_config) {
       
       exit_code = system(cmd)
       if (exit_code != 0) {
-        warning(sprintf("batch_v23.R returned non-zero exit code for date %s", format(d, "%Y-%m-%d")))
+        warning(sprintf("batch_v53.R returned non-zero exit code for date %s", format(d, "%Y-%m-%d")))
       }
     }
   }
   
-  extract_summary(version = "v2")
+  extract_summary(version = "v5")
   invisible(0)
 }
 

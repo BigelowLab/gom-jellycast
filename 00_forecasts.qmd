@@ -29,6 +29,68 @@ lionsmane_gif = make_movie(version = "v2", v = lionsmane_top[1], model = "rf")
 lionsmane_gif
 ```
 
+# 7 day horizontal display
+```{r lionsmane test, echo=FALSE}
+
+library(grid)
+library(gridExtra)
+
+img1 <- extract_im(version = "v2", v = lionsmane_top[1], date = Sys.Date(), model = "rf")
+img2 <- extract_im(version = "v2", v = lionsmane_top[1], date = Sys.Date() + 1, model = "rf")
+img3 <- extract_im(version = "v2", v = lionsmane_top[1], date = Sys.Date() + 2, model = "rf")
+img4 <- extract_im(version = "v2", v = lionsmane_top[1], date = Sys.Date() + 3, model = "rf")
+img5 <- extract_im(version = "v2", v = lionsmane_top[1], date = Sys.Date() + 4, model = "rf")
+img6 <- extract_im(version = "v2", v = lionsmane_top[1], date = Sys.Date() + 5, model = "rf")
+img7 <- extract_im(version = "v2", v = lionsmane_top[1], date = Sys.Date() + 6, model = "rf")
+
+grid.arrange(
+  rasterGrob(img1), rasterGrob(img2), rasterGrob(img3),
+  rasterGrob(img4), rasterGrob(img5), rasterGrob(img6),
+  rasterGrob(img7),
+  nrow = 1
+)
+
+```
+
+# 3 day display
+```{r lionsmane test, echo=FALSE}
+img1 <- extract_im(version = "v2", v = lionsmane_top[1], date = Sys.Date(), model = "rf")
+img2 <- extract_im(version = "v2", v = lionsmane_top[1], date = Sys.Date() + 1, model = "rf")
+img3 <- extract_im(version = "v2", v = lionsmane_top[1], date = Sys.Date() + 2, model = "rf")
+
+grid.arrange(
+  rasterGrob(img1), rasterGrob(img2), rasterGrob(img3),
+  nrow = 1
+)
+```
+
+# 7 day scroll
+```{r scroll, echo=FALSE}
+library(htmltools)
+
+imgs <- list(
+  extract_im(version="v2", v=lionsmane_top[1], date=Sys.Date(), model="rf"),
+  extract_im(version="v2", v=lionsmane_top[1], date=Sys.Date()+1, model="rf"),
+  extract_im(version="v2", v=lionsmane_top[1], date=Sys.Date()+2, model="rf"),
+  extract_im(version="v2", v=lionsmane_top[1], date=Sys.Date()+3, model="rf"),
+  extract_im(version="v2", v=lionsmane_top[1], date=Sys.Date()+4, model="rf"),
+  extract_im(version="v2", v=lionsmane_top[1], date=Sys.Date()+5, model="rf"),
+  extract_im(version="v2", v=lionsmane_top[1], date=Sys.Date()+6, model="rf")
+)
+
+# Build HTML with scrollbar
+div(
+  style = "height:600px; overflow-y: scroll; border:1px solid #ccc;",
+  lapply(imgs, function(x) tags$img(src = x, style="width:100%; margin-bottom:10px;"))
+)
+
+```
+
+
+
+
+
+
 # Today's Moon Jellyfish Forecast
 ```{r moon, echo=FALSE}
 # moon_img = extract_im(version = "v2", v = moon_top[1], model = moon_top[2])
@@ -43,6 +105,7 @@ moon_img = extract_im(version = "v2", v = moon_top[1], model = "rf")
 moon_gif = make_movie(version = "v2", v = moon_top[1], model = "rf")
 moon_gif
 ```
+
 
 <!-- # Today's White Cross Jellyfish Forecast -->
 <!-- ```{r whitecross, echo=FALSE} -->
