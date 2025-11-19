@@ -53,11 +53,13 @@ imgs = lapply(seq_along(dates),
     extract_im(version = "v2", 
                v = lionsmane_top[1], 
                date = dates[i], 
-               model = "rf")
+               model = "rf") |>
+      rasterGrob()
   })
 
+
 grid.arrange(imgs[[1]], imgs[[2]], 
-             imgs[[3]], imhgs[[4]], 
+             imgs[[3]], imgs[[4]], 
              imgs[[6]], imgs[[6]], 
              imgs[[7]],
              nrow = 1)
@@ -83,7 +85,7 @@ grid.arrange(imgs[[1]], imgs[[2]],
 ```{r lionsmane 3day, echo=FALSE}
 
 
-grid.arrange(grob = imgs[1:3],
+grid.arrange(imgs[[1]], imgs[[2]], imgs[[3]],
   nrow = 1
 )
 
