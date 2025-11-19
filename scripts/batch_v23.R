@@ -51,15 +51,36 @@ main <- function(start_date, end_date, start_config, end_config) {
 
 source("/mnt/s1/projects/ecocast/projects/gom-jellycast/setup.R")
 
-Args <- arg_parser("Run multiple configs over multiple dates") %>%
-  add_argument("--dates", nargs = 2, help = "start and end date (YYYY-MM-DD YYYY-MM-DD)") %>%
-  add_argument("--configs", nargs = 2, help = "start and end config YAML paths") %>%
+default_configs = paste(c("/mnt/s1/projects/ecocast/projects/gom-jellycast/data/versions/v2/v2.001/v2.001.yaml",
+                          "/mnt/s1/projects/ecocast/projects/gom-jellycast/data/versions/v2/v2.040/v2.040.yaml"),
+                        collapse = " ")
+
+Args <- arg_parser("Run multiple configs over multiple dates") |>
+  add_argument("--dates", nargs = 2, 
+               help = "start and end date (YYYY-MM-DD YYYY-MM-DD)",
+               default = "2025-08-01 2025-08-07") |>
+  add_argument("--configs", nargs = 2, 
+               help = "start and end config YAML paths",
+               default = default_configs) |>
   parse_args()
 
-main(
-  start_date = as.Date(Args$dates[1]),
-  end_date = as.Date(Args$dates[2]),
-  start_config = Args$configs[1],
-  end_config = Args$configs[2]
-)
+# Here we test if the requested days are within the bounds
+# and if not we prune them
+start_date = as.Date(Args$dates[1])
+end_date = as.Date(Args$dates[2])
+dates = seq(from = start_date, to = end_date, by = "day")
+ok = within_jelly_window(dates)
+dates = dates[ok]
+if (length(ok) == 0){
+  message("none of the requested dates fall within valid window")
+  if (!interactive()) quit(save = "no", status = 1)
+} else {
+  n = length(dates)
+  main(
+    start_date = dates[1],
+    end_date = dates[n],
+    start_config = Args$configs[1],
+    end_config = Args$configs[2]
+  )
+}
 

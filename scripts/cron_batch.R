@@ -1,5 +1,6 @@
 path <- "/mnt/s1/projects/ecocast/projects/gom-jellycast"
 app <- "Rscript"
+EMAIL = NULL
 
 # script1 <- sprintf("batch_v02.R %s", format(Sys.Date() + 8, "%Y-%m-%d"))
 # script2 <- sprintf("batch_v12.R %s", format(Sys.Date() + 8, "%Y-%m-%d"))
@@ -26,6 +27,8 @@ app <- "Rscript"
 script1 <- sprintf("batch_v23.R --dates %s %s", format(Sys.Date(), "%Y-%m-%d"), format(Sys.Date() + 6, "%Y-%m-%d"))
 args1 <- sprintf("%s/scripts/%s --configs %s/data/versions/v2/v2.001/v2.001.yaml %s/data/versions/v2/v2.040/v2.040.yaml", path, script1, path, path)
 
-system2(app, args1)
+ok = system2(app, args1)
 
-charlier::sendmail(to = "llngai26@colby.edu", subject = "updating forecasts")
+if (!is.null(EMAIL)) charlier::sendmail(to = EMAIL, 
+                                        subject = "updating jellyfish forecasts",
+                                        message = ok)
