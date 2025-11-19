@@ -44,17 +44,30 @@ obs <- read_obs() %>%
          type == "lionsmane") %>% 
   st_filter(st_as_sfc(buffer_bbox))
 
+
+# here we test to make sure the data is within the window
+today = Sys.Date()
+if (!within_jelly_window(today)) today = as.Date("2025-08-01")
+dates = today + 0:6
+
 lionsmane_top = extract_top_model(version = "v2", sp = "lionsmane")
 ```
 
 # Today's Forecast
 ```{r forecast, echo=FALSE}
-lionsmane_img = extract_im(version = "v2", v = lionsmane_top[1], model = "rf")
+lionsmane_img = extract_im(version = "v2", 
+                           v = lionsmane_top[1], 
+                           model = "rf",
+                           date = today)
 ```
 
 # Forecast Animation
 ```{r animation, echo=FALSE}
-lionsmane_gif = make_movie(version = "v2", v = lionsmane_top[1], model = "rf")
+lionsmane_gif = make_movie(version = "v2", 
+                           v = lionsmane_top[1], 
+                           start_date = today,
+                           end_date = today + 6,
+                           model = "rf")
 lionsmane_gif
 ```
 

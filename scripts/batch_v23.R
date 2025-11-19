@@ -15,11 +15,13 @@ main <- function(start_date, end_date, start_config, end_config) {
   config_dir <- dirname(dirname(start_config))
   
   all_configs <- list.files(config_dir, pattern = "\\.yaml$", recursive = TRUE, full.names = TRUE)
-  all_configs <- sort(normalizePath(all_configs))
-  
-  start_idx <- which(all_configs == normalizePath(start_config))
-  end_idx <- which(all_configs == normalizePath(end_config))
-  
+  names(all_configs) = basename(all_configs)
+  all_configs = all_configs[order(names(all_configs))]
+  #all_configs <- sort(normalizePath(all_configs))
+  #start_idx <- which(all_configs == normalizePath(start_config))
+  #end_idx <- which(all_configs == normalizePath(end_config))
+  start_idx = which(names(all_configs) == basename(start_config))
+  end_idx = which(names(all_configs) == basename(end_config))
   if (start_idx <= end_idx) {
     configs <- all_configs[start_idx:end_idx]
   } else {
@@ -51,14 +53,13 @@ main <- function(start_date, end_date, start_config, end_config) {
 
 source("/mnt/s1/projects/ecocast/projects/gom-jellycast/setup.R")
 
-default_configs = paste(c("/mnt/s1/projects/ecocast/projects/gom-jellycast/data/versions/v2/v2.001/v2.001.yaml",
-                          "/mnt/s1/projects/ecocast/projects/gom-jellycast/data/versions/v2/v2.040/v2.040.yaml"),
-                        collapse = " ")
+default_configs = c("/mnt/s1/projects/ecocast/projects/gom-jellycast/data/versions/v2/v2.001/v2.001.yaml",
+                    "/mnt/s1/projects/ecocast/projects/gom-jellycast/data/versions/v2/v2.040/v2.040.yaml")
 
 Args <- arg_parser("Run multiple configs over multiple dates") |>
   add_argument("--dates", nargs = 2, 
                help = "start and end date (YYYY-MM-DD YYYY-MM-DD)",
-               default = "2025-08-01 2025-08-07") |>
+               default = c("2025-08-01","2025-08-07"))|>
   add_argument("--configs", nargs = 2, 
                help = "start and end config YAML paths",
                default = default_configs) |>
@@ -71,7 +72,7 @@ end_date = as.Date(Args$dates[2])
 dates = seq(from = start_date, to = end_date, by = "day")
 ok = within_jelly_window(dates)
 dates = dates[ok]
-if (length(ok) == 0){
+if (length(dates) == 0){
   message("none of the requested dates fall within valid window")
   if (!interactive()) quit(save = "no", status = 1)
 } else {

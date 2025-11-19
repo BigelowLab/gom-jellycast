@@ -1,3 +1,10 @@
+#' Retrieve the gom-jellycast data path
+#' 
+#' @return str path description
+jelly_path = function(){
+  "/mnt/s1/projects/ecocast/projectdata/gom-jellycast"
+}
+
 #' Retrieve the relative path to a prediction product
 #' 
 #' @param version str, such as `v0`
@@ -49,7 +56,7 @@ jelly_days = function(form = c("numeric", "string")[2],
   
   x = seq(from = as.numeric(start[1]), to = fini, by = 1)
   
-  if (tolower(form[1]) == "string") x = sprintf(x, "%0.3i")
+  if (tolower(form[1]) == "string") x = sprintf("%0.3i",x)
   x
 }
 
